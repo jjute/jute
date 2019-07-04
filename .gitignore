@@ -1,8 +1,16 @@
-# Created by https://www.gitignore.io/api/java,gradle,intellij
-# Edit at https://www.gitignore.io/?templates=java,gradle,intellij
+
+# This will apply to the root project as well as each Jute module.
+# Include only ignore rules that should be shared by root and all modules.
+
+# Ignore all Jute Module project files except .gitignore
+modules/*
+!/modules/.gitignore
+
+# Created by https://www.gitignore.io/api/gradle,intellij
+# Edit at https://www.gitignore.io/?templates=gradle,intellij
 
 ### Intellij ###
-# Tailored to JetBrains IDE: IntelliJ
+# Covers single JetBrains IDE: IntelliJ
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
@@ -55,22 +63,6 @@ out/
 # Sonarlint plugin
 .idea/sonarlint
 
-### Java ###
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
 ### Gradle ###
 .gradle
 build/
@@ -90,4 +82,4 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.gitignore.io/api/java,gradle,intellij
+# End of https://www.gitignore.io/api/gradle,intellij
