@@ -1,0 +1,41 @@
+/*
+ * Set the root project name of this build
+ */
+rootProject.name = 'jute'
+
+/*
+ * Include all module projects found in './modules/' directory to this build.
+ * All projects added here will become this project's sub-projects.
+ * 
+ * Note that this only includes other projects and is different then 'includeBuild'
+ * which includes complete project builds and constructs a composite build.
+ */
+for (String name : juteModuleNames.split(","))
+{
+    boolean moduleFound = false
+    file("modules").eachDir
+    {
+        logger.debug("Checking directory $it")
+        String module = it.name
+        
+        if (!moduleFound && module.equals(name))
+        {
+            logger.debug("Including Jute module $module")
+
+            moduleFound = true; include ":$module"
+            project(":$module").projectDir = new File("modules/$module" as String)
+        }
+    }
+    if (!moduleFound) {
+        logger.warn("Unable to find module $name in ./modules/")
+    }
+}
+
+/*
+ * Append the main project name as a prefix to each sub-project.
+ * Example: commons.name = jute-commons
+ */
+//rootProject.children.each {
+//    it.name = rootProject.name + "-" + it.name
+//}
+

@@ -1,0 +1,230 @@
+/*
+ * Configures this project AND each of its sub-projects.
+ */
+allprojects {
+    /*
+     * The IDEA plugin generates files that are used by IntelliJ IDEA, thus making it possible to open
+     * the project from IDEA (File - Open Project).  Both external dependencies (including associated
+     * source and Javadoc files) and project dependencies are considered.
+     */
+    apply plugin: 'idea'
+    
+    // Every sub-project should belong to this group
+    group = 'io.yooksi.jute'
+    
+    // For projects that have not specified a version
+    version = '0.1'
+}
+/*
+ * Configures ONLY the sub-projects of this project.
+ */
+subprojects {
+    /*
+     * The Java Library plugin expands the capabilities of the Java plugin by providing specific
+     * knowledge about Java libraries. In particular, a Java library exposes an API to consumers
+     * (i.e., other projects using the Java or the Java Library plugin). All the source sets, tasks
+     * and configurations exposed by the Java plugin are implicitly available when using this plugin.
+     *
+     * Read the official plugin documentation here:
+     * https://docs.gradle.org/current/userguide/java_library_plugin.html
+     */
+    apply plugin: 'java-library'
+
+    /*
+     * The JaCoCo plugin provides code coverage metrics for Java code via integration with JaCoCo.
+     * JaCoCo is a free code coverage library for Java that provides a new standard technology for
+     * code coverage analysis in Java VM based environments. The focus is providing a lightweight,
+     * flexible and well documented library for integration with various build and development tools.
+     *
+     * Read the official plugin documentation here:
+     * https://docs.gradle.org/current/userguide/jacoco_plugin.html
+     */
+    apply plugin: 'jacoco'
+
+    repositories {
+        /*
+         * Adds a repository which looks in Bintray's JCenter repository for dependencies.
+         * The URL used to access this repository is "https://jcenter.bintray.com/".
+         */
+        jcenter()
+    }
+    /*
+     * Set source and target compatibility for compiling Java sources.
+     * This will also define the Language Level that corresponds to the given Java version.
+     */
+    setSourceCompatibility(JavaVersion.VERSION_1_8)
+    setTargetCompatibility(JavaVersion.VERSION_1_8)
+
+    idea {
+        module {
+            /*
+             * The JDK to use for this module. If null, the value of the existing or default
+             * ipr XML (inherited) is used. If it is set to inherited, the project SDK is used.
+             * Otherwise the SDK for the corresponding value of java version is used for this module.
+             */
+            jdkName = '1.8.0_212'
+
+            inheritOutputDirs = true
+            setOutputDir(new File('build'))
+            setTestOutputDir(new File('build/test'))
+            targetBytecodeVersion = JavaVersion.VERSION_1_8
+        }
+    }
+    /* This establishes a source directory convention for all sub-project.
+     * Having a common directory layout allows for users familiar with one
+     * Maven project to immediately feel at home in another Maven project.
+     * The advantages are analogous to adopting a site-wide look-and-feel.
+     *
+     * Apache Maven Project: Introduction to the Standard Directory Layout
+     * https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
+     */
+    sourceSets {
+        main.java.srcDirs = ['src/main/java']
+        main.resources.srcDirs = ['src/main/resources']
+
+        test.java.srcDirs = ['src/test/java']
+        test.resources.srcDirs = ['src/test/resources']
+    }
+
+    dependencies {
+
+        // This dependency allows us to write tests and extensions which use JUnit 5
+        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+
+        // This dependency allows us to run tests which use JUnit 5
+        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
+    }
+
+    task initJuteModules {
+        doFirst {
+            logger.quiet("Initializing module $project.name (v$project.version)")
+        }
+    }
+
+    test {
+        // Clean the old test-results first
+        dependsOn cleanTest
+
+        // Specifies that JUnit Platform (a.k.a. JUnit 5)
+        // should be used to execute the tests.
+        useJUnitPlatform()
+
+//    // set a system property for the test JVM(s)
+//    systemProperty 'some.prop', 'value'
+
+//    // explicitly include or exclude tests
+//    include 'org/foo/**'
+//    exclude 'org/boo/**'
+
+//    // set JVM arguments for the test JVM(s)
+//    jvmArgs '-XX:MaxPermSize=256m'
+
+//    // show standard out and standard error of the test JVM(s) on the console
+//    testLogging.showStandardStreams = true
+
+        // Fail the 'test' task on the first test failure
+        failFast = false
+
+        doFirst {
+            logger.debug("Running project Unit Tests...")
+        }
+
+        // listen to events in the test execution lifecycle
+        beforeTest { descriptor ->
+            logger.lifecycle("Running test: $descriptor")
+        }
+//    afterTest { descriptor, result ->
+//        logger.lifecycle("Test result: " + result)
+//    }
+        doLast {
+            logger.quiet("Finished running Unit Tests.")
+        }
+    }
+
+    jacocoTestReport {
+
+        // Run the tests before generating the report
+        dependsOn test
+
+        reports {
+            // The JaCoCo (single file) XML report
+            xml.enabled = true
+            // The JaCoCo HTML report
+            html.enabled = true
+        }
+        doFirst {
+            logger.debug("Generating code coverage...")
+        }
+        doLast {
+            logger.quiet("Finished generating code coverage.")
+        }
+    }
+    /* Generate test reports before running all checks.
+     * This will make sure that reports are generated before
+     * we send them to https://codecov.io
+     */
+    check.dependsOn jacocoTestReport
+}
+/*
+ * Add commons library as a local dependency to needed modules.
+ */
+if (findProject(':git-bash') != null) {
+    project(':git-bash').dependencies {
+        implementation project(':commons')
+    }
+}
+
+/*
+ * This LinkedHashMap contains lists of external dependency
+ * definitions mapped to String values that are used to group 
+ * libraries into useful categories for cross-project re-usability.
+ *
+ * Use in project dependency sections like this: 
+ *
+ * Syntax: <scope> libraries.<category>
+ * Example: api libraries.validation_annotations
+ *
+ * Read more information on Stack Overflow:
+ * https://stackoverflow.com/a/9547593/5759072
+ */
+ext.libraries = [
+        /*
+         * These are core dependencies for the Bean Validation system.
+         * Recommended scope: implementation
+         */
+        validation_core: [
+            // Hibernate Validator Engine
+            // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+            'org.hibernate.validator:hibernate-validator:6.0.16.Final',
+
+            // Expression Language 3.0
+            // https://mvnrepository.com/artifact/org.glassfish/javax.el
+            'org.glassfish:javax.el:3.0.0'
+        ],
+        /*
+         * These dependencies contain annotations needed by the Bean validation system.
+         * Recommended scope: api
+         */
+        validation_annotations: [
+                // Bean Validation API
+                // https://mvnrepository.com/artifact/javax.validation/validation-api
+                'javax.validation:validation-api:2.0.1.Final',
+
+                // Contains javax annotations
+                // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+                'com.google.code.findbugs:jsr305:3.0.2'
+        ]
+]
+
+tasks.create('listModules') {
+    doFirst {
+        logger.quiet("List of registered Jute modules:")
+    }
+    doLast {
+        rootProject.subprojects.each {
+            logger.quiet("- $it.name")
+        }
+    }
+}
