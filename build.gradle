@@ -97,12 +97,6 @@ subprojects {
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
     }
 
-    task initJuteModules {
-        doFirst {
-            logger.quiet("Initializing module $project.name (v$project.version)")
-        }
-    }
-
     test {
         // Clean the old test-results first
         dependsOn cleanTest
@@ -217,8 +211,44 @@ ext.libraries = [
                 'com.google.code.findbugs:jsr305:3.0.2'
         ]
 ]
+/*
+ * Clone all remote modules listed in 'juteModules' property to the local modules directory.
+ * To clone only specific modules you can call this task with '-PjuteModules=<modules>' argument
+ * which will define module names to process. Just remember to separate each module with a comma.
+ */
+tasks.register('cloneModules') {
+    group = 'module'
+    description = 'Clone remote modules from Github'
 
-tasks.create('listModules') {
+    List<String> registeredModules = Arrays.asList(juteModules.split(','))
+    List<String> cloneTargets = new ArrayList<>()
+
+    registeredModules.each { module ->
+        if (!file("modules/$module").exists()) {
+            cloneTargets << module as String
+        }
+    }
+    if (cloneTargets.size() > 0) {
+        logger.quiet("\nGoing to clone " + registeredModules.size() + " remote modules")
+        cloneTargets.each { module ->
+            String url = "https://github.com/jjute/$module"
+            logger.quiet("Cloning from: $url")
+
+            def stdout = new ByteArrayOutputStream()
+            exec {
+                commandLine 'git', 'clone', '--branch', 'develop', url, "modules/$module"
+                standardOutput = stdout
+            }
+            println stdout.toString().trim()
+        }
+    }
+}
+/*
+ * List all Jute modules currently residing in the ./modules directory.
+ */
+tasks.register('listModules') {
+    group = 'module'
+    description = 'List all registered Jute modules.'
     doFirst {
         logger.quiet("List of registered Jute modules:")
     }

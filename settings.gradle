@@ -10,7 +10,7 @@ rootProject.name = 'jute'
  * Note that this only includes other projects and is different then 'includeBuild'
  * which includes complete project builds and constructs a composite build.
  */
-for (String name : juteModuleNames.split(","))
+for (String name : juteModules.split(','))
 {
     boolean moduleFound = false
     file("modules").eachDir
@@ -27,7 +27,7 @@ for (String name : juteModuleNames.split(","))
         }
     }
     if (!moduleFound) {
-        logger.warn("Unable to find module $name in ./modules/")
+        logger.warn("Warning: Unable to find module $name in ./modules/")
     }
 }
 
