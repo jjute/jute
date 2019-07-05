@@ -164,12 +164,11 @@ subprojects {
 /*
  * Add commons library as a local dependency to needed modules.
  */
-if (findProject(':git-bash') != null) {
+if (findProject(':commons') != null && findProject(':git-bash') != null) {
     project(':git-bash').dependencies {
         implementation project(':commons')
     }
 }
-
 /*
  * This LinkedHashMap contains lists of external dependency
  * definitions mapped to String values that are used to group 
