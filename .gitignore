@@ -53,9 +53,18 @@ modules/*
 out/
 
 ### Intellij Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+# Comment Reason:
+# https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+#
+# About ignoring .iml files from JetBrains team:
+# https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+#
+# "If the project is imported from Maven or Gradle, .iml files are generated automatically and may
+# not be shared, otherwise these files are essential for the project and must be shared so that other
+# users can open the project after checkout. Most open source projects are using Maven or Gradle,
+# so it makes sense to ignore .iml files and not keep them in GitHub repositories."
 
-# *.iml
+*.iml
 # modules.xml
 # .idea/misc.xml
 # *.ipr
