@@ -1,3 +1,5 @@
+import org.gradle.plugins.ide.idea.model.IdeaModule
+
 /*
  * Configures this project AND each of its sub-projects.
  */
@@ -64,10 +66,20 @@ subprojects {
              */
             jdkName = '1.8'
 
+            Project moduleProject = ((IdeaModule)it).getProject()
+            java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
+            
+            /*
+             * If true, output directories for this module will be located below 
+             * the output directory for the project otherwise, they will be set to 
+             * the directories specified by getter method return values.
+             */
             inheritOutputDirs = true
-            setOutputDir(new File('build'))
-            setTestOutputDir(new File('build/test'))
-            targetBytecodeVersion = JavaVersion.VERSION_1_8
+            
+//            setOutputDir(modulePath.resolve("target/production").toFile())
+//            setTestOutputDir(modulePath.resolve("target/test").toFile())
+
+            setTargetBytecodeVersion(JavaVersion.VERSION_1_8)
         }
     }
     /* This establishes a source directory convention for all sub-project.
@@ -85,6 +97,12 @@ subprojects {
         test.java.srcDirs = ['src/test/java']
         test.resources.srcDirs = ['src/test/resources']
     }
+    
+    /*
+     * Sets the build directory of this project. 
+     * The build directory is the directory which all artifacts are generated into.
+     */
+    buildDir = projectDir.toPath().resolve("build").toFile()
 
     dependencies {
 
