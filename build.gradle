@@ -62,7 +62,7 @@ subprojects {
              * ipr XML (inherited) is used. If it is set to inherited, the project SDK is used.
              * Otherwise the SDK for the corresponding value of java version is used for this module.
              */
-            jdkName = '1.8.0_212'
+            jdkName = '1.8'
 
             inheritOutputDirs = true
             setOutputDir(new File('build'))
