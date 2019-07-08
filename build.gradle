@@ -135,11 +135,11 @@ subprojects {
      */
     test {
         // Clean the old test-results first
-        dependsOn cleanTest
+//        dependsOn cleanTest
 
         // Specifies that JUnit Platform (a.k.a. JUnit 5)
         // should be used to execute the tests.
-        useJUnitPlatform()
+//        useJUnitPlatform()
 
 //        /* Setting the exception format here will allow us to customize the way 
 //         * thrown exceptions are being displayed. By setting it to 'full' we get 
@@ -165,13 +165,13 @@ subprojects {
 //        // Fail the 'test' task on the first test failure
 //        failFast = false
 //
-//        doFirst {
-//            logger.debug("Running project Unit Tests...")
-//        }
-//        // listen to events in the test execution lifecycle
-//        beforeTest { descriptor ->
-//            logger.lifecycle("Running test: $descriptor")
-//        }
+        doFirst {
+            logger.debug("Running project Unit Tests...")
+        }
+        // listen to events in the test execution lifecycle
+        beforeTest { descriptor ->
+            logger.lifecycle("Running test: $descriptor")
+        }
 ////    afterTest { descriptor, result ->
 ////        logger.lifecycle("Test result: " + result)
 ////    }
