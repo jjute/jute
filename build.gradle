@@ -141,43 +141,43 @@ subprojects {
         // should be used to execute the tests.
         useJUnitPlatform()
 
-        /* Setting the exception format here will allow us to customize the way 
-         * thrown exceptions are being displayed. By setting it to 'full' we get 
-         * the best exception format Gradle can handle displayed in our console.
-         */
-        testLogging {
-            exceptionFormat = 'full'
-        }
-        
-//    // set a system property for the test JVM(s)
-//    systemProperty 'some.prop', 'value'
-
-//    // explicitly include or exclude tests
-//    include 'org/foo/**'
-//    exclude 'org/boo/**'
-
-//    // set JVM arguments for the test JVM(s)
-//    jvmArgs '-XX:MaxPermSize=256m'
-
-//    // show standard out and standard error of the test JVM(s) on the console
-//    testLogging.showStandardStreams = true
-
-        // Fail the 'test' task on the first test failure
-        failFast = false
-
-        doFirst {
-            logger.debug("Running project Unit Tests...")
-        }
-        // listen to events in the test execution lifecycle
-        beforeTest { descriptor ->
-            logger.lifecycle("Running test: $descriptor")
-        }
-//    afterTest { descriptor, result ->
-//        logger.lifecycle("Test result: " + result)
-//    }
-        doLast {
-            logger.quiet("Finished running Unit Tests.")
-        }
+//        /* Setting the exception format here will allow us to customize the way 
+//         * thrown exceptions are being displayed. By setting it to 'full' we get 
+//         * the best exception format Gradle can handle displayed in our console.
+//         */
+//        testLogging {
+//            exceptionFormat = 'full'
+//        }
+//        
+////    // set a system property for the test JVM(s)
+////    systemProperty 'some.prop', 'value'
+//
+////    // explicitly include or exclude tests
+////    include 'org/foo/**'
+////    exclude 'org/boo/**'
+//
+////    // set JVM arguments for the test JVM(s)
+////    jvmArgs '-XX:MaxPermSize=256m'
+//
+////    // show standard out and standard error of the test JVM(s) on the console
+////    testLogging.showStandardStreams = true
+//
+//        // Fail the 'test' task on the first test failure
+//        failFast = false
+//
+//        doFirst {
+//            logger.debug("Running project Unit Tests...")
+//        }
+//        // listen to events in the test execution lifecycle
+//        beforeTest { descriptor ->
+//            logger.lifecycle("Running test: $descriptor")
+//        }
+////    afterTest { descriptor, result ->
+////        logger.lifecycle("Test result: " + result)
+////    }
+//        doLast {
+//            logger.quiet("Finished running Unit Tests.")
+//        }
     }
     /*
      * Task to generate HTML, Xml and CSV reports of Jacoco coverage data.
