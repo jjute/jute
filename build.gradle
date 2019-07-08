@@ -4,7 +4,8 @@
  * mentioned closure (only applied) so we have to do it here.
  */
 plugins {
-    // Enables remote code coverage via Coveralls:
+    // Enables remote code coverage via Coveralls - a web service that helps track 
+    // code coverage over time, and ensure that all new code is fully covered.
     // https://coveralls.io/
     id "com.github.kt3k.coveralls" version "2.8.4"
 }
@@ -52,20 +53,17 @@ subprojects {
      */
     apply plugin: 'jacoco'
 
+    // Implements 'coveralls' task written for use by CI systems to send code coverage.
+    // https://github.com/kt3k/coveralls-gradle-plugin
+    apply plugin: "com.github.kt3k.coveralls"
+    
     repositories {
         /*
          * Adds a repository which looks in Bintray's JCenter repository for dependencies.
          * The URL used to access this repository is "https://jcenter.bintray.com/".
          */
         jcenter()
-        /*
-         * Use exclusively for Gradle plugins
-         */
-        maven { url "https://plugins.gradle.org/m2/" }
     }
-    // Implements a 'coveralls' task written for use by CI systems.
-    // https://github.com/kt3k/coveralls-gradle-plugin
-    apply plugin: "com.github.kt3k.coveralls"
     
     /*
      * Set source and target compatibility for compiling Java sources.
