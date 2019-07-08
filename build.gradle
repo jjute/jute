@@ -1,6 +1,11 @@
-import org.gradle.plugins.ide.idea.model.IdeaModule
-
+/*
+ * Community plugins should be declared here and applied in sub-projects closure.
+ * This has to be done this way because plugins cannot be declared in the before
+ * mentioned closure (only applied) so we have to do it here.
+ */
 plugins {
+    // Enables remote code coverage via Coveralls:
+    // https://coveralls.io/
     id "com.github.kt3k.coveralls" version "2.8.4"
 }
 
@@ -58,10 +63,10 @@ subprojects {
          */
         maven { url "https://plugins.gradle.org/m2/" }
     }
-
+    // Implements a 'coveralls' task written for use by CI systems.
     // https://github.com/kt3k/coveralls-gradle-plugin
     apply plugin: "com.github.kt3k.coveralls"
-
+    
     /*
      * Set source and target compatibility for compiling Java sources.
      * This will also define the Language Level that corresponds to the given Java version.
@@ -77,9 +82,6 @@ subprojects {
              * Otherwise the SDK for the corresponding value of java version is used for this module.
              */
             jdkName = '1.8'
-
-            Project moduleProject = ((IdeaModule)it).getProject()
-            java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
             
             /*
              * If true, output directories for this module will be located below 
@@ -87,6 +89,9 @@ subprojects {
              * the directories specified by getter method return values.
              */
             inheritOutputDirs = true
+            
+//            Project moduleProject = ((IdeaModule)it).getProject()
+//            java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
             
 //            setOutputDir(modulePath.resolve("target/production").toFile())
 //            setTestOutputDir(modulePath.resolve("target/test").toFile())
@@ -126,7 +131,10 @@ subprojects {
         // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
         testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
     }
-
+    /*
+     * Executes JUnit 5 tests. 
+     * Test are always run in (one or more) separate JVMs.
+     */
     test {
         // Clean the old test-results first
         dependsOn cleanTest
@@ -162,7 +170,6 @@ subprojects {
         doFirst {
             logger.debug("Running project Unit Tests...")
         }
-
         // listen to events in the test execution lifecycle
         beforeTest { descriptor ->
             logger.lifecycle("Running test: $descriptor")
@@ -174,7 +181,9 @@ subprojects {
             logger.quiet("Finished running Unit Tests.")
         }
     }
-
+    /*
+     * Task to generate HTML, Xml and CSV reports of Jacoco coverage data.
+     */
     jacocoTestReport {
 
         // Run the tests before generating the report
@@ -195,7 +204,7 @@ subprojects {
     }
     /* Generate test reports before running all checks.
      * This will make sure that reports are generated before
-     * we send them to https://codecov.io
+     * we send them to our remote code coverage service.
      */
     check.dependsOn jacocoTestReport
 }
