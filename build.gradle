@@ -6,6 +6,22 @@ allprojects {
     group = 'io.yooksi.jute'
 }
 
+/**
+ * Execute a Git command with the given arguments.
+ * The output will be printed to console
+ */
+def runGitCommand(String... args) {
+
+    def stdout = new ByteArrayOutputStream()
+    String[] cmdArgs = new String[args.length + 1]
+    
+    cmdArgs[0] = 'git'
+    System.arraycopy(args, 0, cmdArgs, 1, args.length);
+    
+    exec { commandLine cmdArgs }
+    println stdout.toString().trim()
+}
+
 /*
  * Clone all remote modules listed in 'juteModules' property to the local modules directory.
  * To clone only specific modules you can call this task with '-PjuteModules=<modules>' argument
@@ -28,13 +44,7 @@ tasks.register('cloneModules') {
         cloneTargets.each { module ->
             String url = "https://github.com/jjute/$module"
             logger.quiet("Cloning from: $url")
-
-            def stdout = new ByteArrayOutputStream()
-            exec {
-                commandLine 'git', 'clone', '--branch', 'develop', url, "modules/$module"
-                standardOutput = stdout
-            }
-            println stdout.toString().trim()
+            runGitCommand('clone', '--branch', 'develop', url, "modules/$module")
         }
     }
 }
