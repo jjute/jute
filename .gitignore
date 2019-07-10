@@ -1,40 +1,6 @@
 
-# This will apply to the root project as well as each Jute module.
-# Include only ignore rules that should be shared by root and all modules.
-
-# Ignore all Jute Module project files except .gitignore
-modules/*
-!/modules/.gitignore
-
-# Created by https://www.gitignore.io/api/gradle,intellij
-# Edit at https://www.gitignore.io/?templates=gradle,intellij
-
 ### Intellij ###
-# Covers single JetBrains IDE: IntelliJ
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
-
-# Generated files
-.idea/**/contentModel.xml
-
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
-
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
+.idea/*
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -69,18 +35,12 @@ out/
 # .idea/misc.xml
 # *.ipr
 
-# Sonarlint plugin
-.idea/sonarlint
-
 ### Gradle ###
 .gradle
 build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
 
 # Cache of project
 .gradletasknamecache
@@ -90,5 +50,3 @@ gradle-app.setting
 
 ### Gradle Patch ###
 **/build/
-
-# End of https://www.gitignore.io/api/gradle,intellij
