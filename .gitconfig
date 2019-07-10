@@ -1,0 +1,13 @@
+# Every 'git diff' command will be called with '--submodule' option
+[diff]
+	submodule = log
+
+# Enable submodule summary for the long format and a summary of commits for modified submodules.
+# https://git-scm.com/docs/git-status/2.22.0#_configuration
+[status]
+	submodulesummary = 1
+
+# Ask Git to check that all your submodules have been pushed properly before pushing the main project.
+# This option will make push simply fail if any of the committed submodule changes haven’t been pushed.
+[push]
+	recurseSubmodules = check
