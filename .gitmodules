@@ -4,3 +4,7 @@
 [submodule "modules/git-bash"]
 	path = modules/git-bash
 	url = https://github.com/jjute/git-bash
+[submodule "commons"]
+	branch = develop
+[submodule "git-bash"]
+	branch = develop
