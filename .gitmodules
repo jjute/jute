@@ -1,10 +1,8 @@
 [submodule "modules/commons"]
 	path = modules/commons
 	url = https://github.com/jjute/commons
+	branch = develop
 [submodule "modules/git-bash"]
 	path = modules/git-bash
 	url = https://github.com/jjute/git-bash
-[submodule "commons"]
-	branch = develop
-[submodule "git-bash"]
 	branch = develop
