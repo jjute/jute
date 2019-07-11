@@ -18,15 +18,13 @@ ext.isOsWindows = System.getProperty("os.name").startsWith("Windows")
 def runShellCommand(String... arguments) {
 
     def stdout = new ByteArrayOutputStream()
-    String[] command
+    String[] command = new String[arguments.length + 2]
 
-    if (project.isOsWindows)
-    {
-        command = new String[arguments.length + 2]
+    if (project.isOsWindows) {
         command[0] = 'cmd'; command[1] = '/c'
-        System.arraycopy(arguments, 0, command, 2, arguments.length)
     }
-    else command = arguments;
+    else { command[0] = 'sh'; command[1] = '-c' }
+    System.arraycopy(arguments, 0, command, 2, arguments.length)
 
     exec {  commandLine command }
     println stdout.toString().trim()
@@ -82,7 +80,7 @@ tasks.register('initModules') {
 
         // Switch to develop branch for each module
         gradle.juteModules.each { module ->
-            runShellCommand("\"cd modules/$module && git checkout develop\"")
+            runShellCommand("cd modules/$module && git checkout develop")
         }
     }
 }
