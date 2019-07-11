@@ -47,33 +47,43 @@ def runGitCommand(String... args) {
     exec { commandLine cmdArgs }
     println stdout.toString().trim()
 }
+/**
+ * @return <code>true</code> if any of the submodules listed in <code>juteModules</code>
+ * property do not exists in the designated modules directory. Submodule state of existence
+ * is evaluated by the existence of '.git' file inside the module root directory.
+ */
+boolean isAnySubmoduleMissing() {
+
+    boolean needsUpdate = false
+    gradle.juteModules.each { module ->
+        needsUpdate = !file("./modules/$module/.git").exists()
+    }
+    return needsUpdate
+}
 
 /*
- * Clone all remote modules listed in 'juteModules' property to the local modules directory.
- * To clone only specific modules you can call this task with '-PjuteModules=<modules>' argument
- * which will define module names to process. Just remember to separate each module with a comma.
+ * Clone and initialize all remote submodules to the local modules directory.
+ * TODO: Option to initialize only specified modules
  */
-tasks.register('cloneModules') {
+tasks.register('initModules') {
     group = 'module'
     description = 'Clone remote modules from Github'
-
-    List<String> registeredModules = Arrays.asList(juteModules.split(','))
-    List<String> cloneTargets = new ArrayList<>()
-
-    registeredModules.each { module ->
-        if (!file("modules/$module").exists()) {
-            cloneTargets << module as String
-        }
+    onlyIf {
+        isAnySubmoduleMissing()
     }
-    if (cloneTargets.size() > 0) {
-        logger.quiet("\nGoing to clone " + registeredModules.size() + " remote modules")
-        cloneTargets.each { module ->
-            String url = "https://github.com/jjute/$module"
-            logger.quiet("Cloning from: $url")
-            runGitCommand('clone', '--branch', 'develop', url, "modules/$module")
+    doLast {
+        logger.quiet("Initializing git submodules...")
+
+        // Clone and initialize all submodules
+        runGitCommand('submodule', 'update', '--init', './modules')
+
+        // Apply project git configuration for repository
+        runGitCommand('config', '--local', 'include.path', '../.gitconfig')
+
         }
     }
 }
+
 /*
  * List all Jute modules currently residing in the ./modules directory.
  */
