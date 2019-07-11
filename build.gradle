@@ -80,6 +80,9 @@ tasks.register('initModules') {
         // Apply project git configuration for repository
         runGitCommand('config', '--local', 'include.path', '../.gitconfig')
 
+        // Switch to develop branch for each module
+        gradle.juteModules.each { module ->
+            runShellCommand("\"cd modules/$module && git checkout develop\"")
         }
     }
 }
