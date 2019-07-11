@@ -6,6 +6,32 @@ allprojects {
     group = 'io.yooksi.jute'
 }
 
+/*
+ * This variable will be initialized to true if the current
+ * operating system platform is Windows and false otherwise
+ */
+ext.isOsWindows = System.getProperty("os.name").startsWith("Windows")
+
+/**
+ * Run a <i>platform-independent</i> shell command.
+ */
+def runShellCommand(String... arguments) {
+
+    def stdout = new ByteArrayOutputStream()
+    String[] command
+
+    if (project.isOsWindows)
+    {
+        command = new String[arguments.length + 2]
+        command[0] = 'cmd'; command[1] = '/c'
+        System.arraycopy(arguments, 0, command, 2, arguments.length)
+    }
+    else command = arguments;
+
+    exec {  commandLine command }
+    println stdout.toString().trim()
+}
+
 /**
  * Execute a Git command with the given arguments.
  * The output will be printed to console
