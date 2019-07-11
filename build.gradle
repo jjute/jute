@@ -40,7 +40,7 @@ def runGitCommand(String... args) {
     String[] cmdArgs = new String[args.length + 1]
     
     cmdArgs[0] = 'git'
-    System.arraycopy(args, 0, cmdArgs, 1, args.length);
+    System.arraycopy(args, 0, cmdArgs, 1, args.length)
     
     exec { commandLine cmdArgs }
     println stdout.toString().trim()
