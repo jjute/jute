@@ -26,16 +26,7 @@ for (String name : juteModules.split(','))
             project(":$module").projectDir = new File("modules/$module" as String)
         }
     }
-    if (!moduleFound) {
-        logger.warn("Warning: Unable to find module $name in ./modules/")
-    }
+//    if (!moduleFound) {
+//        logger.warn("Warning: Unable to find module $name in ./modules/")
+//    }
 }
-
-/*
- * Append the main project name as a prefix to each sub-project.
- * Example: commons.name = jute-commons
- */
-//rootProject.children.each {
-//    it.name = rootProject.name + "-" + it.name
-//}
-
