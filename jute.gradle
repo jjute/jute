@@ -1,3 +1,5 @@
+import org.gradle.plugins.ide.idea.model.IdeaModule
+
 /*
  * Configures this project AND each of its sub-projects.
  */
@@ -52,13 +54,13 @@ allprojects {
              * the output directory for the project otherwise, they will be set to
              * the directories specified by getter method return values.
              */
-            inheritOutputDirs = true
+            inheritOutputDirs = false
 
-//            Project moduleProject = ((IdeaModule)it).getProject()
-//            java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
+            Project moduleProject = ((IdeaModule)it).getProject()
+            java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
 
-//            setOutputDir(modulePath.resolve("target/production").toFile())
-//            setTestOutputDir(modulePath.resolve("target/test").toFile())
+            setOutputDir(modulePath.resolve("build/target/production").toFile())
+            setTestOutputDir(modulePath.resolve("build/target/test").toFile())
 
             setTargetBytecodeVersion(JavaVersion.VERSION_1_8)
         }
