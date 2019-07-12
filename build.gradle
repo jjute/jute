@@ -86,8 +86,7 @@ void downloadFileFromWeb(String url, File dir) {
         throw new IllegalStateException("Unable to create directory structure for path: " + dir.path)
     }
     final URL location = new URL(url)
-    String filename = file(location.getPath()).getName()
-    File target = dir.toPath().resolve(filename).toFile()
+    File target = dir.toPath().resolve(location.getFile()).toFile()
     target.createNewFile(); target << location.getText()
 }
 
