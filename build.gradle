@@ -15,7 +15,7 @@ ext.isOsWindows = System.getProperty("os.name").startsWith("Windows")
 /**
  * Run a <i>platform-independent</i> shell command.
  */
-def runShellCommand(String... arguments) {
+void runShellCommand(String... arguments) {
 
     def stdout = new ByteArrayOutputStream()
     String[] command = new String[arguments.length + 2]
@@ -34,7 +34,7 @@ def runShellCommand(String... arguments) {
  * Execute a Git command with the given arguments.
  * The output will be printed to console
  */
-def runGitCommand(String... args) {
+void runGitCommand(String... args) {
 
     def stdout = new ByteArrayOutputStream()
     String[] cmdArgs = new String[args.length + 1]
