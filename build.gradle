@@ -1,9 +1,25 @@
+import java.nio.file.Paths
+
 /*
  * Configures this project AND each of its sub-projects.
  */
 allprojects {
     // Every sub-project should belong to this group
     group = 'io.yooksi.jute'
+}
+/*
+ * Configures ONLY the sub-projects of this project.
+ */
+subprojects {
+    apply from: resolveRootPath(initScriptPath)
+    if (codeCoverageEnabled.equals('true'))
+        apply from: resolveRootPath(coverageScriptPath)
+}
+/**
+ * Resolve the given path against the root project's directory path.
+ */
+def resolveRootPath(String pathToResolve) {
+    return Paths.get(rootDir.path, pathToResolve).toString()
 }
 
 /*
