@@ -45,6 +45,38 @@ def runGitCommand(String... args) {
     exec { commandLine cmdArgs }
     println stdout.toString().trim()
 }
+
+/**
+ * Download a text-based file from a given URL and store it in the given directory.
+ *
+ * @param url location of the file on the web
+ * @param dir directory file used to store the target file
+ *
+ * @throws MalformedURLException if the parsed URL failed to comply with the
+ *                               specific syntax of the associated protocol.
+ *
+ * @throws FileNotFoundException if the given file is not a valid directory.
+ *
+ * @throws IllegalStateException if the target directory does not exist and we were
+ *                               unable to create the missing directory structure
+ */
+void downloadFileFromWeb(String url, File dir) {
+
+    logger.info("Downloading file: $url\nDestination dir: " + dir.path)
+
+    if (dir.exists()) {
+        if (!dir.isDirectory())
+            throw new FileNotFoundException("Target path is not a valid directory!")
+    }
+    else if (!dir.mkdirs()) {
+        throw new IllegalStateException("Unable to create directory structure for path: " + dir.path)
+    }
+    final URL location = new URL(url)
+    String filename = file(location.getPath()).getName()
+    File target = dir.toPath().resolve(filename).toFile()
+    target.createNewFile(); target << location.getText()
+}
+
 /**
  * @return <code>true</code> if any of the submodules listed in <code>juteModules</code>
  * property do not exists in the designated modules directory. Submodule state of existence
