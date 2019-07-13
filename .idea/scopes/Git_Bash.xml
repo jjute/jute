@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Git-Bash" pattern="src[jute.git-bash*]:*..*||test[jute.git-bash*]:*..*" />
+</component>

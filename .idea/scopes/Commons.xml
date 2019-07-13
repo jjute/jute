@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Commons" pattern="src[jute.commons*]:*..*||test[jute.commons*]:*..*" />
+</component>
