@@ -78,5 +78,11 @@ Generating code coverage with CI also requires additional steps when we want to 
   ./gradlew coveralls --init-script ./.gradle/coverage.gradle
   </pre>
 
+---
 
+## License
+
+This project is under the [MIT License](https://choosealicense.com/licenses/mit/).
+
+You are allowed to use, modify, distribute and/or sell copies of this project as long as you preserve the original copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code. Read the `LICENSE.md` file for more detailed information.
 
