@@ -31,14 +31,15 @@ Before we can start working on JJute projects with Jute Integration Framework we
 
 ## Code Coverage
 
-Jute offers fully functional code coverage for both local and remote testing. If you are not familiar with the concept of code coverage I recommend reading about it before working with coverage reports. This [Wikipedia](https://en.wikipedia.org/wiki/Code_coverage) page is a good place to start:
+Jute offers fully functional code coverage for both local and remote testing. If you are not familiar with the concept of code coverage I recommend [reading](https://en.wikipedia.org/wiki/Code_coverage) about it before working with coverage reports.
 
 > Code coverage is a measure used to describe the degree to which the source code of a program is executed when a particular test suite runs. A program with high test. A program with high test coverage, measured as a percentage, has had more of its source code executed during testing, which suggests it has a lower chance of containing undetected software bugs compared to a program with low test coverage
 
 Local coverage reports are automatically generated using [JaCoCo](https://www.jacoco.org/jacoco/) after each test task execution. Coverage is disabled by default due to Gradle system limitations. It can only be enabled for each individual task and stays enabled within that scope only. To generate a local coverage report you have to run a test task *(or another task depending on tests)* with a dedicated initialization script that defines the necessary dependencies and configurations:
 
-- On Windows - `gradlew test --init-script coverage.gradle`
-- On Unix - `./gradlew test --init-script coverage.gradle`
+<pre>
+    ./gradlew test --init-script coverage.gradle
+</pre>
 
 *Note that this verbose `--init-script` option can be substituted with `-I` for easier use.*
 
@@ -59,8 +60,8 @@ Generating code coverage with CI also requires additional steps when we want to 
 - **Initialization phase**: 
 
   <pre>
-      wget "https://raw.githubusercontent.com/jjute/jute/master/coverage.gradle"
-  	mkdir -p ./.gradle && mv coverage.gradle ./.gradle
+  wget "https://raw.githubusercontent.com/jjute/jute/master/coverage.gradle"
+  mkdir -p ./.gradle && mv coverage.gradle ./.gradle
   </pre>
 
 - **Test phase**:
@@ -68,13 +69,13 @@ Generating code coverage with CI also requires additional steps when we want to 
   *Substitute the default commands:*
 
   <pre>
-      ./gradlew check --init-script ./.gradle/coverage.gradle
+  ./gradlew check --init-script ./.gradle/coverage.gradle
   </pre>
 
 - **Publish phase**: 
 
   <pre>
-      ./gradlew coveralls --init-script ./.gradle/coverage.gradle
+  ./gradlew coveralls --init-script ./.gradle/coverage.gradle
   </pre>
 
 
