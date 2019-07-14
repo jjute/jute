@@ -1,5 +1,13 @@
 import java.nio.file.Paths
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'commons-io:commons-io:2.6'
+    }
+}
 /*
  * Configures this project AND each of its sub-projects.
  */
