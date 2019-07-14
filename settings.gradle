@@ -14,7 +14,7 @@ gradle.ext { juteModules = juteModuleNames.split(',') }
 for (String name : gradle.juteModules)
 {
     boolean moduleFound = false
-    file("modules").eachDir
+    file(juteModulesPath).eachDir
     {
         logger.debug("Checking directory $it")
         String module = it.name
@@ -24,7 +24,7 @@ for (String name : gradle.juteModules)
             logger.debug("Including Jute module $module")
 
             moduleFound = true; include ":$module"
-            project(":$module").projectDir = new File("modules/$module" as String)
+            project(":$module").projectDir = new File("$juteModulesPath/$module" as String)
         }
     }
 //    if (!moduleFound) {

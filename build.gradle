@@ -1,4 +1,5 @@
 import java.nio.file.Paths
+import org.apache.commons.io.FileUtils
 
 buildscript {
     repositories {
@@ -21,6 +22,7 @@ allprojects {
 subprojects {
     apply from: resolveRootPath(initScriptPath)
 }
+
 /**
  * Resolve the given path against the root project's directory path.
  */
@@ -107,34 +109,63 @@ boolean isAnySubmoduleMissing() {
 
     boolean needsUpdate = false
     gradle.juteModules.each { module ->
-        needsUpdate = !file("./modules/$module/.git").exists()
+        needsUpdate = !getModuleGitDir(module).exists()
     }
     return needsUpdate
 }
+/**
+ * @return the <code>Path</code> to the given module root directory
+ */
+@SuppressWarnings("GrMethodMayBeStatic")
+java.nio.file.Path getModuleDir(String module) {
+    return Paths.get(juteModulesPath).resolve(module)
+}
+/**
+ * Resolve the given path against the module root directory path.
+ * @return <code>String</code> representation of the <code>Path</code>
+ */
+String resolveModulePath(String module, String path) {
+    return getModuleDir(module).resolve(path).toString()
+}
+/**
+ * @return the Git metadata <code>File</code> (.git) for the given module. 
+ */
+File getModuleGitDir(String module) {
+    return file(resolveModulePath(module, '.git'))
+}
+/*
+ * See 'initModules' task for more info 
+ */
+private void cloneAndInitModule(String module) {
+
+    String url = "https://github.com/jjute/$module"
+    String path = getModuleDir(module)
+    String branch = 'develop'
+
+    final File moduleDir = file(path)
+    if (moduleDir.exists())
+    {
+        if (!getModuleGitDir(module).exists()) {
+            FileUtils.deleteDirectory(moduleDir)
+        }
+        else return
+    }
+    runGitCommand('clone', '--branch', branch, url, path)
+}
 
 /*
- * Clone and initialize all remote submodules to the local modules directory.
- * TODO: Option to initialize only specified modules
+ * Clone and initialize all missing project modules.
+ * The module names are listed in juteModuleNames property
  */
 tasks.register('initModules') {
     group = 'module'
-    description = 'Clone remote modules from Github'
+    description = 'Clone and initialize missing project modules.'
     onlyIf {
         isAnySubmoduleMissing()
     }
     doLast {
-        logger.quiet("Initializing git submodules...")
-
-        // Clone and initialize all submodules
-        runGitCommand('submodule', 'update', '--init', './modules')
-
-        // Apply project git configuration for repository
-        runGitCommand('config', '--local', 'include.path', '../.gitconfig')
-
-        // Switch to develop branch for each module
-        gradle.juteModules.each { module ->
-            runShellCommand("cd modules/$module && git checkout develop")
-        }
+        logger.quiet("Cloning and initializing Jute modules...")
+        gradle.juteModules.each { module -> cloneAndInitModule(module) }
     }
 }
 
