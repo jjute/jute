@@ -2,13 +2,13 @@
 
 ---
 
-Jute is a *Gradle-based* integration framework for all JJute modules. It provides effective build automation, easier maintenance, dependency management and advanced features such as code coverage. All JJute modules are able to act as standalone Git submodules but benefit greatly from being developed under this framework. It was primarily designed to work with Java libraries, however it works with standard Java projects as well.
+Jute is a *Gradle-based* integration framework for all JJute modules. It provides effective build automation, easier maintenance, dependency management and advanced features such as code coverage. All JJute modules are able to act as standalone projects but benefit greatly from being developed under this framework. It was primarily designed to work with Java libraries, however it works with standard Java projects as well.
 
 ## Motivation
 
 Working with Gradle is very rewarding but not always straightforward and easy as we would like it to be. Getting the most benefit out of this system requires plenty of conditional configurations. These configurations are then best shared between related projects that are not necessarily in the same directory hierarchy. 
 
-Since Jute modules are designed as Git submodules and reside in separate remote repositories so they can be developed as standalone projects I needed a way to manage their interdependencies and share common configurations. This is what this framework was designed to do. It sets up the required development environment and integrates all designated modules into a single project with shared configurations on demand.
+Since Jute modules reside in separate remote repositories so they can be developed as standalone projects I needed a way to manage their interdependencies and share common configurations. This is what this framework was designed to do. It sets up the required development environment and integrates all designated modules into a single project with shared configurations on demand.
 
 ## Features
 
@@ -23,11 +23,7 @@ Since Jute modules are designed as Git submodules and reside in separate remote 
 
 ## Installation
 
-Before we can start working on JJute projects with Jute Integration Framework we need to prepare our development environment. There are two easy ways to quickly setup the framework:
-
-- Each JJute project is designated as a Git submodule so they can all be cloned alongside Jute with the following command:  `git clone --recurse-submodules https://github.com/jjute/jute`
-
-- Clone the framework repository and run `initModules` Gradle task. To quickly re-clone a JJute project simply delete the module directory and run the task again. It will detect the missing module and clone it again. 
+Before we can start working on JJute projects with Jute Integration Framework we need to prepare our development environment. Clone the framework repository and run `initModules` Gradle task. This will clone and checkout all missing modules. To quickly re-clone a JJute project simply delete the module directory and run the task again. It will detect the missing module and clone it again. 
 
 ## Code Coverage
 
@@ -37,11 +33,9 @@ Jute offers fully functional code coverage for both local and remote testing. If
 
 Local coverage reports are automatically generated using [JaCoCo](https://www.jacoco.org/jacoco/) after each test task execution. Coverage is disabled by default due to Gradle system limitations. It can only be enabled for each individual task and stays enabled within that scope only. To generate a local coverage report you have to run a test task *(or another task depending on tests)* with a dedicated initialization script that defines the necessary dependencies and configurations:
 
-<pre>
-    ./gradlew test --init-script coverage.gradle
-</pre>
-
-*Note that this verbose `--init-script` option can be substituted with `-I` for easier use.*
+<ul>
+<code>./gradlew test --init-script coverage.gradle`</code>
+</ul>
 
 Setting up a remote code coverage web service for projects can be quite difficult at times. Jute handles the heavy lifting with a [special plugin](https://github.com/kt3k/coveralls-gradle-plugin) and enables us to send reports to a web service that can then be displayed with SVG badges to publicly display the project's coverage ratio. Jute is currently using [Coveralls](https://coveralls.io/) as it's preferred choice of code coverage web service. I've tried [CodeCov](https://codecov.io) but unfortunately could never get it to work.
 
