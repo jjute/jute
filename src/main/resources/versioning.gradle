@@ -1,0 +1,6 @@
+//noinspection UnnecessaryQualifiedReference
+def timestampFormat = new java.text.SimpleDateFormat('yyyyMMddHHmmssZ')
+timestampFormat.timeZone = TimeZone.getTimeZone("UTC")
+ext.buildTimestamp = timestampFormat.format(new Date())
+
+//tasks.register('release')
