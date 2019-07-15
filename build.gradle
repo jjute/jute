@@ -8,7 +8,7 @@ gradlePlugin {
     plugins {
         jutePlugin {
             id = 'io.yooksi.jute-plugin'
-            implementationClass = 'io.yooksi.jute.plugin.JutePlugin2'
+            implementationClass = 'io.yooksi.jute.plugin.JutePlugin'
         }
     }
 }
