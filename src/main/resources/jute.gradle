@@ -5,6 +5,7 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
+        // https://plugins.gradle.org/plugin/com.github.jk1.dependency-license-report
         classpath 'com.github.jk1:gradle-license-report:1.7'
     }
 }
@@ -34,10 +35,10 @@ allprojects {
     /*
      * A plugin for generating reports about the licenses of the dependencies 
      * for your Gradle project. This plugin will resolve all your dependencies, 
-     * and then scour them for anything that looks like relevant licensing information. 
+     * and then scour them for anything that looks like relevant licensing information.
      */
     apply plugin: com.github.jk1.license.LicenseReportPlugin
-    
+
     repositories {
         /*
          * Adds a repository which looks in Bintray's JCenter repository for dependencies.

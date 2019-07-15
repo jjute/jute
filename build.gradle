@@ -1,14 +1,33 @@
 import java.nio.file.Paths
-import org.apache.commons.io.FileUtils
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'commons-io:commons-io:2.6'
+plugins {
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        jutePlugin {
+            id = 'io.yooksi.jute-plugin'
+            implementationClass = 'io.yooksi.jute.plugin.JutePlugin2'
+        }
     }
 }
+
+//apply plugin: io.yooksi.jute.plugin.JutePlugin
+
+dependencies {
+
+    // This dependency allows us to write tests and extensions which use JUnit 5
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+
+    // This dependency allows us to run tests which use JUnit 5
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
+    
+    testCompile gradleTestKit()
+}
+
 /*
  * Configures this project AND each of its sub-projects.
  */
@@ -146,7 +165,7 @@ private void cloneAndInitModule(String module) {
     if (moduleDir.exists())
     {
         if (!getModuleGitDir(module).exists()) {
-            FileUtils.deleteDirectory(moduleDir)
+//            FileUtils.deleteDirectory(moduleDir)
         }
         else return
     }
