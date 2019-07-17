@@ -14,6 +14,13 @@ gradlePlugin {
 }
 
 //apply plugin: io.yooksi.jute.plugin.JutePlugin
+configurations {
+    sharedImplementation.extendsFrom implementation
+}
+
+sourceSets.each { set ->
+    set.compileClasspath += configurations.sharedImplementation
+}
 
 dependencies {
 
