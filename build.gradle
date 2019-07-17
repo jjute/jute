@@ -11,6 +11,10 @@ gradlePlugin {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 configurations {
     sharedImplementation.extendsFrom implementation
 }
@@ -30,6 +34,19 @@ dependencies {
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
     
     testCompile gradleTestKit()
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    sharedImplementation 'org.apache.commons:commons-lang3:3.9'
+
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    sharedImplementation 'commons-io:commons-io:2.6'
+
+    // JetBrains Java Annotations
+    // https://mvnrepository.com/artifact/org.jetbrains/annotations
+    sharedImplementation 'org.jetbrains:annotations:17.0.0'
+
+    // https://mvnrepository.com/artifact/javax.validation/validation-api
+    sharedImplementation 'javax.validation:validation-api:2.0.1.Final'
 }
 
 /*
