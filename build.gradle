@@ -22,9 +22,6 @@ gradlePlugin {
     }
 }
 
-repositories {
-    jcenter()
-}
 /*
  * Set source and target compatibility for compiling Java sources.
  * This will also define the Language Level that corresponds to the given Java version.
@@ -38,12 +35,18 @@ setTargetCompatibility(JavaVersion.VERSION_1_8)
  */
 buildDir = projectDir.toPath().resolve("build").toFile()
 
+/*
+ * Define custom dependency configurations here
+ */
 configurations {
+    /*
+     * Implementation dependencies that should be shared by all source sets.
+     * This should encompass common use and utility dependencies such as Apache libraries.
+     */
     sharedImplementation.extendsFrom implementation
 }
 
 sourceSets {
-
     "test-it" {
         java.srcDir file('src/test-it/java')
         compileClasspath += sourceSets.main.output + configurations.testRuntime
@@ -51,10 +54,15 @@ sourceSets {
     }
     main.compileClasspath += configurations.testCompile
 }
+/*
+ * Add shared implementation dependencies to both compile and runtime classpath.
+ * It's important to add them to runtime classpath so we can run tests through Gradle.
+ */
 sourceSets.each { set ->
     set.compileClasspath += configurations.sharedImplementation
     set.runtimeClasspath += configurations.sharedImplementation
 }
+
 idea {
     module {
         /*
@@ -87,6 +95,8 @@ idea {
         testSourceDirs += project.sourceSets.findByName('test-it').resources.srcDirs
     }
 }
+
+repositories.jcenter()
 
 dependencies {
 
