@@ -3,6 +3,15 @@ import java.nio.file.Paths
 plugins {
     id 'java-gradle-plugin'
 }
+/*
+ * Custom test task configurations:
+ *
+ * - Clean test temporary files.
+ * - Enable Gradle JUnit integration.
+ * - Track test progress through console logging.
+ * - Improve exception logging format.
+ */
+apply from: 'testsuite.gradle'
 
 gradlePlugin {
     plugins {
