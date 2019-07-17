@@ -6,14 +6,11 @@ plugins {
 
 gradlePlugin {
     plugins {
-        jutePlugin {
-            id = 'io.yooksi.jute-plugin'
-            implementationClass = 'io.yooksi.jute.plugin.JutePlugin'
-        }
+        jutePlugin.id = 'io.jjute.integration-framework'
+        jutePlugin.implementationClass = 'io.jjute.plugin.framework.JutePlugin'
     }
 }
 
-//apply plugin: io.yooksi.jute.plugin.JutePlugin
 configurations {
     sharedImplementation.extendsFrom implementation
 }
