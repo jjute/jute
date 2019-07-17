@@ -25,6 +25,12 @@ gradlePlugin {
 repositories {
     jcenter()
 }
+/*
+ * Set source and target compatibility for compiling Java sources.
+ * This will also define the Language Level that corresponds to the given Java version.
+ */
+setSourceCompatibility(JavaVersion.VERSION_1_8)
+setTargetCompatibility(JavaVersion.VERSION_1_8)
 
 configurations {
     sharedImplementation.extendsFrom implementation
