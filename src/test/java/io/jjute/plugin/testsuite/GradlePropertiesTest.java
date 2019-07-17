@@ -9,19 +9,16 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("WeakerAccess")
 public class GradlePropertiesTest {
 
-    /**
-     * Enforce proper constructor and field encapsulation.
-     */
     @Test
-    public void createPropertiesTest() {
-        /*
-         * Ensure that class declarations maintain proper encapsulation
-         */
+    public void shouldAssertThatClassDeclarationsAreEncapsulated() {
+
         Assertions.assertEquals(0, GradleProperty.class.getConstructors().length);
         Assertions.assertEquals(Type.values().length, GradleProperty.Type.class.getFields().length);
-        /*
-         * Test name and value getter method return values
-         */
+    }
+
+    @Test
+    public void shouldReturnValidPropertyValues() {
+
         for (GradleProperty.Type type : Type.values()) {
 
             GradleProperty property = type.create("defaultProperty", "01-value");
@@ -30,11 +27,8 @@ public class GradlePropertiesTest {
         }
     }
 
-    /**
-     * Test how Gradle properties display in different formats on demand.
-     */
     @Test
-    public void displayPropertyValuesTest() {
+    public void shouldDisplayValidPropertyValues() {
 
         GradleProperty projectProp = Type.PROJECT.create("defaultProperty", "01-value");
 

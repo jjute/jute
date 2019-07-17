@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class JutePluginFunctionalTest extends FunctionalTest {
 
     @Test
-    public void assertProjectPluginsApplied() {
+    public void shouldApplyProjectPlugins() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
@@ -27,7 +27,7 @@ public class JutePluginFunctionalTest extends FunctionalTest {
     }
 
     @Test
-    public void assertNotFoundProjectPluginFails() {
+    public void shouldFailwhenProjectPluginNotFound() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
