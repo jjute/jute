@@ -19,6 +19,15 @@ configurations {
     sharedImplementation.extendsFrom implementation
 }
 
+sourceSets {
+
+    "test-it" {
+        java.srcDir file('src/test-it/java')
+        compileClasspath += sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+    main.compileClasspath += configurations.testCompile
+}
 sourceSets.each { set ->
     set.compileClasspath += configurations.sharedImplementation
 }
