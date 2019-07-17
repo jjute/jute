@@ -32,6 +32,12 @@ repositories {
 setSourceCompatibility(JavaVersion.VERSION_1_8)
 setTargetCompatibility(JavaVersion.VERSION_1_8)
 
+/*
+ * Sets the build directory of this project.
+ * The build directory is the directory which all artifacts are generated into.
+ */
+buildDir = projectDir.toPath().resolve("build").toFile()
+
 configurations {
     sharedImplementation.extendsFrom implementation
 }
