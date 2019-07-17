@@ -1,11 +1,8 @@
-package io.yooksi.jute.plugin;
+package io.jjute.plugin.framework;
 
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.repositories.ArtifactRepository;
 
-public enum CommunityPlugin implements ProjectPlugin {
-
-    TEST(null);
+public class CommunityPlugin implements ProjectPlugin {
 
     private final String id;
     CommunityPlugin(String id) {
@@ -19,6 +16,6 @@ public enum CommunityPlugin implements ProjectPlugin {
 
     @Override
     public String getId() {
-        return null;
+        return id;
     }
 }

@@ -1,4 +1,4 @@
-package io.yooksi.jute.plugin;
+package io.jjute.plugin.framework;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -6,7 +6,7 @@ import org.gradle.api.initialization.dsl.ScriptHandler;
 
 public class JutePlugin implements Plugin<Project> {
 
-    private static CorePlugin[] corePlugins = {
+    public static ProjectPlugin[] appliedPlugins = {
             CorePlugin.IDEA, CorePlugin.JAVA_LIBRARY
     };
 
@@ -20,8 +20,8 @@ public class JutePlugin implements Plugin<Project> {
 
         target.allprojects( project -> {
 
-            for (CorePlugin corePlugin : corePlugins) {
-                corePlugin.apply(project);
+            for (ProjectPlugin plugin : appliedPlugins) {
+                plugin.apply(project);
             }
 
             project.getRepositories().jcenter();

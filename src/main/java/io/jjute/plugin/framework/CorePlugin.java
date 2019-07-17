@@ -1,4 +1,4 @@
-package io.yooksi.jute.plugin;
+package io.jjute.plugin.framework;
 
 import org.gradle.api.Project;
 
@@ -70,8 +70,12 @@ public enum CorePlugin implements ProjectPlugin {
     public void apply(Project target) {
         target.getPluginManager().apply(id);
     }
-
+    @Override
     public String getId() {
         return id;
+    }
+    @Override
+    public String toString() {
+        return getId();
     }
 }

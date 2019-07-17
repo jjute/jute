@@ -1,4 +1,4 @@
-package io.yooksi.jute.plugin;
+package io.jjute.plugin.framework;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
