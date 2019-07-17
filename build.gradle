@@ -1,7 +1,9 @@
+import org.gradle.plugins.ide.idea.model.IdeaModule
 import java.nio.file.Paths
 
 plugins {
     id 'java-gradle-plugin'
+    id 'idea'
 }
 /*
  * Custom test task configurations:
@@ -39,6 +41,37 @@ sourceSets {
 }
 sourceSets.each { set ->
     set.compileClasspath += configurations.sharedImplementation
+idea {
+    module {
+        /*
+         * The JDK to use for this module. If null, the value of the existing or default
+         * ipr XML (inherited) is used. If it is set to inherited, the project SDK is used.
+         * Otherwise the SDK for the corresponding value of java version is used for this module.
+         */
+        jdkName = '1.8'
+
+        /*
+         * If true, output directories for this module will be located below
+         * the output directory for the project otherwise, they will be set to
+         * the directories specified by getter method return values.
+         */
+        inheritOutputDirs = false
+
+        Project moduleProject = ((IdeaModule)it).getProject()
+        java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
+
+        setOutputDir(modulePath.resolve("build/target/production").toFile())
+        setTestOutputDir(modulePath.resolve("build/target/test").toFile())
+
+        setTargetBytecodeVersion(JavaVersion.VERSION_1_8)
+
+        /*
+         * Add integration test sources to project test sources.
+         * This will make sure module directories are properly marked as tests.
+         */
+        testSourceDirs += project.sourceSets.findByName('test-it').java.srcDirs
+        testSourceDirs += project.sourceSets.findByName('test-it').resources.srcDirs
+    }
 }
 
 dependencies {
