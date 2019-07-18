@@ -1,11 +1,13 @@
 package io.jjute.plugin.testsuite;
 
+import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.internal.DefaultGradleRunner;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
@@ -77,37 +79,18 @@ public class JuteGradleRunner extends DefaultGradleRunner {
     }
 
     /**
-     * <p>
-     *     Save the user properties as an unmodifiable view of the given list and add them to build arguments.
-     * <p>
-     *     Note that setting build arguments after calling this method at any point before {@link #build()}
-     *     will erase the changes to arguments made here so you will have to add them again by calling
-     *     {@link #withSavedProperties()}
-     * </p>
+     * Save the user properties as an unmodifiable view of the given list and add them to build arguments.
      */
     private JuteGradleRunner saveProperties(List<GradleProperty> properties) {
-
         userProperties = Collections.unmodifiableList(properties);
-        return withSavedProperties();
+        return this;
     }
     /**
      * Save the given user property as an immutable singleton list and add it to build arguments.
-     * Read documentation of {@link #saveProperties(List)} method for more information.
      */
     private JuteGradleRunner saveProperty(GradleProperty property) {
-
         userProperties = Collections.singletonList(property);
-        return withSavedProperties();
-    }
-
-    /**
-     * Add the saved properties to build arguments.
-     */
-    private JuteGradleRunner withSavedProperties() {
-
-        List<String> arguments = new java.util.ArrayList<>(getArguments());
-        userProperties.forEach(p -> arguments.add(p.asCLOption()));
-        return (JuteGradleRunner) withArguments(arguments);
+        return this;
     }
 
     /**
@@ -152,7 +135,6 @@ public class JuteGradleRunner extends DefaultGradleRunner {
 
     /**
      * Add a single project property with multiple values to build arguments.
-     * Needs to be called before setting build arguments.
      *
      * @param name name of the property
      * @param values collection of property values
@@ -171,5 +153,19 @@ public class JuteGradleRunner extends DefaultGradleRunner {
      */
     public List<GradleProperty> getUserProperties() {
         return userProperties;
+    }
+
+    @Override
+    public BuildResult build() {
+
+        final String[] properties = new String[userProperties.size()];
+        for (int i = 0; i < userProperties.size(); i++) {
+            properties[i] = userProperties.get(i).asArgument();
+        }
+        List<String> arguments = Arrays.asList(properties);
+        arguments.addAll(getArguments());
+
+        super.withArguments(arguments);
+        return super.build();
     }
 }
