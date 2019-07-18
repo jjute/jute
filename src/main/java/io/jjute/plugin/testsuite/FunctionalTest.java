@@ -151,12 +151,16 @@ public class FunctionalTest {
     }
 
     /**
-     * @return a new instance of {@code JuteGradleRunner} configured for use.
+     * Return a new instance of {@code JuteGradleRunner} configured for use by test methods:
+     * <ul>
+     *     <li>With the plugin classpath based on the Gradle plugin development plugin conventions
+     *     <li>With the output of executed builds forwarded to the {@code System.out} stream.
+     * </ul>
      */
     protected JuteGradleRunner createRunnerForPlugin() {
 
-        GradleRunner runner = JuteGradleRunner.create().withPluginClasspath();
-        return (JuteGradleRunner) runner.withProjectDir(buildFile.getParentFile());
+        return (JuteGradleRunner) JuteGradleRunner.create().withPluginClasspath()
+                .withProjectDir(buildFile.getParentFile()).forwardOutput();
     }
 
     /**
