@@ -85,13 +85,13 @@ public class GradleProperty {
      * @return a view of how this property as if it was passed as a command line option.
      *         If you need to display as if defined in a file see {@link #asProperty()}.
      */
-    public @NotEmpty String asCLOption() {
+    public @NotEmpty String asArgument() {
         return type.option + toString();
     }
 
     /**
      * @return a view of how this property as if it was defined in {@code gradle.properties}.
-     *         If you need to display as if it was passed as a CL option see {@link #asCLOption()}.
+     *         If you need to display as if it was passed as a CL option see {@link #asArgument()}.
      */
     public @NotEmpty String asProperty() {
         return (type == Type.SYSTEM ? "systemProp." : "") + toString();

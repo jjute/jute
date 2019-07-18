@@ -32,12 +32,12 @@ public class GradlePropertiesTest {
 
         GradleProperty projectProp = Type.PROJECT.create("defaultProperty", "01-value");
 
-        Assertions.assertEquals("-PdefaultProperty=01-value", projectProp.asCLOption());
+        Assertions.assertEquals("-PdefaultProperty=01-value", projectProp.asArgument());
         Assertions.assertEquals("defaultProperty=01-value", projectProp.asProperty());
 
         GradleProperty systemProp = Type.SYSTEM.create("defaultProperty", "01-value");
 
-        Assertions.assertEquals("-DdefaultProperty=01-value", systemProp.asCLOption());
+        Assertions.assertEquals("-DdefaultProperty=01-value", systemProp.asArgument());
         Assertions.assertEquals("systemProp.defaultProperty=01-value", systemProp.asProperty());
     }
 }
