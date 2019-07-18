@@ -151,16 +151,35 @@ public class FunctionalTest {
     }
 
     /**
-     * Return a new instance of {@code JuteGradleRunner} configured for use by test methods:
-     * <ul>
-     *     <li>With the plugin classpath based on the Gradle plugin development plugin conventions
-     *     <li>With the output of executed builds forwarded to the {@code System.out} stream.
-     * </ul>
+     * Return a new instance of {@code JuteGradleRunner} configured for use by test methods.
+     *
+     * @param forwardOutput whether the output of executed builds should be forwarded to the
+     *                      {@code System.out} stream. This is disabled by default as output
+     *                      is always available via {@link BuildResult#getOutput()}.
+     *
+     * @param withDebug whether debugging support is enabled. If debug support is not enabled, the
+     *                  build will be executed in an entirely separate process. This means that any
+     *                  debugger that is attached to the test execution process will not be attached to
+     *                  the build process. When debug support is enabled, the build is executed in the
+     *                  same process that is using the Gradle Runner, allowing the build to be debugged.
+     *                  Debug support is off (i.e. {@code false}) by default.
+     */
+    protected JuteGradleRunner createRunnerForPlugin(boolean forwardOutput, boolean withDebug) {
+
+        final GradleRunner runner = JuteGradleRunner.create().withPluginClasspath()
+                .withProjectDir(buildFile.getParentFile()).withDebug(withDebug);
+
+        if (forwardOutput) runner.forwardOutput();
+        return (JuteGradleRunner) runner;
+    }
+    /**
+     * Helper method to return a new instance of {@code JuteGradleRunner}
+     * with <i>output forwarding</i> and <i>debug support</i> enabled.
+     *
+     * @see #createRunnerForPlugin(boolean, boolean)
      */
     protected JuteGradleRunner createRunnerForPlugin() {
-
-        return (JuteGradleRunner) JuteGradleRunner.create().withPluginClasspath()
-                .withProjectDir(buildFile.getParentFile()).forwardOutput();
+        return createRunnerForPlugin(true, true);
     }
 
     /**
