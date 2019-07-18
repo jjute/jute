@@ -91,6 +91,32 @@ public class PluginUtils {
     }
 
     /**
+     * Find and return the properties file with the given name as a resource.
+     * Resources are searched in registered resource {@code SourceDirectorySet}
+     * entries for this module using {@link Class#getResourceAsStream(String)}.
+     *
+     * @param name properties filename <b>without</b> the file extension.
+     * @return {@code Properties} object that represents the found properties file.
+     *
+     * @throws IOException if an I/O exception occurred while closing input stream.
+     * @throws java.io.FileNotFoundException if the properties file was not found as a resource.
+     */
+    public static Properties getResourcePropertiesFile(@NotNull String name) throws IOException {
+
+        String filename = '/' + name + ".properties";
+        Properties properties = new Properties();
+
+        try (java.io.InputStream stream = PluginUtils.class.getResourceAsStream(filename)) {
+            if (stream == null) {
+                String log = "Unable to read resource properties file (%s)";
+                throw new java.io.FileNotFoundException(String.format(log, name));
+            }
+            properties.load(stream);
+            return properties;
+        }
+    }
+
+    /**
      * Search the given classpath for a specified path entry.
      *
      * @param classpath system classpath as a list of files.

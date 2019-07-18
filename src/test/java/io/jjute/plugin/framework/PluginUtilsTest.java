@@ -15,6 +15,16 @@ import java.util.Objects;
 public class PluginUtilsTest {
 
     @Test
+    public void shouldFindAndReadResourcePropertiesFiles() throws IOException {
+
+        java.util.Properties defaultProperties = PluginUtils.getResourcePropertiesFile("default");
+        Assertions.assertNotEquals(0, defaultProperties.size());
+
+        // Should not throw java.io.FileNotFoundException
+        Assertions.assertDoesNotThrow(() -> PluginUtils.getResourcePropertiesFile("gradle"));
+    }
+
+    @Test
     public void whenDirContainsPathShouldReturnTrue() {
 
         Path origin = Paths.get("example/of/some/really/fancy/path");
