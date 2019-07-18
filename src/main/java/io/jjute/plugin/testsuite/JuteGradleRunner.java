@@ -164,6 +164,11 @@ public class JuteGradleRunner extends DefaultGradleRunner {
         }
         List<String> arguments = Arrays.asList(properties);
         arguments.addAll(getArguments());
+        /*
+         * By default GradleRunner runs 'help' task before any other task.
+         * This clutters the standard build output and is generally not desirable.
+         */
+        arguments.add("-xhelp");
 
         super.withArguments(arguments);
         return super.build();
