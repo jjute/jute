@@ -17,11 +17,12 @@ public class PluginUtilsTest {
     @Test
     public void shouldFindAndReadResourcePropertiesFiles() throws IOException {
 
-        java.util.Properties defaultProperties = PluginUtils.getResourcePropertiesFile("default");
-        Assertions.assertNotEquals(0, defaultProperties.size());
+        GradleProperties defaultProps = GradleProperties.getDefaultFromResources();
+        Assertions.assertNotEquals(0, Objects.requireNonNull(defaultProps).size());
 
-        // Should not throw java.io.FileNotFoundException
-        Assertions.assertDoesNotThrow(() -> PluginUtils.getResourcePropertiesFile("gradle"));
+        GradleProperties gradleProps = GradleProperties.getFromResources("gradle.properties");
+        Assertions.assertEquals(0, Objects.requireNonNull(gradleProps).size());
+        Assertions.assertNotNull(GradleProperties.getFromResources());
     }
 
     @Test
