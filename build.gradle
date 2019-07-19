@@ -47,10 +47,15 @@ configurations {
 }
 
 sourceSets {
-    "test-it" {
-        java.srcDir file('src/test-it/java')
-        compileClasspath += sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath += output + compileClasspath
+    testInt {
+        java.srcDirs = ['src/testInt/java']
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + compileClasspath
+    }
+    test {
+        java.srcDirs = ['src/test/java']
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + compileClasspath
     }
     main.compileClasspath += configurations.testCompile
 }
