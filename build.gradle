@@ -97,7 +97,8 @@ idea {
 
         /*
          * Add integration test sources to project test sources.
-         * This will make sure module directories are properly marked as tests.
+         * This will make sure module directories are properly marked as tests
+         */
         sourceDirs -= file('src/testInt/java')
         testSourceDirs += file('src/testInt/java')
     }
