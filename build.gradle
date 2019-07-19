@@ -327,3 +327,15 @@ tasks.register('listModules') {
         }
     }
 }
+
+tasks.register('getSourceSetInfo') {
+
+    group 'verification'
+    description 'Print directory paths for each source set.'
+
+    sourceSets.findAll { srcSet ->
+        List<File> srcSetList = srcSet.java.srcDirs.asList()
+        logger.quiet(String.format("Printing %s source set content(%d):", srcSet.name, srcSetList.size()))
+        logger.quiet("Directories: " + Arrays.toString(srcSetList.toArray(new File[0])))
+    }
+}
