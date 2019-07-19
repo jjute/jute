@@ -32,4 +32,30 @@ public class JutePluginFunctionalTest extends FunctionalTest {
                 "}"
         }); createRunnerForPlugin(false, true).buildAndFail();
     }
+    
+    @Test
+    public void shouldAddJCenterRepository() {
+
+        initAndWriteToBuildFile(new String[] {
+                "task verifyRepository {",
+                "    if (project.getRepositories().findByName('BintrayJCenter') == null)",
+                "        throw new RuntimeException()",
+                "}"
+        }); createRunnerForPlugin().build();
+    }
+
+    @Test
+    public void shouldUseCorrectJavaVersionCompatibility() {
+
+        initAndWriteToBuildFile(new String[] {
+                "task verifyCompatibility {",
+                "   String sVersion = findProperty('projectJavaVersion')",
+                "   JavaVersion version = JavaVersion.toVersion(sVersion)",
+                "   JavaVersion srcComp = getSourceCompatibility()",
+                "   JavaVersion targetComp = getTargetCompatibility()",
+                "   if (!version.equals(srcComp) || !version.equals(targetComp))",
+                "       throw new RuntimeException()",
+                "}"
+        }); createRunnerForPlugin().build();
+    }
 }
