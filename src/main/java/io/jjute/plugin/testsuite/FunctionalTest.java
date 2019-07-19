@@ -55,8 +55,8 @@ public class FunctionalTest {
      * system designated default temporary-file directory. The test area
      * will be cleaned after the JVM that invoked the tests terminates.
      *
-     * @throws GradlePluginTestException if an {@code IOException} occurred while trying to create or
-     *                                   schedule deletion of the root directory or build file.
+     * @throws GradlePluginTestException if an {@code IOException} occurred while trying to create
+     *                                   or schedule deletion of the root directory or build file.
      */
     public FunctionalTest() {
 

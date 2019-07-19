@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+/**
+ * The {@code GradleProperties} class represents a persistent set of Gradle properties.
+ */
 public class GradleProperties extends Properties {
 
     /**
