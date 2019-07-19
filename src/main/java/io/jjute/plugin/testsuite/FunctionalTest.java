@@ -1,5 +1,6 @@
 package io.jjute.plugin.testsuite;
 
+import io.jjute.plugin.framework.GradleProperties;
 import io.jjute.plugin.framework.PluginUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -24,6 +25,8 @@ import java.nio.file.Files;
  *      Testing Gradle Plugins: Implementing functional tests</a>
  */
 public class FunctionalTest {
+
+    protected final GradleProperties properties;
 
     /**
      * Instance of {@code GradleRunner} used to build and execute tests.
@@ -88,6 +91,16 @@ public class FunctionalTest {
         }
         catch (IOException e) {
             throw new GradlePluginTestException("Unable to resolve plugin identifier.", e);
+        }
+        try {
+            properties = GradleProperties.getFromResources();
+            if (properties != null) {
+                properties.storeToFile(buildDir.toPath().resolve("gradle.properties").toFile());
+            }
+            else System.out.println("Warning: Unable to find gradle.properties resource.");
+        }
+        catch (IOException e) {
+            throw new GradlePluginTestException("An I/O exception occurred while reading properties.");
         }
     }
 
