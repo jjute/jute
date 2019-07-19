@@ -1,5 +1,11 @@
+import org.apache.commons.io.FileUtils
 import org.gradle.plugins.ide.idea.model.IdeaModule
 import java.nio.file.Paths
+
+buildscript {
+    repositories.jcenter()
+    dependencies.classpath 'commons-io:commons-io:2.6'
+}
 
 plugins {
     id 'java-gradle-plugin'
@@ -123,6 +129,27 @@ dependencies {
 
     // https://mvnrepository.com/artifact/javax.validation/validation-api
     sharedImplementation 'javax.validation:validation-api:2.0.1.Final'
+}
+/*
+ * Plugin development tasks should be called before running
+ * integration tests to make sure plugin metadata is up-to-date
+ */
+task updatePluginMetadata {
+    group 'plugin development'
+    description 'Update plugin descriptors and generate metadata for functional tests.'
+    dependsOn = ['pluginDescriptors', 'pluginUnderTestMetadata']
+}
+/*
+ * Modify this task to recursively delete all IntelliJ IDEA test output files.
+ * This should be called before running defined IDEA test configurations.
+ */
+cleanTest {
+    File ideaTestOutputDir = file('build/target/')
+    onlyIf { ideaTestOutputDir.exists() }
+    doLast {
+        FileUtils.deleteDirectory(ideaTestOutputDir)
+        logger.debug("Cleaned IDEA test output directory.")
+    }
 }
 
 /*
