@@ -22,8 +22,6 @@ public class JutePluginFunctionalTest extends FunctionalTest {
         createRunnerForPlugin().withProperty("projectPlugins", arguments).build();
     }
 
-//    Project project = ProjectBuilder.builder().build();
-
     @Test
     public void shouldFailWhenProjectPluginNotFound() {
 
@@ -32,7 +30,6 @@ public class JutePluginFunctionalTest extends FunctionalTest {
                 "   if (!project.plugins.hasPlugin('123abc348f'))",
                 "       throw new RuntimeException()",
                 "}"
-        });
-        createRunnerForPlugin().buildAndFail();
+        }); createRunnerForPlugin(false, true).buildAndFail();
     }
 }

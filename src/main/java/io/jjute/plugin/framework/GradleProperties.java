@@ -32,7 +32,7 @@ public class GradleProperties extends Properties {
             throw new IllegalArgumentException(String.format(
                     "Parameter (%s) is not a valid properties filename.", filename));
         }
-        try (java.io.InputStream stream = PluginUtils.class.getResourceAsStream('/' + filename))
+        try (java.io.InputStream stream = GradleProperties.class.getResourceAsStream('/' + filename))
         {
             if (stream != null)
             {

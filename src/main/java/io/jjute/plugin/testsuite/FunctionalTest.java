@@ -229,7 +229,7 @@ public class FunctionalTest {
             throw new GradlePluginTestException("Unable to find plugin descriptor on classpath.");
         }
         else if (propertiesFiles.length > 1) {
-            // TODO: Print warning here using a logger
+            System.out.println("Warning: Multiple properties files detected in META-INF/gradle-plugins.");
         }
         return FilenameUtils.removeExtension(propertiesFiles[0].getName());
     }
