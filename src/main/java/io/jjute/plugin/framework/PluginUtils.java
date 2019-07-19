@@ -28,6 +28,14 @@ public class PluginUtils {
     }
 
     /**
+     * @return the value of the given property or {@code null} if not found.
+     * @see Project#findProperty(String)
+     */
+    public String findProperty(String property) {
+        return (String) project.findProperty(property);
+    }
+
+    /**
      * Run a <i>platform-independent</i> shell command.
      */
     public void runShellCommand(String command) {
