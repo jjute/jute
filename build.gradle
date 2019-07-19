@@ -84,20 +84,16 @@ idea {
          */
         inheritOutputDirs = false
 
-        Project moduleProject = ((IdeaModule)it).getProject()
-        java.nio.file.Path modulePath = moduleProject.projectDir.toPath()
-
-        setOutputDir(modulePath.resolve("build/target/production").toFile())
-        setTestOutputDir(modulePath.resolve("build/target/test").toFile())
+        outputDir file('build/target/production')
+        testOutputDir file('build/target/test')
 
         setTargetBytecodeVersion(JavaVersion.VERSION_1_8)
 
         /*
          * Add integration test sources to project test sources.
          * This will make sure module directories are properly marked as tests.
-         */
-        testSourceDirs += project.sourceSets.findByName('test-it').java.srcDirs
-        testSourceDirs += project.sourceSets.findByName('test-it').resources.srcDirs
+        sourceDirs -= file('src/testInt/java')
+        testSourceDirs += file('src/testInt/java')
     }
 }
 
