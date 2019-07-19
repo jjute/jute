@@ -1,14 +1,11 @@
 package io.jjute.plugin.framework;
 
 import io.jjute.plugin.testsuite.FunctionalTest;
-import io.jjute.plugin.testsuite.FunctionalTests;
-import org.gradle.internal.impldep.org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 @SuppressWarnings("WeakerAccess")
-@Category(FunctionalTests.class)
 public class JutePluginFunctionalTest extends FunctionalTest {
 
     @Test
