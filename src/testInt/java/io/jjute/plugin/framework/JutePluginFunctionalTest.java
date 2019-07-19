@@ -1,13 +1,18 @@
 package io.jjute.plugin.framework;
 
 import io.jjute.plugin.testsuite.FunctionalTest;
+import io.jjute.plugin.testsuite.FunctionalTests;
+import org.gradle.internal.impldep.org.junit.experimental.categories.Category;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 @SuppressWarnings("WeakerAccess")
+@Category(FunctionalTests.class)
 public class JutePluginFunctionalTest extends FunctionalTest {
 
     @Test
-    public void shouldApplyProjectPlugins() {
+    public void whenPropertiesAsOptionShouldApplyProjectPlugins() throws IOException {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
@@ -16,18 +21,14 @@ public class JutePluginFunctionalTest extends FunctionalTest {
                 "           throw new RuntimeException(\"Missing project plugin: \" + plugin)",
                 "   }",
                 "}"
-        });
-
-        String[] arguments = new String[JutePlugin.appliedPlugins.length];
-        for (int i = 0; i < JutePlugin.appliedPlugins.length; i++) {
-            arguments[i] = JutePlugin.appliedPlugins[i].getId();
-        }
-        String cmdArguments = "-PprojectPlugins=" + String.join(",", arguments);
+        }); String[] arguments = { CorePlugin.IDEA.getId(), CorePlugin.JAVA.getId() };
         createRunnerForPlugin().withProperty("projectPlugins", arguments).build();
     }
 
+//    Project project = ProjectBuilder.builder().build();
+
     @Test
-    public void shouldFailwhenProjectPluginNotFound() {
+    public void shouldFailWhenProjectPluginNotFound() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
