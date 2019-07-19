@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.List;
@@ -162,8 +161,8 @@ public class JuteGradleRunner extends DefaultGradleRunner {
         for (int i = 0; i < userProperties.size(); i++) {
             properties[i] = userProperties.get(i).asArgument();
         }
-        List<String> arguments = Arrays.asList(properties);
-        arguments.addAll(getArguments());
+        List<String> arguments = new java.util.ArrayList<>(getArguments());
+        arguments.addAll(java.util.Arrays.asList(properties));
         /*
          * By default GradleRunner runs 'help' task before any other task.
          * This clutters the standard build output and is generally not desirable.

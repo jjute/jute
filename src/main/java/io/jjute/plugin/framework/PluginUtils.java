@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
@@ -49,11 +48,9 @@ public class PluginUtils {
         String[] fullCmdArgs = new String[cmdArgs.length + 2];
 
         if (System.getProperty("os.name").startsWith("Windows")) {
-            fullCmdArgs[0] = "cmd";
-            fullCmdArgs[1] = "/c";
+            fullCmdArgs[0] = "cmd"; fullCmdArgs[1] = "/c";
         } else {
-            fullCmdArgs[0] = "sh";
-            fullCmdArgs[1] = "-c";
+            fullCmdArgs[0] = "sh";fullCmdArgs[1] = "-c";
         }
         System.arraycopy(cmdArgs, 0, fullCmdArgs, 2, cmdArgs.length);
 
@@ -75,7 +72,7 @@ public class PluginUtils {
      * @param url location of the file on the web
      * @param dir directory file used to store the target file
      *
-     * @throws NotDirectoryException  if the given file is not a valid directory.
+     * @throws java.nio.file.NotDirectoryException  if the given file is not a valid directory.
      * @throws java.net.MalformedURLException if the given URL is not valid.
      */
     public void downloadTextFile(String url, File dir, boolean create) throws IOException {
@@ -85,7 +82,7 @@ public class PluginUtils {
 
         if (dir.exists()) {
             if (!dir.isDirectory()) {
-                throw new NotDirectoryException("Target path is not a valid directory!");
+                throw new java.nio.file.NotDirectoryException("Target path is not a valid directory!");
             }
         } else if (!dir.mkdirs()) {
             throw new IllegalStateException("Unable to create directory structure for path: " + filePath);

@@ -3,14 +3,13 @@ package io.jjute.plugin.testsuite;
 import io.jjute.plugin.framework.PluginUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.gradle.api.logging.Logger;
 import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.testkit.runner.BuildResult;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 
 /**
  * <p>
@@ -103,7 +102,7 @@ public class FunctionalTest {
     private void writeToBuildFile(String[] text, boolean append) {
 
         try {
-            java.util.List<String> toWrite = new ArrayList<>(java.util.Arrays.asList(text));
+            java.util.List<String> toWrite = java.util.Arrays.asList(text);
             FileUtils.writeLines(buildFile, toWrite, append);
         }
         catch (java.io.IOException e) {
@@ -164,6 +163,7 @@ public class FunctionalTest {
      *                  same process that is using the Gradle Runner, allowing the build to be debugged.
      *                  Debug support is off (i.e. {@code false}) by default.
      */
+    @SuppressWarnings("SameParameterValue")
     protected JuteGradleRunner createRunnerForPlugin(boolean forwardOutput, boolean withDebug) {
 
         final GradleRunner runner = JuteGradleRunner.create().withPluginClasspath()

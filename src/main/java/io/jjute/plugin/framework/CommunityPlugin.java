@@ -1,6 +1,7 @@
 package io.jjute.plugin.framework;
 
 import org.gradle.api.Project;
+import org.jetbrains.annotations.NotNull;
 
 public class CommunityPlugin implements ProjectPlugin {
 
@@ -10,7 +11,7 @@ public class CommunityPlugin implements ProjectPlugin {
     }
 
     @Override
-    public void apply(Project target) {
+    public void apply(@NotNull Project target) {
 
     }
 
