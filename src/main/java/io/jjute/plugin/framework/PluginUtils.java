@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
