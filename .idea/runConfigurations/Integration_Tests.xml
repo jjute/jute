@@ -7,7 +7,7 @@
     <option name="TEST_OBJECT" value="package" />
     <option name="PARAMETERS" value="" />
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="cleanTest" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="configIdeaIntTests" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
       <option name="Make" enabled="true" />
     </method>
   </configuration>

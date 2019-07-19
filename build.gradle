@@ -152,6 +152,9 @@ cleanTest {
         logger.debug("Cleaned IDEA test output directory.")
     }
 }
+tasks.register('configIdeaIntTests') { 
+    dependsOn = ['cleanTest', 'assemble', 'updatePluginMetadata'] 
+}
 
 /*
  * Configures this project AND each of its sub-projects.
