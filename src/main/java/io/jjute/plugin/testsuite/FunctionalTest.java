@@ -76,13 +76,17 @@ public class FunctionalTest {
         } catch (java.io.IOException e) {
             throw new GradlePluginTestException("Unable to create " +
                     "test project build file: \"%s\"", buildFile.getPath(), e);
-        } try {
-            FileUtils.forceDeleteOnExit(buildDir);
         }
-        catch (java.io.IOException e) {
-           throw new GradlePluginTestException("Failed to schedule " +
-                   "build root dir deletion: \"%s\"", buildDir.getPath(), e);
-        }
+        /* Use a shutdown hook here because for some reason Apache
+         * FileUtils.forceDeleteOnExit does not work in this specific situation.
+         */
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try { FileUtils.deleteDirectory(buildDir); }
+            catch (java.io.IOException e) {
+                throw new GradlePluginTestException("Failed to schedule " +
+                        "build root dir deletion: \"%s\"", buildDir.getPath(), e);
+            }
+        }));
 
         buildRunner = createRunnerForPlugin();
 
