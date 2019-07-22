@@ -10,6 +10,7 @@ import org.gradle.testkit.runner.BuildResult;
 import javax.validation.constraints.NotEmpty;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 
 /**
@@ -164,6 +165,29 @@ public class FunctionalTest {
      */
     protected void initAndWriteToBuildFile(String[] text) {
         initializeBuildFile(); writeToBuildFile(text);
+    }
+
+    /**
+     * Write Gradle properties stored in given {@code Map} to {@code gradle.properties}
+     * file located in the test project root directory. The properties however will
+     * not be written if the properties file could not be found.
+     *
+     * @param properties {@code Map} containing Gradle properties where map keys represent property names
+     *                   <i>(left-hand side)</i> and map values represent property values <i>(right-hand side)</i>.
+     *
+     * @throws IOException if an I/O error occurred while writing properties to file.
+     */
+    protected void writeToGradleProperties(java.util.Map<String, Object> properties) throws IOException {
+
+        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
+        if (propertiesFile != null)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (java.util.Map.Entry<String, Object> entry : properties.entrySet()) {
+                sb.append(entry.getKey()).append('=').append(entry.getValue()).append("\n");
+            }
+            FileUtils.write(propertiesFile, sb.toString(), Charset.defaultCharset());
+        }
     }
 
     /**

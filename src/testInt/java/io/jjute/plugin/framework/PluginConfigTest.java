@@ -1,7 +1,6 @@
 package io.jjute.plugin.framework;
 
 import io.jjute.plugin.testsuite.FunctionalTest;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +12,15 @@ public class PluginConfigTest extends FunctionalTest {
     @Test
     public void shouldSetConfigsFromGradleProperties() throws IOException {
 
-        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
-        FileUtils.writeLines(propertiesFile, java.util.Arrays.asList(
-                "projectJavaVersion=1.1",
-                "isProjectJavaLibrary=false",
-                "enableIDEAIntegration=false",
-                "ideaOutputDir=test/directory/path/one",
-                "ideaTestOutputDir=test/directory/path/two"
-        ));
+        java.util.Map<String, Object> properties = new java.util.HashMap<>();
+
+        properties.put("projectJavaVersion", 1.1);
+        properties.put("isProjectJavaLibrary", false);
+        properties.put("enableIDEAIntegration", false);
+        properties.put("ideaOutputDir", "test/directory/path/one");
+        properties.put("ideaTestOutputDir", "test/directory/path/two");
+
+        writeToGradleProperties(properties);
         Map<String, String> map = new java.util.HashMap<>();
         /*
          * Keys represents plugin property names.
@@ -39,14 +39,15 @@ public class PluginConfigTest extends FunctionalTest {
     @Test
     public void shouldSetConfigsFromCommandArguments() throws IOException {
 
-        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
-        FileUtils.writeLines(propertiesFile, java.util.Arrays.asList(
-                "projectJavaVersion=1.3",
-                "isProjectJavaLibrary=false",
-                "enableIDEAIntegration=true",
-                "ideaOutputDir=test/dir/path/one",
-                "ideaTestOutputDir=test/dir/path/two"
-        ));
+        java.util.Map<String, Object> properties = new java.util.HashMap<>();
+
+        properties.put("projectJavaVersion", 1.3);
+        properties.put("isProjectJavaLibrary", false);
+        properties.put("enableIDEAIntegration", true);
+        properties.put("ideaOutputDir", "test/dir/path/one");
+        properties.put("ideaTestOutputDir", "test/dir/path/two");
+
+        writeToGradleProperties(properties);
         Map<String, String> map = new java.util.HashMap<>();
         /*
          * Keys represents plugin property names.
@@ -55,8 +56,8 @@ public class PluginConfigTest extends FunctionalTest {
         map.put("jute.projectJavaVersion", "JavaVersion.VERSION_1_3");
         map.put("jute.isProjectJavaLibrary", "false");
         map.put("jute.enableIDEAIntegration", "true");
-        map.put("jute.ideaOutputDir", "test/dir/path/one");
-        map.put("jute.ideaTestOutputDir", "test/dir/path/two");
+        map.put("jute.ideaOutputDir", "\"test/dir/path/one\"");
+        map.put("jute.ideaTestOutputDir", "\"test/dir/path/two\"");
 
         initAndWriteToBuildFile(getCompareConfigsTaskBuildLines(map));
     }
