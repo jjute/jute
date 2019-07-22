@@ -168,6 +168,11 @@ public class JuteGradleRunner extends DefaultGradleRunner {
          * This clutters the standard build output and is generally not desirable.
          */
         arguments.add("-xhelp");
+        /*
+         * This tells Gradle to print a stacktrace in case the plugin fails with an exception.
+         * Without this we have no idea where or why the exception occurred.
+         */
+        arguments.add("--stacktrace");
 
         super.withArguments(arguments);
         return super.build();
