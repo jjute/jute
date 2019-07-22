@@ -16,6 +16,8 @@ public class JutePlugin implements Plugin<Project> {
     private Logger logger;
     private PluginUtils utils;
     private JavaVersion javaVersion;
+
+    private PluginConfig config;
     private Set<ProjectPlugin> plugins;
 
     @Override
@@ -27,6 +29,7 @@ public class JutePlugin implements Plugin<Project> {
         logger.debug("Applying JutePlugin to project " + target.getDisplayName());
 
         loadGradleProperties();
+        config = target.getExtensions().create("jute", PluginConfig.class);
 
         ScriptHandler buildscript = target.getBuildscript();
         buildscript.getRepositories().gradlePluginPortal();
