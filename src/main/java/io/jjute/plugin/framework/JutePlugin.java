@@ -22,6 +22,22 @@ public class JutePlugin implements Plugin<Project> {
     private PluginConfig config;
     private Set<ProjectPlugin> plugins;
 
+    /**
+     * <p>
+     *     When the plugin is applied to a project, Gradle creates an instance of the plugin
+     *     class and calls this method against the instance. The project object is passed as
+     *     a parameter, which the plugin can use to configure the project however it needs to.
+     * <p>
+     *     A new instance of a plugin is created for each project it is applied to. Also note that
+     *     the {@code Plugin} class is a generic type. This example has it receiving the {@code Project}
+     *     type as a type parameter. A plugin can instead receive a parameter of type {@code Settings},
+     *     in which case the plugin can be  applied in a settings script, or a parameter of type Gradle,
+     *     in which case the plugin can be applied in an initialization script.
+     * </p>
+     * @param target {@code Project} object this plugin instance is being applied to
+     * @see <a href="https://docs.gradle.org/4.10.3/userguide/custom_plugins.html#sec:writing_a_simple_plugin">
+     *      Gradle Docs 4.10.3: Writing a simple plugin</a>
+     */
     @Override
     public void apply(Project target) {
 
