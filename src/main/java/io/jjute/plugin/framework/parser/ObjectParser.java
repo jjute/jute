@@ -1,4 +1,4 @@
-package io.jjute.plugin.framework.io;
+package io.jjute.plugin.framework.parser;
 
 import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
@@ -9,8 +9,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 @SuppressWarnings("unchecked")
 public class ObjectParser<R, I> extends DataParser<R, I> {
-
-    public static final StringParser STRING = new StringParser();
 
     /**
      * @throws IllegalStateException if the resolved method is not declared static.
@@ -24,17 +22,19 @@ public class ObjectParser<R, I> extends DataParser<R, I> {
         this(result, method, (Class<I>) Object.class);
     }
 
+    /**
+     * @throws NullPointerException if the given object instance is {@code null}.
+     * @throws DataParsingException when a {@link IllegalAccessException} is thrown when invoking the parsing method
+     *                              because the access to method was denied or a {@link InvocationTargetException} is
+     *                              thrown signaling that an underlying method of the invocation target threw an exception
+     */
     @Override
     public R parse(@NotNull I input) {
         try {
             return parseData(input);
         }
         catch (InvocationTargetException e) {
-            throw new IllegalStateException(e);
+            throw new DataParsingException(e);
         }
-    }
-    @Override
-    public String toString(Object type) {
-        return type.toString();
     }
 }

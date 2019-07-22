@@ -1,11 +1,13 @@
-package io.jjute.plugin.framework.io;
+package io.jjute.plugin.framework.parser;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
 /**
  *<p>
@@ -20,13 +22,13 @@ import java.lang.reflect.Modifier;
  *       Here is an example of how to parse a primitive data type to {@code String}:
  *   <pre>
  *   DataParser{@code <String, Object>} parser = new ObjectParser<>(String.class, "valueOf", Double.TYPE);
- *   System.out.println(parser.parseType(10.25d)); // "10.25"
+ *   System.out.println(parser.parse(10.25d)); // "10.25"
  *   </pre>
  *   <dt>
  *       Or we could use a {@link PrimitiveParser} which comes with pre-initialized parsers:
  *   </dt>
  *   <pre>
- *   System.out.println(PrimitiveParser.DOUBLE.toString(10.25d)); // "10.25"
+ *   System.out.println(PrimitiveParser.DOUBLE.parse(10.25d)); // "10.25"
  *   </pre>
  * <dt>
  *     Running the examples above would be the equivalent of calling {@link String#valueOf(double)},
@@ -103,7 +105,7 @@ public abstract class DataParser<R, I> {
      * contain a {@code static} modifier in order to be accessed, so methods
      * that are not declared {@code static} cannot be accessed here.
      */
-    protected final Method method;
+    protected final @Nullable Method method;
 
     /**
      * Resolve a {@code static} method with the given specifications.
@@ -113,7 +115,7 @@ public abstract class DataParser<R, I> {
      * @param input single method argument {@code Class}.
      *
      * @throws IllegalStateException if the resolved method is not declared static.
-     * @throws IllegalArgumentException if the specified method was not found in the given type class.
+     * @throws DataParsingException if the specified method was not found in the given type class.
      */
     protected DataParser(Class<R> result, String method, Class<I> input) {
 
@@ -124,27 +126,30 @@ public abstract class DataParser<R, I> {
                         "to be declared static.", this.method.toGenericString()));
             }
         } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException(e);
+            throw new DataParsingException(e);
         }
+    }
+
+    /**
+     * This constructor should be used by {@code DataParser} implementations that
+     * do not relay on delegating operations to methods resolved through reflection,
+     * but instead implement their own parsing system.
+     */
+    protected DataParser() {
+        this.method = null;
     }
 
     /**
      * Parse the given data of type {@code I} to data of type {@code R}.
      *
      * Note that implementations are free to handle parsing any way they like,
-     * which does not necessarily involve the use of reflection to delegate.
-     * In some situations this might be the preferred solution as can be seen
-     * in {@link StringParser#parse(Object) StringParser}.
+     * which does not necessarily involve the use of reflection to delegate as
+     * in some situations this might be the preferred solution
      *
      * @param data input data of type {@code I}.
      * @return output data of type {@code R}.
      */
     public abstract R parse(@NotNull I data);
-
-    /**
-     * @return a {@code String} representation of the given data.
-     */
-    public abstract String toString(I data);
 
     /**
      * Parse the given object of generic data type {@code I} to a designated result data type {@code R}.
@@ -154,18 +159,19 @@ public abstract class DataParser<R, I> {
      * @param data object instance of generic data type {@code I} to parse to {@code R}.
      * @return the result of parsing given object of data type {@code I} to data type {@code R}.
      *
+     * @throws InvocationTargetException if underlying method of the invocation target throws an exception.
      * @throws NullPointerException if the given object instance is {@code null}.
-     * @throws IllegalStateException when a {@link IllegalAccessException} is thrown when invoking
+     * @throws DataParsingException when a {@link IllegalAccessException} is thrown when invoking
      *                               parsing method because the access to method was denied.
      */
     @Contract("null -> fail")
     protected R parseData(I data) throws InvocationTargetException {
 
         try {
-            return (R) method.invoke(null, data);
+            return (R) Objects.requireNonNull(method).invoke(null, data);
         }
         catch (IllegalAccessException e) {
-            throw new IllegalStateException(e);
+            throw new DataParsingException(e);
         }
     }
 

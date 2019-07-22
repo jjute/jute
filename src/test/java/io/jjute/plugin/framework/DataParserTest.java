@@ -1,8 +1,9 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.framework.io.DataParser;
-import io.jjute.plugin.framework.io.ObjectParser;
-import io.jjute.plugin.framework.io.PrimitiveParser;
+import io.jjute.plugin.framework.parser.DataParser;
+import io.jjute.plugin.framework.parser.DataParsingException;
+import io.jjute.plugin.framework.parser.ObjectParser;
+import io.jjute.plugin.framework.parser.PrimitiveParser;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void shouldParsePrimitiveDataTypesToObjects() {
+    public void shouldWrapPrimitiveDataTypesToObjects() {
 
         java.util.Map<PrimitiveParser, Object> primitiveParsers = new java.util.HashMap<>();
         primitiveParsers.put(PrimitiveParser.BOOLEAN, true);
@@ -58,16 +59,14 @@ public class DataParserTest<K extends Pair<Object, String>> {
         for (Map.Entry<PrimitiveParser, Object> entry : primitiveParsers.entrySet())
         {
             Object expectedValue = entry.getValue();
-            Object parsedValue = entry.getKey().parse(expectedValue);
+            PrimitiveParser parser = entry.getKey();
+
+            Object wrappedValue = parser.wrap(expectedValue);
+            Object parsedValue = parser.parse(expectedValue.toString());
+
+            Assertions.assertEquals(expectedValue, wrappedValue);
             Assertions.assertEquals(expectedValue, parsedValue);
         }
-    }
-
-    @Test
-    public void shouldParseStringsWithStringParser() {
-
-        final String text = "text";
-        Assertions.assertEquals(text, ObjectParser.STRING.parse(text));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
         map.put((K) new Pair(1, "1"), Byte.TYPE);
         map.put((K) new Pair(1, "1"), Short.TYPE);
 
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        Assertions.assertThrows(DataParsingException.class, () ->
                 parseDataFromMapWithExpectedResult(map));
     }
 
@@ -110,7 +109,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     @Test
     public void whenUsingNotStaticMethodShouldThrowException() {
 
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
+        Assertions.assertThrows(DataParsingException.class, () ->
                 new ObjectParser<>(String.class, "nonStaticParser", MagicString.class));
     }
 }
