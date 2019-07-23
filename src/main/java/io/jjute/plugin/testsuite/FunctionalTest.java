@@ -191,6 +191,21 @@ public class FunctionalTest {
     }
 
     /**
+     * Write Gradle properties stored in given array to {@code gradle.properties}
+     * file located in the test project root directory. The properties however will
+     * not be written if the properties file could not be found.
+     *
+     * @param properties array of text lines to write
+     *
+     * @throws IOException if an I/O error occurred while writing properties to file.
+     */
+    protected void writeToGradleProperties(String[] properties) throws IOException {
+
+        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
+        FileUtils.writeLines(propertiesFile, java.util.Arrays.asList(properties));
+    }
+
+    /**
      * Return a new instance of {@code JuteGradleRunner} configured for use by test methods.
      *
      * @param forwardOutput whether the output of executed builds should be forwarded to the
