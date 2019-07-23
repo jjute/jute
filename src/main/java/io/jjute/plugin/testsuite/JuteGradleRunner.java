@@ -155,14 +155,17 @@ public class JuteGradleRunner extends DefaultGradleRunner {
     }
 
     /**
-     * Prepare this runner before building it with the following operations:
+     * Run these operations and then build the runner:
      * <ul>
      *     <li>Inject all user properties as arguments.
      *     <li>Disable {@code help} task from running for a cleaner output.</li>
      *     <li>Enable {@code --stacktrace} option for easier debugging.</li>
      * </ul>
+     * @param fail whether this build is expected to complete with failiure. If set to {@code true} then
+     *             the method will run and return the result of {@link #buildAndFail()}, otherwise
+     *             run and return the result of {@link #build()}.
      */
-    private JuteGradleRunner prepareBuild() {
+    private BuildResult prepareAndBuild(boolean fail) {
 
         final String[] properties = new String[userProperties.size()];
         for (int i = 0; i < userProperties.size(); i++) {
@@ -182,16 +185,16 @@ public class JuteGradleRunner extends DefaultGradleRunner {
         arguments.add("--stacktrace");
 
         super.withArguments(arguments);
-        return this;
+        return fail ? super.buildAndFail() : super.build();
     }
 
     @Override
     public BuildResult build() {
-        return prepareBuild().build();
+        return prepareAndBuild(false);
     }
 
     @Override
     public BuildResult buildAndFail() {
-        return prepareBuild().buildAndFail();
+        return prepareAndBuild(true);
     }
 }
