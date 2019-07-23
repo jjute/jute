@@ -68,6 +68,15 @@ public class PluginConfig {
     public String ideaTestOutputDir = "build/target/test";
 
     /**
+     * If true, output directories for IDEA modules will be located below
+     * the output directory for the project otherwise, they will be set
+     * to the directories specified by getter method return values.
+     *
+     * @see IdeaModule#setInheritOutputDirs(Boolean)
+     */
+    public boolean ideaInheritOutputDirs = false;
+
+    /**
      * <p>
      *     Gradle plugin properties required by {@code JutePlugin}.
      * <p>
@@ -82,7 +91,8 @@ public class PluginConfig {
         IS_JAVA_LIBRARY("isProjectJavaLibrary", PrimitiveParser.BOOLEAN),
         IDEA_INTEGRATION("enableIDEAIntegration", PrimitiveParser.BOOLEAN),
         IDEA_OUTPUT_DIR("ideaOutputDir", null),
-        IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir", null);
+        IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir", null),
+        IDEA_INHERIT_DIRS("ideaInheritOutputDirs", PrimitiveParser.BOOLEAN);
 
         private final String name;
         private final Field field;
