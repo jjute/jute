@@ -154,8 +154,15 @@ public class JuteGradleRunner extends DefaultGradleRunner {
         return userProperties;
     }
 
-    @Override
-    public BuildResult build() {
+    /**
+     * Prepare this runner before building it with the following operations:
+     * <ul>
+     *     <li>Inject all user properties as arguments.
+     *     <li>Disable {@code help} task from running for a cleaner output.</li>
+     *     <li>Enable {@code --stacktrace} option for easier debugging.</li>
+     * </ul>
+     */
+    private JuteGradleRunner prepareBuild() {
 
         final String[] properties = new String[userProperties.size()];
         for (int i = 0; i < userProperties.size(); i++) {
@@ -175,6 +182,16 @@ public class JuteGradleRunner extends DefaultGradleRunner {
         arguments.add("--stacktrace");
 
         super.withArguments(arguments);
-        return super.build();
+        return this;
+    }
+
+    @Override
+    public BuildResult build() {
+        return prepareBuild().build();
+    }
+
+    @Override
+    public BuildResult buildAndFail() {
+        return prepareBuild().buildAndFail();
     }
 }
