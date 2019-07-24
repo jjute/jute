@@ -61,6 +61,11 @@ public class JutePlugin implements Plugin<Project> {
             if (plugins.contains(CorePlugin.IDEA)) {
                 new IdeaIntegration(this, target).configureIdeaModel();
             }
+            /*
+             * Sets the build directory of this project.
+             * The build directory is the directory which all artifacts are generated into.
+             */
+            project.setBuildDir(project.getProjectDir().toPath().resolve("build").toFile());
         });
     }
 
