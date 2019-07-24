@@ -1,101 +1,17 @@
 package io.jjute.plugin.framework;
 
 import org.apache.commons.io.FilenameUtils;
-import org.codehaus.groovy.runtime.ResourceGroovyMethods;
-import org.gradle.api.Project;
-import org.gradle.api.logging.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("WeakerAccess")
 public class PluginUtils {
-
-    private final Project project;
-    private final Logger logger;
-
-    public PluginUtils(Project project) {
-        this.project = project;
-        this.logger = project.getLogger();
-    }
-
-    /**
-     * @return the value of the given property or {@code null} if not found.
-     * @see Project#findProperty(String)
-     */
-    public String findProperty(String property) {
-        return (String) project.findProperty(property);
-    }
-
-    /**
-     * Run a <i>platform-independent</i> shell command.
-     */
-    public void runShellCommand(String command) {
-
-        logger.debug("Running shell command " + command);
-        String[] cmdArgs = command.split(" ");
-
-        java.io.OutputStream stdout = new java.io.ByteArrayOutputStream();
-        String[] fullCmdArgs = new String[cmdArgs.length + 2];
-
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            fullCmdArgs[0] = "cmd"; fullCmdArgs[1] = "/c";
-        } else {
-            fullCmdArgs[0] = "sh";fullCmdArgs[1] = "-c";
-        }
-        System.arraycopy(cmdArgs, 0, fullCmdArgs, 2, cmdArgs.length);
-
-        project.exec((execSpec) -> execSpec.commandLine((Object[]) fullCmdArgs));
-        logger.quiet(stdout.toString().trim());
-    }
-
-    /**
-     * Execute a Git command with the given arguments.
-     * The output will be printed to console
-     */
-    public void runGitCommand(String command) {
-        runShellCommand("git " + command);
-    }
-
-    /**
-     * Download a text-based file from a given URL and store it in the given directory.
-     *
-     * @param url location of the file on the web
-     * @param dir directory file used to store the target file
-     *
-     * @throws java.nio.file.NotDirectoryException  if the given file is not a valid directory.
-     * @throws java.net.MalformedURLException if the given URL is not valid.
-     */
-    public void downloadTextFile(String url, File dir, boolean create) throws IOException {
-
-        String filePath = dir.getPath();
-        logger.debug(String.format("Downloading file: %s\nDestination dir: %s", url, filePath));
-
-        if (dir.exists()) {
-            if (!dir.isDirectory()) {
-                throw new java.nio.file.NotDirectoryException("Target path is not a valid directory!");
-            }
-        } else if (!dir.mkdirs()) {
-            throw new IllegalStateException("Unable to create directory structure for path: " + filePath);
-        }
-        final URL location = new URL(url);
-        File target = dir.toPath().resolve(location.getFile()).toFile();
-
-        if (create && !target.createNewFile()) {
-            throw new java.nio.file.FileAlreadyExistsException("Unable to create target file " + target.getName());
-        }
-        String text = ResourceGroovyMethods.getText(location);
-        ResourceGroovyMethods.write(target, text);
-    }
 
     /**
      * Search the given classpath for a specified path entry.

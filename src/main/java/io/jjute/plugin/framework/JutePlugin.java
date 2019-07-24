@@ -14,8 +14,6 @@ import java.util.Set;
 public class JutePlugin implements Plugin<Project> {
 
     private Logger logger;
-    private PluginUtils utils;
-
     private PluginConfig config;
     private Set<ProjectPlugin> plugins;
 
@@ -39,8 +37,6 @@ public class JutePlugin implements Plugin<Project> {
     public void apply(Project target) {
 
         logger = target.getLogger();
-        utils = new PluginUtils(target);
-
         logger.debug("Applying JutePlugin to project " + target.getDisplayName());
 
         config = target.getExtensions().create("jute", PluginConfig.class);
