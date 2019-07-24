@@ -18,7 +18,7 @@ public class IdeaIntegration extends IntegrationModel {
     private final PluginConfig config;
 
     public IdeaIntegration(JutePlugin plugin, Project target) {
-        super("idea", target);
+        super("IDEA", target);
         this.jute = plugin;
         this.config = jute.getConfig();
     }
