@@ -40,7 +40,7 @@ public class IntegrationTest {
      */
     protected final Project project;
 
-    private IntegrationTest() {
+    public IntegrationTest() {
         project = createJavaProject();
     }
 
