@@ -7,6 +7,7 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 
+@SuppressWarnings("WeakerAccess")
 public class JavaIntegration extends IntegrationModel {
 
     public JavaIntegration(Project target) {

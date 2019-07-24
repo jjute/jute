@@ -11,7 +11,7 @@ import java.io.IOException;
 public class JavaIntegrationTest extends FunctionalTest {
 
     @Test
-    public void shouldSetCorrectSourceAndTargetCompatibility() throws IOException {
+    public void shouldSetSourceAndTargetCompatibility() throws IOException {
 
         JavaVersion compatibility = JavaVersion.VERSION_1_9;
 
@@ -30,7 +30,7 @@ public class JavaIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldSetCorrectSourceSetDirectoryLayout() {
+    public void shouldSetSourceSetDirectoryLayout() {
 
         initAndWriteToBuildFile(new String[] {
             "void verifySourceSetDirectory(SourceDirectorySet set, String path) {",
@@ -45,6 +45,26 @@ public class JavaIntegrationTest extends FunctionalTest {
             "   verifySourceSetDirectory(test.java, 'src/test/java')",
             "   verifySourceSetDirectory(test.resources, 'src/test/resources')",
             "}"
+        }); createRunnerForPlugin().build();
+    }
+
+    @Test
+    public void shouldSetSingleSourceSetDirectory() {
+
+        initAndWriteToBuildFile(new String[] {
+                "task setSingleSourceSetDir {",
+                "   io.jjute.plugin.framework.integration.JavaIntegration java = " +
+                        "new io.jjute.plugin.framework.integration.JavaIntegration(project)",
+                "   SourceSet main = java.getConvention().getSourceSets().getByName(\"main\")",
+                "   java.nio.file.Path path = java.nio.file.Paths.get('src/secondary/java')",
+                "   java.setSingleSourceDir(main.getJava(), path.toString())",
+                "   java.util.Set<File> srcDirs = sourceSets.main.java.srcDirs",
+                "   java.nio.file.Path targetPath = projectDir.toPath().resolve(path)",
+                "   if (srcDirs.size() != 1 || !srcDirs.iterator().next().toPath().equals(targetPath)) {",
+                "       String message = \"Source dirs were not configured properly: %s, expected a single File entry %s.\"",
+                "       throw new RuntimeException(String.format(message, srcDirs, targetPath))",
+                "   }",
+                "}"
         }); createRunnerForPlugin().build();
     }
 }
