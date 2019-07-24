@@ -1,5 +1,6 @@
-package io.jjute.plugin.framework;
+package io.jjute.plugin.framework.integration;
 
+import io.jjute.plugin.framework.PluginConfig;
 import io.jjute.plugin.testsuite.FunctionalTest;
 import org.gradle.api.JavaVersion;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 @SuppressWarnings("WeakerAccess")
-public class ConventionConfigTest extends FunctionalTest {
+public class JavaIntegrationTest extends FunctionalTest {
 
     @Test
     public void shouldSetCorrectSourceAndTargetCompatibility() throws IOException {

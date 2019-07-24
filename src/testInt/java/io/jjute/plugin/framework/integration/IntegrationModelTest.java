@@ -1,7 +1,5 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.framework.integration.IntegrationModel;
-import io.jjute.plugin.framework.integration.PluginIntegrationException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.jetbrains.annotations.TestOnly;
