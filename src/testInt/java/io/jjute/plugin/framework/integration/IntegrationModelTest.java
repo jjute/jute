@@ -1,30 +1,26 @@
 package io.jjute.plugin.framework.integration;
 
+import io.jjute.plugin.testsuite.IntegrationTest;
 import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
-
 @SuppressWarnings("WeakerAccess")
-public class IntegrationModelTest {
+public class IntegrationModelTest extends IntegrationTest {
 
-    private static Project dummyProject;
     private DummyIntegrationModel model;
 
     @TestOnly
-    private class DummyIntegrationModel extends IntegrationModel {
+    private static class DummyIntegrationModel extends IntegrationModel {
 
         private DummyIntegrationModel(String model, Project project) {
             super(model, project);
         }
     }
     @TestOnly
-    private class DummyIntegrationException extends PluginIntegrationException {
+    private static class DummyIntegrationException extends PluginIntegrationException {
 
         private DummyIntegrationException(IntegrationModel model, String cause) {
             super(model, cause);
@@ -34,21 +30,15 @@ public class IntegrationModelTest {
         }
     }
 
-    @BeforeAll
-    public static void setupIntegrationModelTest() {
-        ProjectBuilder builder =  ProjectBuilder.builder().withName("dummyProject");
-        dummyProject = Objects.requireNonNull(builder.build());
-    }
-
     @BeforeEach
     public void createDummyIntegrationModel() {
-        model = new DummyIntegrationModel("dummy", dummyProject);
+        model = new DummyIntegrationModel("dummy", project);
     }
 
     @Test
     public void shouldReturnValidValuesFromGetters() {
 
-        Assertions.assertEquals(dummyProject, model.getProject());
+        Assertions.assertEquals(project, model.getProject());
         Assertions.assertEquals("dummy", model.getModelName());
     }
 
