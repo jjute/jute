@@ -50,6 +50,7 @@
 .idea/modules
 .idea/misc.xml
 .idea/vcs.xml
+.idea/codeStyles
 
 ### Gradle ###
 .gradle
