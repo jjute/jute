@@ -1,7 +1,7 @@
 package io.jjute.plugin.testsuite;
 
 import io.jjute.plugin.framework.GradleProperties;
-import io.jjute.plugin.framework.PluginUtils;
+import io.jjute.plugin.framework.util.PluginUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.gradle.testkit.runner.GradleRunner;

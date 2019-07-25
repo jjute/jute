@@ -1,4 +1,4 @@
-package io.jjute.plugin.framework;
+package io.jjute.plugin.framework.util;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.Nullable;

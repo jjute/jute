@@ -1,5 +1,6 @@
 package io.jjute.plugin.framework;
 
+import io.jjute.plugin.framework.util.PluginUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
