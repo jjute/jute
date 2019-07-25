@@ -4,13 +4,12 @@ import io.jjute.plugin.framework.PluginConfig;
 import io.jjute.plugin.testsuite.FunctionalTest;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("WeakerAccess")
-public class JUnitIntegrationTest extends FunctionalTest {
+class JUnitIntegrationTest extends FunctionalTest {
 
     private static final String JUNIT_INTEGRATION = PluginConfig.Property.JUNIT_INTEGRATION.getName();
 
     @Test
-    public void shouldAddProjectDependencies() {
+    void shouldAddProjectDependencies() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyJUnitIntegration {",
@@ -22,7 +21,7 @@ public class JUnitIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldConfigureProjectTestFramework() {
+    void shouldConfigureProjectTestFramework() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyJUnitIntegration {",

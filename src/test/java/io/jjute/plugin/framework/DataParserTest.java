@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import javafx.util.Pair;
 
-@SuppressWarnings({"unchecked", "WeakerAccess"})
-public class DataParserTest<K extends Pair<Object, String>> {
+@SuppressWarnings("unchecked")
+class DataParserTest<K extends Pair<Object, String>> {
 
     @SuppressWarnings("unused")
     public static class MagicString {
@@ -30,7 +30,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void shouldParsePrimitiveDataTypesToString() {
+    void shouldParsePrimitiveDataTypesToString() {
 
         java.util.Map<K, Class<?>> map = new java.util.HashMap<>();
 
@@ -44,7 +44,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void shouldWrapPrimitiveDataTypesToObjects() {
+    void shouldWrapPrimitiveDataTypesToObjects() {
 
         java.util.Map<PrimitiveParser, Object> primitiveParsers = new java.util.HashMap<>();
         primitiveParsers.put(PrimitiveParser.BOOLEAN, true);
@@ -70,7 +70,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void whenNoSuchMethodExistsShouldFailParsingType() {
+    void whenNoSuchMethodExistsShouldFailParsingType() {
 
         java.util.Map<K, Class<?>> map = new java.util.HashMap<>();
 
@@ -82,7 +82,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void shouldParseObjectDataTypes() {
+    void shouldParseObjectDataTypes() {
 
         DataParser<MagicString, String> parser;
         parser = new ObjectParser<>(MagicString.class, "valueOf", String.class);
@@ -107,7 +107,7 @@ public class DataParserTest<K extends Pair<Object, String>> {
     }
 
     @Test
-    public void whenUsingNotStaticMethodShouldThrowException() {
+    void whenUsingNotStaticMethodShouldThrowException() {
 
         Assertions.assertThrows(DataParsingException.class, () ->
                 new ObjectParser<>(String.class, "nonStaticParser", MagicString.class));

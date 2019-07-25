@@ -1,23 +1,21 @@
 package io.jjute.plugin.testsuite;
 
-import io.jjute.plugin.testsuite.GradleProperty;
 import static io.jjute.plugin.testsuite.GradleProperty.Type;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("WeakerAccess")
-public class GradlePropertiesTest {
+class GradlePropertiesTest {
 
     @Test
-    public void shouldAssertThatClassDeclarationsAreEncapsulated() {
+    void shouldAssertThatClassDeclarationsAreEncapsulated() {
 
         Assertions.assertEquals(0, GradleProperty.class.getConstructors().length);
         Assertions.assertEquals(Type.values().length, GradleProperty.Type.class.getFields().length);
     }
 
     @Test
-    public void shouldReturnValidPropertyValues() {
+    void shouldReturnValidPropertyValues() {
 
         for (GradleProperty.Type type : Type.values()) {
 
@@ -28,7 +26,7 @@ public class GradlePropertiesTest {
     }
 
     @Test
-    public void shouldDisplayValidPropertyValues() {
+    void shouldDisplayValidPropertyValues() {
 
         GradleProperty projectProp = Type.PROJECT.create("defaultProperty", "01-value");
 

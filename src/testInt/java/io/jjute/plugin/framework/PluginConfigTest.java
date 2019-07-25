@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Map;
 
-@SuppressWarnings("WeakerAccess")
-public class PluginConfigTest extends FunctionalTest {
+class PluginConfigTest extends FunctionalTest {
 
     @Test
-    public void shouldSetConfigsFromGradleProperties() throws IOException {
+    void shouldSetConfigsFromGradleProperties() throws IOException {
 
         java.util.Map<String, Object> properties = new java.util.HashMap<>();
 
@@ -38,7 +37,7 @@ public class PluginConfigTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldSetConfigsFromCommandArguments() throws IOException {
+    void shouldSetConfigsFromCommandArguments() throws IOException {
 
         java.util.Map<String, Object> properties = new java.util.HashMap<>();
 

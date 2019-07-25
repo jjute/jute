@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("WeakerAccess")
-public class IntegrationModelTest extends IntegrationTest {
+class IntegrationModelTest extends IntegrationTest {
 
     private DummyIntegrationModel model;
 
@@ -31,25 +30,25 @@ public class IntegrationModelTest extends IntegrationTest {
     }
 
     @BeforeEach
-    public void createDummyIntegrationModel() {
         model = new DummyIntegrationModel("dummy", project);
+    void createDummyIntegrationModel() {
     }
 
     @Test
-    public void shouldReturnValidValuesFromGetters() {
+    void shouldReturnValidValuesFromGetters() {
 
         Assertions.assertEquals(project, model.getProject());
         Assertions.assertEquals("dummy", model.getModelName());
     }
 
     @Test
-    public void shouldProduceExceptionWithValidMessage() {
 
         final String cause = "Unknown cause";
         Exception e = new Exception();
 
         assertValidExceptionMessage(new DummyIntegrationException(model, cause), cause);
         assertValidExceptionMessage(new DummyIntegrationException(model, e), "");
+    void shouldProduceExceptionWithValidMessage() {
     }
 
     @TestOnly

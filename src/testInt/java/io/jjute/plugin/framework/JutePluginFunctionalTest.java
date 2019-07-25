@@ -3,13 +3,10 @@ package io.jjute.plugin.framework;
 import io.jjute.plugin.testsuite.FunctionalTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-@SuppressWarnings("WeakerAccess")
-public class JutePluginFunctionalTest extends FunctionalTest {
+class JutePluginFunctionalTest extends FunctionalTest {
 
     @Test
-    public void whenPropertiesAsOptionShouldApplyProjectPlugins() throws IOException {
+    void whenPropertiesAsOptionShouldApplyProjectPlugins() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
@@ -23,7 +20,7 @@ public class JutePluginFunctionalTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldFailWhenProjectPluginNotFound() {
+    void shouldFailWhenProjectPluginNotFound() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyPlugin {",
@@ -34,7 +31,7 @@ public class JutePluginFunctionalTest extends FunctionalTest {
     }
     
     @Test
-    public void shouldAddJCenterRepository() {
+    void shouldAddJCenterRepository() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyRepository {",
@@ -45,7 +42,7 @@ public class JutePluginFunctionalTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldUseCorrectJavaVersionCompatibility() {
+    void shouldUseCorrectJavaVersionCompatibility() {
 
         initAndWriteToBuildFile(new String[] {
                 "task verifyCompatibility {",

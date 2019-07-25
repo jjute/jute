@@ -6,9 +6,8 @@ import org.junit.jupiter.api.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-@SuppressWarnings("WeakerAccess")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StandardFTTest extends FunctionalTest {
+class StandardFTTest extends FunctionalTest {
 
     private static final Charset CHARSET = Charset.defaultCharset();
 
@@ -16,7 +15,7 @@ public class StandardFTTest extends FunctionalTest {
      * <p>Test to see if {@code FunctionalTest} was setup correctly.
      */
     @Test @Order(1)
-    public void shouldSetupStandardFTTest() throws IOException {
+    void shouldSetupStandardFTTest() throws IOException {
 
         Assertions.assertTrue(buildDir.isDirectory());
         Assertions.assertTrue(buildFile.exists());
@@ -29,14 +28,14 @@ public class StandardFTTest extends FunctionalTest {
     }
 
     @AfterEach
-    public void resetStandardFTTest() throws IOException {
+    void resetStandardFTTest() throws IOException {
 
         Assertions.assertTrue(buildFile.delete());
         Assertions.assertTrue(buildFile.createNewFile());
     }
 
     @Test
-    public void shouldClearAndInitializeBuildFile() throws IOException {
+    void shouldClearAndInitializeBuildFile() throws IOException {
 
         FileUtils.write(buildFile, "text", CHARSET);
         String fileText =  FileUtils.readFileToString(buildFile, CHARSET);
@@ -48,7 +47,7 @@ public class StandardFTTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldWriteToBuildFile() throws IOException {
+    void shouldWriteToBuildFile() throws IOException {
 
         String[] text = { "first line", "second line", "third line" };
         writeToBuildFile(text);

@@ -11,11 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-@SuppressWarnings("WeakerAccess")
-public class PluginUtilsTest {
+class PluginUtilsTest {
 
     @Test
-    public void shouldFindAndReadResourcePropertiesFiles() throws IOException {
+    void shouldFindAndReadResourcePropertiesFiles() throws IOException {
 
         GradleProperties defaultProps = GradleProperties.getDefaultFromResources();
         Assertions.assertNotEquals(0, Objects.requireNonNull(defaultProps).size());
@@ -26,7 +25,7 @@ public class PluginUtilsTest {
     }
 
     @Test
-    public void whenDirContainsPathShouldReturnTrue() {
+    void whenDirContainsPathShouldReturnTrue() {
 
         Path origin = Paths.get("example/of/some/really/fancy/path");
         String[] paths = { "some/really/fancy", "example/of", "fancy/path" };
@@ -37,7 +36,7 @@ public class PluginUtilsTest {
     }
 
     @Test
-    public void whenDirDoesNotContainPathShouldReturnFalse() {
+    void whenDirDoesNotContainPathShouldReturnFalse() {
 
         Path origin = Paths.get("example/of/some/really/fancy/path");
         String[] paths = { "example/of/not/fancy/path", "really/not/fancy", "not/fancy/path" };
@@ -48,7 +47,7 @@ public class PluginUtilsTest {
     }
 
     @Test
-    public void whenComparingPathWithNoElementsShouldThrowException() {
+    void whenComparingPathWithNoElementsShouldThrowException() {
 
         Path origin = Paths.get("example/of/a/valid/path");
         String[] paths = { "", "/", "../", "./", "../.././" };
@@ -60,7 +59,7 @@ public class PluginUtilsTest {
     }
 
     @Test
-    public void shouldFindPathFromListOfFiles() throws IOException {
+    void shouldFindPathFromListOfFiles() throws IOException {
 
         Path rootDir = Files.createTempDirectory("jute-test");
         FileUtils.forceDeleteOnExit(rootDir.toFile());

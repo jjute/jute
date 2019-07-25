@@ -7,11 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-@SuppressWarnings("WeakerAccess")
-public class JavaIntegrationTest extends FunctionalTest {
+class JavaIntegrationTest extends FunctionalTest {
 
     @Test
-    public void shouldSetSourceAndTargetCompatibility() throws IOException {
+    void shouldSetSourceAndTargetCompatibility() throws IOException {
 
         JavaVersion compatibility = JavaVersion.VERSION_1_9;
 
@@ -30,7 +29,7 @@ public class JavaIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldSetSourceSetDirectoryLayout() {
+    void shouldSetSourceSetDirectoryLayout() {
 
         initAndWriteToBuildFile(new String[] {
             "void verifySourceSetDirectory(SourceDirectorySet set, String path) {",
@@ -49,7 +48,7 @@ public class JavaIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldSetSingleSourceSetDirectory() {
+    void shouldSetSingleSourceSetDirectory() {
 
         initAndWriteToBuildFile(new String[] {
                 "task setSingleSourceSetDir {",

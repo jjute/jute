@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("WeakerAccess")
-public class ProjectDependencyTest extends IntegrationTest {
+class ProjectDependencyTest extends IntegrationTest {
 
     private static final String apacheLang = "org.apache.commons:commons-lang3:3.9";
     private static final String apacheMath = "org.apache.commons:commons-math3:3.6.1";
 
     @BeforeEach
-    public void addSampleApacheDependencies() {
+    void addSampleApacheDependencies() {
 
         DependencyHandler handler = project.getDependencies();
         handler.add("implementation", apacheLang);
@@ -22,12 +21,12 @@ public class ProjectDependencyTest extends IntegrationTest {
     }
 
     @Test
-    public void whenGettingTestTaskShouldNotThrowException() {
+    void whenGettingTestTaskShouldNotThrowException() {
         Assertions.assertDoesNotThrow(() -> ProjectUtils.getTestTask(project));
     }
 
     @Test
-    public void shouldFindDeclaredProjectDependencies() {
+    void shouldFindDeclaredProjectDependencies() {
 
         String g1, n1, v1, g2, n2, v2;
 
@@ -42,7 +41,7 @@ public class ProjectDependencyTest extends IntegrationTest {
     }
 
     @Test
-    public void shouldConstructValidDependencyNotations() {
+    void shouldConstructValidDependencyNotations() {
 
         java.util.Set<String> dependencyNotations = new java.util.HashSet<>();
         for (Dependency dependency : ProjectUtils.getProjectDependencies(project))

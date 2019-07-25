@@ -6,13 +6,12 @@ import java.io.IOException;
 
 import static io.jjute.plugin.framework.PluginConfig.Property;
 
-@SuppressWarnings("WeakerAccess")
-public class IdeaIntegrationTest extends FunctionalTest {
+class IdeaIntegrationTest extends FunctionalTest {
 
     private final String IDEA_INTEGRATION = Property.IDEA_INTEGRATION.getName();
 
     @Test
-    public void whenIdeaIntegrationEnabledShouldApplyIdeaPlugin() throws IOException {
+    void whenIdeaIntegrationEnabledShouldApplyIdeaPlugin() {
 
         initAndWriteToBuildFile(new String[] {
                 "task validateIdeaIntegration {",
@@ -24,7 +23,7 @@ public class IdeaIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void whenIdeaIntegrationEnabledShouldFindPlugin() {
+    void whenIdeaIntegrationEnabledShouldFindPlugin() {
 
         initAndWriteToBuildFile(new String[] {
             "task validateIdeaIntegration {",
@@ -36,7 +35,7 @@ public class IdeaIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    public void shouldConfigureValidOutputPaths() throws IOException {
+    void shouldConfigureValidOutputPaths() throws IOException {
 
         java.util.Map<String, Object> properties = new java.util.HashMap<>();
 
