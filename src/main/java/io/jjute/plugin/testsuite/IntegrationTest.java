@@ -1,5 +1,6 @@
 package io.jjute.plugin.testsuite;
 
+import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 
@@ -56,6 +57,13 @@ public class IntegrationTest {
 
         try {
             File projectDir = Files.createTempDirectory("jute-plugin").toFile();
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try { FileUtils.deleteDirectory(projectDir); }
+                catch (java.io.IOException e) {
+                    throw new GradlePluginTestException("Failed to schedule " +
+                            "project root dir deletion: \"%s\"", projectDir.getPath(), e);
+                }
+            }));
             Project project = ProjectBuilder.builder().withProjectDir(projectDir).build();
             project.getPluginManager().apply(type.id); return project;
         }
