@@ -180,14 +180,11 @@ public class FunctionalTest {
     protected void writeToGradleProperties(java.util.Map<String, Object> properties) throws IOException {
 
         java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
-        if (propertiesFile != null)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (java.util.Map.Entry<String, Object> entry : properties.entrySet()) {
-                sb.append(entry.getKey()).append('=').append(entry.getValue()).append("\n");
-            }
-            FileUtils.write(propertiesFile, sb.toString(), Charset.defaultCharset());
+        StringBuilder sb = new StringBuilder();
+        for (java.util.Map.Entry<String, Object> entry : properties.entrySet()) {
+            sb.append(entry.getKey()).append('=').append(entry.getValue()).append("\n");
         }
+        FileUtils.write(propertiesFile, sb.toString(), Charset.defaultCharset());
     }
 
     /**

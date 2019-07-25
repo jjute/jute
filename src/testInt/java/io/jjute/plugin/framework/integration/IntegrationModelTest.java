@@ -9,20 +9,21 @@ import org.junit.jupiter.api.Test;
 
 class IntegrationModelTest extends IntegrationTest {
 
+    private static final String exceptionCause = "Unknown cause";
     private DummyIntegrationModel model;
 
     @TestOnly
     private static class DummyIntegrationModel extends IntegrationModel {
 
-        private DummyIntegrationModel(String model, Project project) {
-            super(model, project);
+        private DummyIntegrationModel(Project project) {
+            super("dummy", project);
         }
     }
     @TestOnly
     private static class DummyIntegrationException extends PluginIntegrationException {
 
-        private DummyIntegrationException(IntegrationModel model, String cause) {
-            super(model, cause);
+        private DummyIntegrationException(IntegrationModel model) {
+            super(model, exceptionCause);
         }
         private DummyIntegrationException(IntegrationModel model, Throwable cause) {
             super(model, cause);
@@ -30,8 +31,8 @@ class IntegrationModelTest extends IntegrationTest {
     }
 
     @BeforeEach
-        model = new DummyIntegrationModel("dummy", project);
     void createDummyIntegrationModel() {
+        model = new DummyIntegrationModel(project);
     }
 
     @Test
@@ -42,13 +43,10 @@ class IntegrationModelTest extends IntegrationTest {
     }
 
     @Test
-
-        final String cause = "Unknown cause";
-        Exception e = new Exception();
-
-        assertValidExceptionMessage(new DummyIntegrationException(model, cause), cause);
-        assertValidExceptionMessage(new DummyIntegrationException(model, e), "");
     void shouldProduceExceptionWithValidMessage() {
+        
+        assertValidExceptionMessage(new DummyIntegrationException(model), exceptionCause);
+        assertValidExceptionMessage(new DummyIntegrationException(model, new Exception()), "");
     }
 
     @TestOnly
