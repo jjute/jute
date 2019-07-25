@@ -77,6 +77,12 @@ public class PluginConfig {
     public boolean ideaInheritOutputDirs = false;
 
     /**
+     * Should tests perform using {@code JUnit} platform. If integration is disabled
+     * and JUnit is the only project test suite available then tests will not run.
+     */
+    public boolean enableJUnitIntegration = true;
+
+    /**
      * <p>
      *     Gradle plugin properties required by {@code JutePlugin}.
      * <p>
@@ -92,7 +98,8 @@ public class PluginConfig {
         IDEA_INTEGRATION("enableIDEAIntegration", PrimitiveParser.BOOLEAN),
         IDEA_OUTPUT_DIR("ideaOutputDir", null),
         IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir", null),
-        IDEA_INHERIT_DIRS("ideaInheritOutputDirs", PrimitiveParser.BOOLEAN);
+        IDEA_INHERIT_DIRS("ideaInheritOutputDirs", PrimitiveParser.BOOLEAN),
+        JUNIT_INTEGRATION("enableJUnitIntegration", PrimitiveParser.BOOLEAN);
 
         private final String name;
         private final Field field;
@@ -155,6 +162,9 @@ public class PluginConfig {
     }
     public boolean isJavaLibrary() {
         return isProjectJavaLibrary;
+    }
+    public boolean JUnitIntegration() {
+        return enableJUnitIntegration;
     }
     public boolean ideaIntegration() {
         return enableIDEAIntegration;

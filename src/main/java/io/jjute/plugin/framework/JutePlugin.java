@@ -1,6 +1,7 @@
 package io.jjute.plugin.framework;
 
 import io.jjute.plugin.framework.integration.IdeaIntegration;
+import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.framework.integration.JavaIntegration;
 import io.jjute.plugin.framework.parser.DataParsingException;
 import org.gradle.api.Plugin;
@@ -66,6 +67,14 @@ public class JutePlugin implements Plugin<Project> {
              * The build directory is the directory which all artifacts are generated into.
              */
             project.setBuildDir(project.getProjectDir().toPath().resolve("build").toFile());
+
+            if (config.JUnitIntegration())
+            {
+                JUnitIntegration junit = new JUnitIntegration(project);
+
+                junit.addProjectDependencies();
+                junit.enableNativeSupport();
+            }
         });
     }
 
