@@ -96,10 +96,10 @@ public class PluginConfig {
         JAVA_VERSION("projectJavaVersion", Property.Parser.javaVersionParser),
         IS_JAVA_LIBRARY("isProjectJavaLibrary", PrimitiveParser.BOOLEAN),
         IDEA_INTEGRATION("enableIDEAIntegration", PrimitiveParser.BOOLEAN),
-        IDEA_OUTPUT_DIR("ideaOutputDir", null),
-        IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir", null),
+        IDEA_OUTPUT_DIR("ideaOutputDir"),
+        IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir"),
         IDEA_INHERIT_DIRS("ideaInheritOutputDirs", PrimitiveParser.BOOLEAN),
-        JUNIT_INTEGRATION("enableJUnitIntegration", PrimitiveParser.BOOLEAN);
+        JUNIT_INTEGRATION("enableJUnitIntegration", PrimitiveParser.BOOLEAN),
 
         private final String name;
         private final Field field;
@@ -117,6 +117,9 @@ public class PluginConfig {
                 throw new IllegalArgumentException(String.format("The specified field " +
                         "\"%s\" was not found declared in class PluginConfig", name), e);
             }
+        }
+        Property(String name) {
+            this(name, null);
         }
 
         /**
