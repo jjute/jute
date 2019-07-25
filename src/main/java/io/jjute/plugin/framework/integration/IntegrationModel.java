@@ -2,6 +2,7 @@ package io.jjute.plugin.framework.integration;
 
 import org.gradle.api.Project;
 
+@SuppressWarnings("WeakerAccess")
 public class IntegrationModel {
 
     private final String model;

@@ -43,6 +43,7 @@ public class PrimitiveParser<R, I> extends DataParser<R, String> {
      */
     private final Method wrapper;
 
+    @SuppressWarnings("SameParameterValue")
     private PrimitiveParser(Class<R> result, String method) {
         super(result, method, String.class);
         wrapper = getWrapperMethod(result);
@@ -55,7 +56,7 @@ public class PrimitiveParser<R, I> extends DataParser<R, String> {
      * @param result primitive data type {@code Class} that should be the result
      *               of the parsing operation custom implementation.
      */
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
     protected PrimitiveParser(Class<R> result) {
         super(); wrapper = getWrapperMethod(result);
     }

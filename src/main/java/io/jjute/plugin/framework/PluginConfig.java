@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
  * @see <a href="https://docs.gradle.org/4.10.3/userguide/custom_plugins.html#sec:getting_input_from_the_build">
  *      Gradle Docs 4.10.3: Making the plugin configurable</a>
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "CanBeFinal"})
 public class PluginConfig {
 
     /**
