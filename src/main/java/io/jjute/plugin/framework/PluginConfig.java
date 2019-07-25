@@ -68,8 +68,8 @@ public class PluginConfig {
     public String ideaTestOutputDir = "build/target/test";
 
     /**
-     * If true, output directories for IDEA modules will be located below
-     * the output directory for the project otherwise, they will be set
+     * If {@code true}, output directories for IDEA modules will be located
+     * below the output directory for the project otherwise, they will be set
      * to the directories specified by getter method return values.
      *
      * @see IdeaModule#setInheritOutputDirs(Boolean)
