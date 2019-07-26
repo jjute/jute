@@ -3,6 +3,7 @@ package io.jjute.plugin.testsuite;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -22,38 +23,18 @@ import java.nio.file.Files;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#integration-tests">
  *      Testing Gradle Plugins: Implementing integration tests</a>
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IntegrationTest {
 
-    /**
-     * Determines whether the {@code Project} is a simple Java application project or a Java library project.
-     * This designation will affect which base plugin is applied to the project.
-     */
-    private enum ProjectType {
-        JAVA("java"), JAVA_LIBRARY("java-library");
-
-        private final String id;
-        ProjectType(String id) {
-            this.id = id;
-        }
-    }
     /**
      * {@code Project} instance used to execute this integration test.
      */
     protected final Project project;
 
-    public IntegrationTest() {
-        project = createJavaProject();
-    }
-
     /**
-     * Create a new Gradle {@code Project} instance for this integration test.
-     *
-     * @param type {@code ProjectType} to create.
-     * @return the newly created {@code Project} instance
-     *
      * @throws GradlePluginTestException if an I/O exception occurred while creating the project root directory
      */
-    private static Project createProject(ProjectType type) {
+    public IntegrationTest() {
 
         try {
             File projectDir = Files.createTempDirectory("jute-plugin").toFile();
@@ -64,25 +45,14 @@ public class IntegrationTest {
                             "project root dir deletion: \"%s\"", projectDir.getPath(), e);
                 }
             }));
-            Project project = ProjectBuilder.builder().withProjectDir(projectDir).build();
-            project.getPluginManager().apply(type.id); return project;
+            this.project = ProjectBuilder.builder().withProjectDir(projectDir).build();
+            this.project.getPluginManager().apply("java");
         }
         catch (java.io.IOException e) {
             throw new GradlePluginTestException("Unable to create project root directory", e);
         }
     }
-    /**
-     * @return a new Java project for this integration test.
-     */
-    public static Project createJavaProject()  {
-        return createProject(ProjectType.JAVA);
-    }
-    /**
-     * @return a new Java library project for this integration test.
-     */
-    public static Project createJavaLibraryProject() {
-        return createProject(ProjectType.JAVA_LIBRARY);
-    }
+
     /**
      * @return the {@code Project} associated with this integration test.
      */
