@@ -7,6 +7,7 @@ buildscript {
 
 plugins {
     id 'java-gradle-plugin'
+    id 'groovy'
     id 'idea'
 }
 /*
@@ -57,17 +58,27 @@ configurations {
 }
 
 sourceSets {
-    testInt {
-        java.srcDirs = ['src/testInt/java']
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath = output + compileClasspath
+    main {
+        /* The Groovy plugin extends the Java plugin and compiles Groovy along with Java.
+         * What we are doing here is telling Groovy to compile everything for us, so there is
+         * no need to compile Java code twice. In fact setting Java srcDirs here would throw errors.
+         * https://stackoverflow.com/questions/22369033/how-to-use-gradle-java-and-groovy-together
+         */
+        java.srcDirs = []
+        groovy.srcDirs = ["src/main/java", "src/main/groovy"]
+    }
+    testsuite {
+        groovy.srcDirs = ['src/testsuite/java']
+        compileClasspath = sourceSets.main.output + configurations.testFixture
     }
     test {
-        java.srcDirs = ['src/test/java']
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath = output + compileClasspath
+        groovy.srcDirs = ['src/test/java']
+        compileClasspath = sourceSets.testsuite.output + sourceSets.main.output + configurations.testRuntime
     }
-    main.compileClasspath += configurations.testCompile
+    testInt {
+        groovy.srcDirs = ['src/testInt/java']
+        compileClasspath = sourceSets.test.compileClasspath
+    }
 }
 /*
  * Add shared implementation dependencies to both compile and runtime classpath.
@@ -75,7 +86,7 @@ sourceSets {
  */
 sourceSets.each { set ->
     set.compileClasspath += configurations.sharedImplementation
-    set.runtimeClasspath += configurations.sharedImplementation
+    set.runtimeClasspath += set.output + set.compileClasspath + configurations.sharedImplementation
 }
 
 idea {
@@ -103,8 +114,7 @@ idea {
          * Add integration test sources to project test sources.
          * This will make sure module directories are properly marked as tests
          */
-        sourceDirs -= file('src/testInt/java')
-        testSourceDirs += file('src/testInt/java')
+        testSourceDirs += project.sourceSets.testInt.java.srcDirs
     }
 }
 
