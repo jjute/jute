@@ -50,6 +50,10 @@ configurations {
      * This should encompass common use and utility dependencies such as Apache libraries.
      */
     sharedImplementation.extendsFrom implementation
+    /*
+     * Test implementation dependencies used by testsuite and test sources.
+     */
+    testFixture.extendsFrom testImplementation
 }
 
 sourceSets {
@@ -108,15 +112,18 @@ repositories.jcenter()
 
 dependencies {
 
+    // The Gradle TestKit (a.k.a. just TestKit) is a library that aids in testing Gradle
+    // plugins and build logic generally. At this time, it is focused on functional testing.
+    // https://docs.gradle.org/current/userguide/test_kit.html
+    testFixture gradleTestKit()
+
     // This dependency allows us to write tests and extensions which use JUnit 5
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+    testFixture 'org.junit.jupiter:junit-jupiter-api:5.5.0'
 
     // This dependency allows us to run tests which use JUnit 5
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
-    
-    testCompile gradleTestKit()
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     sharedImplementation 'org.apache.commons:commons-lang3:3.9'
