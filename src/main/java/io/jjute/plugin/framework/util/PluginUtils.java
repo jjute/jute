@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,14 +21,14 @@ public class PluginUtils {
      *         if the given entry was not found on the provided classpath.
      *
      * @throws IOException if an I/O error is thrown when accessing a classpath directory.
-     * @throws NoSuchFileException if any entry in the given classpath does not point to an existing file.
      */
     public static @Nullable File findClasspathEntry(List<? extends File> classpath, Path entry) throws IOException {
 
         for (File classpathElement : classpath)
         {
-            List<Path> classpathDirs = java.nio.file.Files.walk(classpathElement.toPath())
-                    .filter(Files::isDirectory).collect(Collectors.toList());
+            List<Path> classpathDirs = classpathElement.exists() ? java.nio.file.Files
+                    .walk(classpathElement.toPath()).filter(Files::isDirectory)
+                    .collect(Collectors.toList()) : java.util.Collections.emptyList();
 
             for (Path dir : classpathDirs) {
                 if (doesOriginPathContain(dir, entry))
