@@ -21,11 +21,6 @@ class ProjectDependencyTest extends IntegrationTest {
     }
 
     @Test
-    void whenGettingTestTaskShouldNotThrowException() {
-        Assertions.assertDoesNotThrow(() -> ProjectUtils.getTestTask(project));
-    }
-
-    @Test
     void shouldFindDeclaredProjectDependencies() {
 
         String g1, n1, v1, g2, n2, v2;
