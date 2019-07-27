@@ -1,6 +1,7 @@
 package io.jjute.plugin.framework.integration;
 
 import io.jjute.plugin.framework.util.ProjectUtils;
+import io.jjute.plugin.framework.util.TaskUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.plugins.JavaPlugin;
@@ -26,7 +27,7 @@ public class JUnitIntegration extends IntegrationModel {
 
     public JUnitIntegration(Project project) {
         super("JUnit", project);
-        test = ProjectUtils.getTestTask(project);
+        test = TaskUtils.getTestTask(project, "test");
     }
 
     /**
