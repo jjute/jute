@@ -27,7 +27,7 @@ public class JUnitIntegration extends IntegrationModel {
 
     public JUnitIntegration(Project project) {
         super("JUnit", project);
-        test = TaskUtils.getTestTask(project, "test");
+        test = TaskUtils.getTestTask(project);
     }
 
     /**

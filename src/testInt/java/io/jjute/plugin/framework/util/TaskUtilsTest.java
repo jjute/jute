@@ -19,6 +19,7 @@ class TaskUtilsTest extends IntegrationTest {
     @Test
     void whenGettingTestTaskShouldNotThrowException() {
         Assertions.assertDoesNotThrow(() -> TaskUtils.getTestTask(project, "test"));
+        Assertions.assertDoesNotThrow(() -> TaskUtils.getTestTask(project));
     }
 
     @Test
