@@ -1,12 +1,13 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.framework.util.ProjectUtils;
 import io.jjute.plugin.framework.util.TaskUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.testing.Test;
+import org.jetbrains.annotations.Contract;
 
+@SuppressWarnings("WeakerAccess")
 public class JUnitIntegration extends IntegrationModel {
 
     /**
@@ -33,12 +34,15 @@ public class JUnitIntegration extends IntegrationModel {
     /**
      * Add JUnit {@code api} and {@code engine} dependencies to the associated project.
      */
-    public void addProjectDependencies() {
+    @Contract("-> this")
+    public JUnitIntegration addProjectDependencies() {
 
         DependencyHandler dependencies = project.getDependencies();
 
         dependencies.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, API);
         dependencies.add(JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME, ENGINE);
+
+        return this;
     }
 
     /**
@@ -47,7 +51,10 @@ public class JUnitIntegration extends IntegrationModel {
      * When a specific platform was not specified Gradle will detect the one we're using
      * presumably through the dependency declarations.
      */
-    public void enableNativeSupport() {
+    @Contract("-> this")
+    public JUnitIntegration enableNativeSupport() {
+
         test.useJUnitPlatform();
+        return this;
     }
 }

@@ -68,12 +68,9 @@ public class JutePlugin implements Plugin<Project> {
              */
             project.setBuildDir(project.getProjectDir().toPath().resolve("build").toFile());
 
-            if (config.JUnitIntegration())
-            {
-                JUnitIntegration junit = new JUnitIntegration(project);
 
-                junit.addProjectDependencies();
-                junit.enableNativeSupport();
+            if (config.JUnitIntegration()) {
+                new JUnitIntegration(project).addProjectDependencies().enableNativeSupport();
             }
         });
     }
