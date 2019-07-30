@@ -21,7 +21,7 @@ class PluginUtilsTest {
         Assertions.assertNotEquals(0, Objects.requireNonNull(defaultProps).size());
 
         GradleProperties gradleProps = GradleProperties.getFromResources("gradle.properties");
-        Assertions.assertEquals(0, Objects.requireNonNull(gradleProps).size());
+        Assertions.assertTrue(Objects.requireNonNull(gradleProps).size() > 0);
         Assertions.assertNotNull(GradleProperties.getFromResources());
     }
 
