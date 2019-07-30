@@ -4,14 +4,16 @@ import io.jjute.plugin.framework.PluginConfig;
 import io.jjute.plugin.testsuite.FunctionalTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 class JUnitIntegrationTest extends FunctionalTest {
 
     private static final String JUNIT_INTEGRATION = PluginConfig.Property.JUNIT_INTEGRATION.getName();
 
     @Test
-    void shouldAddProjectDependencies() {
+    void shouldAddProjectDependencies() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyJUnitIntegration {",
                 "   if (!(test.getTestFramework() instanceof org.gradle.api.internal.tasks.testing." +
                         "junitplatform.JUnitPlatformTestFramework))",
@@ -21,9 +23,9 @@ class JUnitIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    void shouldConfigureProjectTestFramework() {
+    void shouldConfigureProjectTestFramework() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyJUnitIntegration {",
                 "   java.util.Set<Dependency> dependencies = io.jjute.plugin.framework.util." +
                         "ProjectUtils.getProjectDependencies(project)",

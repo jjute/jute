@@ -1,9 +1,12 @@
 package io.jjute.plugin.testsuite;
 
+import io.jjute.plugin.framework.CommunityPlugin;
 import io.jjute.plugin.framework.GradleProperties;
+import io.jjute.plugin.framework.ProjectPlugin;
 import io.jjute.plugin.framework.util.PluginUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.gradle.api.Project;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.BuildResult;
 
@@ -12,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.InvalidPropertiesFormatException;
 
 /**
  * <p>
@@ -35,9 +39,9 @@ public class FunctionalTest {
     protected final JuteGradleRunner buildRunner;
 
     /**
-     * Plugin identifier used to resolve the plugin in the test build.
+     * {@code CommunityPlugin} that contains information needed to resolve {@code JutePlugin}.
      */
-    protected final String pluginId;
+    protected final CommunityPlugin jutePlugin;
 
     /**
      * The directory that Gradle will be executed in
@@ -92,7 +96,7 @@ public class FunctionalTest {
         buildRunner = createRunnerForPlugin();
 
         try {
-            pluginId = getPluginIdentifier();
+            jutePlugin = new CommunityPlugin(getPluginIdentifier());
         }
         catch (IOException e) {
             throw new GradlePluginTestException("Unable to resolve plugin identifier.", e);
@@ -102,11 +106,40 @@ public class FunctionalTest {
             if (properties != null) {
                 properties.storeToFile(buildDir.toPath().resolve("gradle.properties").toFile());
             }
-            else System.out.println("Warning: Unable to find gradle.properties resource.");
+            else throw new GradlePluginTestException("Unable to find gradle.properties resource file.");
         }
         catch (IOException e) {
             throw new GradlePluginTestException("An I/O exception occurred while reading properties.");
         }
+    }
+
+    /**
+     * Apply the given plugins with a plugin DSL block that configures an instance
+     * of {@link org.gradle.plugin.use.PluginDependenciesSpec PluginDependenciesSpec}
+     * which is an API used by plugin declarations inside the {@code plugins{}} script block.
+     *
+     * @param plugins array of project plugins to apply
+     * @throws IOException if an I/O error occurred while reading build file.
+     * @throws GradlePluginTestException if the DSL plugins block could not be created because
+     *                                   it is already defined in the current build file.
+     *
+     * @see <a href="https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block">
+     *      Gradle Docs: Applying plugins with the plugins DSL</a>
+     */
+    protected void applyPlugins(ProjectPlugin... plugins) throws IOException {
+
+        if (FileUtils.readFileToByteArray(buildFile).length > 0) {
+            throw new GradlePluginTestException("Cannot write DSL plugin declaration, block is already defined.");
+        }
+        String[] pluginDeclarations = new String[plugins.length];
+        for (int i = 0; i < plugins.length; i++) {
+            pluginDeclarations[i] = "\t" + plugins[i].toString();
+        }
+        String[] pluginsDSL = new String[plugins.length + 2];
+        pluginsDSL[0] = "plugins {"; pluginsDSL[pluginsDSL.length - 1] = "}\n";
+
+        System.arraycopy(pluginDeclarations, 0, pluginsDSL, 1, pluginDeclarations.length);
+        writeToBuildFile(pluginsDSL, false);
     }
 
     /**
@@ -115,17 +148,12 @@ public class FunctionalTest {
      * @param text array of text lines to write to file. {@code null} entries produce blank lines.
      * @param append if {@code true}, the lines will be added to the end of the file rather than overwriting
      *
-     * @throws GradlePluginTestException if an I/O exception occurred while writing to build file.
+     * @throws IOException if an I/O exception occurred while writing to build file
      */
-    private void writeToBuildFile(String[] text, boolean append) {
+    private void writeToBuildFile(String[] text, boolean append) throws IOException {
 
-        try {
-            java.util.List<String> toWrite = java.util.Arrays.asList(text);
-            FileUtils.writeLines(buildFile, toWrite, append);
-        }
-        catch (java.io.IOException e) {
-            throw new GradlePluginTestException("An I/O exception occurred while writing to build file.", e);
-        }
+        java.util.List<String> toWrite = java.util.Arrays.asList(text);
+        FileUtils.writeLines(buildFile, toWrite, append);
     }
 
     /**
@@ -133,44 +161,35 @@ public class FunctionalTest {
      * The lines are added to the end of the file rather then overwriting existing content.
      *
      * @param text array of text lines to write to file. {@code null} entries produce blank lines.
+     * @throws IOException if an I/O exception occurred while writing to build file.
+     * @see #initializeBuildFile(String[])
      */
-    protected void writeToBuildFile(String[] text) {
+    protected void writeToBuildFile(String[] text) throws IOException {
         writeToBuildFile(text, true);
     }
 
     /**
-     * <p>
-     *     Initialize the test build file by delete existing content <i>(if any)</i> and
-     *     declare and apply the plugin being tested with {@code plugins} DSL code block.
-     * <p>
-     *     This method should be called before each test that plans to write to build file,
-     *     preferably in a dedicated JUnit method annotated with {@code @BeforeEach}.
-     *     Alternatively you can call {@link #initAndWriteToBuildFile(String[])}
-     *     method to write the initial text in each test method.
-     */
-    protected void initializeBuildFile() {
-
-        String[] plugins = { "plugins {", String.format("id '%s'", pluginId), "}\n" };
-        writeToBuildFile(plugins, false);
-    }
-
-    /**
-     * Initialize the test build file by delete existing content and write the
-     * {@code toString()} value of each array item to the build {@code File} line by line.
+     * Initialize the test build file by deleting existing content, applying {@link #jutePlugin} and
+     * writing {@code toString()} value of each array item to the build {@code File} line by line.
      *
      * @param text array of text lines to write to file. {@code null} entries produce blank lines.
      *
-     * @see #initializeBuildFile()
+     * @throws GradlePluginTestException if build file already contains written content.
+     * @throws IOException if an I/O error occurred while reading build file.
+     *
+     * @see #applyPlugins(ProjectPlugin...)
      * @see #writeToBuildFile(String[])
      */
-    protected void initAndWriteToBuildFile(String[] text) {
-        initializeBuildFile(); writeToBuildFile(text);
+    protected void initializeBuildFile(String[] text) throws IOException {
+
+        applyPlugins(jutePlugin);
+        writeToBuildFile(text);
     }
 
     /**
-     * Write Gradle properties stored in given {@code Map} to {@code gradle.properties}
-     * file located in the test project root directory. The properties however will
-     * not be written if the properties file could not be found.
+     * Write Gradle properties stored in given {@code Map} to {@link Project#GRADLE_PROPERTIES gradle.properties}
+     * file located in the test project root directory. If the file does not exist it will be created.
+     * Note that the properties however will not be written if the properties file could not be found.
      *
      * @param properties {@code Map} containing Gradle properties where map keys represent property names
      *                   <i>(left-hand side)</i> and map values represent property values <i>(right-hand side)</i>.
@@ -179,27 +198,47 @@ public class FunctionalTest {
      */
     protected void writeToGradleProperties(java.util.Map<String, Object> properties) throws IOException {
 
-        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
         StringBuilder sb = new StringBuilder();
         for (java.util.Map.Entry<String, Object> entry : properties.entrySet()) {
             sb.append(entry.getKey()).append('=').append(entry.getValue()).append("\n");
         }
-        FileUtils.write(propertiesFile, sb.toString(), Charset.defaultCharset());
+        FileUtils.write(getGradleProperties(), sb.toString(), Charset.defaultCharset(), true);
     }
 
     /**
-     * Write Gradle properties stored in given array to {@code gradle.properties}
-     * file located in the test project root directory. The properties however will
-     * not be written if the properties file could not be found.
-     *
+     * Write Gradle properties stored in given array to {@link Project#GRADLE_PROPERTIES  gradle.properties}
+     * file located in the test project root directory by adding them to the end of the file <i>(appending)</i>.
+     * If the file does not exist it will be created. Each array element will be interpreted and written to
+     * file <i>as-is</i>, meaning each element is expected to be formatted according to the following syntax:
+     * <blockquote>
+     * <dl>
+     *     <dt><b>Syntax:</b>
+     *         <dd>{@code <property-key>=<property-value>}
+     *     <dt><b>Example:</b>
+     *         <dd>{@code propertyKey=propertyValue}
+     * </dl>
+     * </blockquote>
      * @param properties array of text lines to write
      *
      * @throws IOException if an I/O error occurred while writing properties to file.
+     * @throws InvalidPropertiesFormatException if any of the given properties is not a valid property.
      */
     protected void writeToGradleProperties(String[] properties) throws IOException {
 
-        java.io.File propertiesFile = buildDir.toPath().resolve("gradle.properties").toFile();
-        FileUtils.writeLines(propertiesFile, java.util.Arrays.asList(properties));
+        for (String property : properties) {
+            if (property.split("=").length != 2)
+                throw new InvalidPropertiesFormatException("\"" + property + "\" is not a valid property.");
+        }
+        FileUtils.writeLines(getGradleProperties(), java.util.Arrays.asList(properties), true);
+    }
+
+    /**
+     * @return a {@code File} reference to {@link Project#GRADLE_PROPERTIES gradle.properties} located
+     *         in the test project root directory. This method only returns an object representing the
+     *         path to properties file and does not guarantee that the file actually exists on disk.
+     */
+    protected File getGradleProperties() {
+        return buildDir.toPath().resolve("gradle.properties").toFile();
     }
 
     /**
@@ -216,7 +255,6 @@ public class FunctionalTest {
      *                  same process that is using the Gradle Runner, allowing the build to be debugged.
      *                  Debug support is off (i.e. {@code false}) by default.
      */
-    @SuppressWarnings("SameParameterValue")
     protected JuteGradleRunner createRunnerForPlugin(boolean forwardOutput, boolean withDebug) {
 
         final GradleRunner runner = JuteGradleRunner.create().withPluginClasspath()

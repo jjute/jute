@@ -3,12 +3,14 @@ package io.jjute.plugin.framework;
 import io.jjute.plugin.testsuite.FunctionalTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 class JutePluginFunctionalTest extends FunctionalTest {
 
     @Test
-    void whenPropertiesAsOptionShouldApplyProjectPlugins() {
+    void whenPropertiesAsOptionShouldApplyProjectPlugins() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyPlugin {",
                 "   projectPlugins.split(',').each { plugin ->",
                 "       if (!project.plugins.hasPlugin(plugin))",
@@ -20,9 +22,9 @@ class JutePluginFunctionalTest extends FunctionalTest {
     }
 
     @Test
-    void shouldFailWhenProjectPluginNotFound() {
+    void shouldFailWhenProjectPluginNotFound() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyPlugin {",
                 "   if (!project.plugins.hasPlugin('123abc348f'))",
                 "       throw new RuntimeException()",
@@ -31,9 +33,9 @@ class JutePluginFunctionalTest extends FunctionalTest {
     }
     
     @Test
-    void shouldAddJCenterRepository() {
+    void shouldAddJCenterRepository() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyRepository {",
                 "    if (project.getRepositories().findByName('BintrayJCenter') == null)",
                 "        throw new RuntimeException()",
@@ -42,9 +44,9 @@ class JutePluginFunctionalTest extends FunctionalTest {
     }
 
     @Test
-    void shouldUseCorrectJavaVersionCompatibility() {
+    void shouldUseCorrectJavaVersionCompatibility() throws IOException {
 
-        initAndWriteToBuildFile(new String[] {
+        initializeBuildFile(new String[] {
                 "task verifyCompatibility {",
                 "   String sVersion = findProperty('projectJavaVersion')",
                 "   JavaVersion version = JavaVersion.toVersion(sVersion)",
