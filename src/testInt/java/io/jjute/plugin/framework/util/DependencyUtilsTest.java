@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ProjectDependencyTest extends IntegrationTest {
+class DependencyUtilsTest extends IntegrationTest {
 
     private static final String apacheLang = "org.apache.commons:commons-lang3:3.9";
     private static final String apacheMath = "org.apache.commons:commons-math3:3.6.1";
@@ -28,24 +28,24 @@ class ProjectDependencyTest extends IntegrationTest {
         g1 = "org.apache.commons"; n1 = "commons-lang3"; v1 = "3.9";
         g2 = "org.apache.commons"; n2 = "commons-math3"; v2 = "3.6.1";
 
-        Assertions.assertTrue(ProjectUtils.projectHasDependency(project, apacheLang));
-        Assertions.assertTrue(ProjectUtils.projectHasDependency(project, apacheMath));
+        Assertions.assertTrue(DependencyUtils.projectHasDependency(project, apacheLang));
+        Assertions.assertTrue(DependencyUtils.projectHasDependency(project, apacheMath));
 
-        Assertions.assertTrue(ProjectUtils.projectHasDependency(project, g1, n1, v1));
-        Assertions.assertTrue(ProjectUtils.projectHasDependency(project, g2, n2, v2));
+        Assertions.assertTrue(DependencyUtils.projectHasDependency(project, g1, n1, v1));
+        Assertions.assertTrue(DependencyUtils.projectHasDependency(project, g2, n2, v2));
     }
 
     @Test
     void shouldConstructValidDependencyNotations() {
 
         java.util.Set<String> dependencyNotations = new java.util.HashSet<>();
-        for (Dependency dependency : ProjectUtils.getProjectDependencies(project))
+        for (Dependency dependency : DependencyUtils.getProjectDependencies(project))
         {
-            String notation = ProjectUtils.getDependencyNotation(dependency);
+            String notation = DependencyUtils.getDependencyNotation(dependency);
             /*
              * Confirm that both method return an identical result
              */
-            Assertions.assertEquals(notation, ProjectUtils.getDependencyNotation(
+            Assertions.assertEquals(notation, DependencyUtils.getDependencyNotation(
                     dependency.getGroup(), dependency.getName(), dependency.getVersion()));
 
             dependencyNotations.add(notation);

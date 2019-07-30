@@ -6,7 +6,7 @@ import org.gradle.api.artifacts.Dependency;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ProjectUtils {
+public class DependencyUtils {
 
     /**
      * <p>
