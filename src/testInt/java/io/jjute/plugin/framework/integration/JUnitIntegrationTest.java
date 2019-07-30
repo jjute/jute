@@ -2,6 +2,7 @@ package io.jjute.plugin.framework.integration;
 
 import io.jjute.plugin.framework.PluginConfig;
 import io.jjute.plugin.testsuite.FunctionalTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,19 +26,22 @@ class JUnitIntegrationTest extends FunctionalTest {
     @Test
     void shouldConfigureProjectTestFramework() throws IOException {
 
+        Assertions.assertNotNull(JUnitIntegration.API);
+        Assertions.assertNotNull(JUnitIntegration.ENGINE);
+
         initializeBuildFile(new String[] {
                 "task verifyJUnitIntegration {",
                 "   java.util.Set<Dependency> dependencies = io.jjute.plugin.framework.util." +
-                        "ProjectUtils.getProjectDependencies(project)",
-                "   String[] junitDependencies = [",
+                        "DependencyUtils.getProjectDependencies(project)",
+                "   org.gradle.api.internal.artifacts.dependencies.DefaultClientModule[] junitDependencies = [",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.API,",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.ENGINE",
                 "   ]",
                 "   boolean[] foundDependency = new boolean[junitDependencies.length]",
                 "   dependencies.each { d -> ",
-                "       String notation = io.jjute.plugin.framework.util.ProjectUtils.getDependencyNotation(d)",
+                "       String notation = io.jjute.plugin.framework.util.DependencyUtils.getDependencyNotation(d)",
                 "       for (int i = 0; i < foundDependency.length; i++) {",
-                "           if (junitDependencies[i].equals(notation))",
+                "           if (junitDependencies[i].getId().equals(notation))",
                 "               foundDependency[i] = true",
                 "       }",
                 "   }",

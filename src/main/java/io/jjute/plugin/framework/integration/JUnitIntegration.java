@@ -3,11 +3,11 @@ package io.jjute.plugin.framework.integration;
 import io.jjute.plugin.framework.util.TaskUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
+import org.gradle.api.internal.artifacts.dependencies.DefaultClientModule;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.testing.Test;
 import org.jetbrains.annotations.Contract;
 
-@SuppressWarnings("WeakerAccess")
 public class JUnitIntegration extends IntegrationModel {
 
     /**
@@ -15,14 +15,19 @@ public class JUnitIntegration extends IntegrationModel {
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api">
      *      Artifact on Maven Repository</a>
      */
-    public static final String API = "org.junit.jupiter:junit-jupiter-api:5.5.0";
-
+    public static final DefaultClientModule API = new DefaultClientModule(
+            "org.junit.jupiter", "junit-jupiter-api", "5.5.0",
+            JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME
+    );
     /**
      * This dependency allows us to run tests which use JUnit 5
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine">
      *      Artifact on Maven Repository</a>
      */
-    public static final String ENGINE = "org.junit.jupiter:junit-jupiter-engine:5.5.0";
+    public static final DefaultClientModule ENGINE = new DefaultClientModule(
+            "org.junit.jupiter", "junit-jupiter-engine", "5.5.0",
+            JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME
+    );
 
     private final Test test;
 
