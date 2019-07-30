@@ -13,6 +13,7 @@ import org.gradle.testkit.runner.BuildResult;
 import javax.validation.constraints.NotEmpty;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.InvalidPropertiesFormatException;
@@ -310,5 +311,30 @@ public class FunctionalTest {
             System.out.println("Warning: Multiple properties files detected in META-INF/gradle-plugins.");
         }
         return FilenameUtils.removeExtension(propertiesFiles[0].getName());
+    }
+
+    /**
+     * Copy a resource {@code File} found under given path to a designated directory.
+     *
+     * @param resourcePath {@code String} representing a path to the target resource.
+     * @param dirPath {@code String} representing destination directory path.
+     * @return a reference to the successfully copied {@code File}.
+     *
+     * @throws NullPointerException if the resource under the given path was not found.
+     * @throws GradlePluginTestException if an I/O error occurred while copying file to directory.
+     */
+    protected File copyResourceToDirectory(String resourcePath, String dirPath) {
+
+        try {
+            java.net.URL url = getClass().getResource('/' + resourcePath);
+            File resourceFile = new File(java.util.Objects.requireNonNull(url).toURI());
+            File copyResultFile = buildDir.toPath().resolve(dirPath).toFile();
+            FileUtils.copyFileToDirectory(resourceFile, copyResultFile);
+            return copyResultFile.toPath().resolve(resourceFile.getName()).toFile();
+        }
+        catch (URISyntaxException | IOException e) {
+            throw new GradlePluginTestException(String.format("Unable to move resource " +
+                    "\"%s\" to directory \"%s\"", resourcePath, dirPath), e);
+        }
     }
 }

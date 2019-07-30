@@ -194,4 +194,18 @@ class StandardFTTest extends FunctionalTest {
 
         Assertions.assertThrows(GradlePluginTestException.class, () -> applyPlugins(CorePlugin.JAVA));
     }
+
+    @Test
+    void shouldCopyResourceFileToDestinationDirectory() {
+
+        String resourcePath = "dummy.txt";
+        String destinationPath = "src/test/java/io/jjute/test";
+
+        File dummyUnitTestJava = copyResourceToDirectory(resourcePath, destinationPath);
+        java.nio.file.Path expectedPath = java.nio.file.Paths.get(
+                buildDir.toPath().toString(), destinationPath, resourcePath);
+
+        Assertions.assertTrue(dummyUnitTestJava.exists());
+        Assertions.assertEquals(expectedPath, dummyUnitTestJava.toPath());
+    }
 }
