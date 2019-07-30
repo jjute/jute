@@ -74,8 +74,9 @@ public enum CorePlugin implements ProjectPlugin {
     public String getId() {
         return id;
     }
+
     @Override
     public String toString() {
-        return getId();
+        return "id '" + getId() + "'";
     }
 }
