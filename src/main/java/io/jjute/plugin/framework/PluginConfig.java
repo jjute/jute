@@ -9,11 +9,9 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.plugins.ide.idea.model.IdeaModule;
 
 import java.io.File;
-import java.lang.reflect.Field;
 
 /**
- * <p>
- *     This is a Jute plugin DSL extension class.
+ * This is a Jute plugin DSL extension class.
  * <p>
  *     Fields declared in this class will be treated as project properties and as such should be
  *     declared {@code public} so they allow access in the following ways:
@@ -108,15 +106,14 @@ public class PluginConfig {
     public boolean testFailFast = false;
 
     /**
-     * <p>
-     *     Gradle plugin properties required by {@code JutePlugin}.
+     * Gradle plugin properties required by {@code JutePlugin}.
      * <p>
      *     Each property here comes with a parser reference used to parse corresponding
      *     properties found as {@code Object} instances found in Gradle properties.
      *     A {@code null} parser means the {@code Object} should be interpreted as a {@code String}.
      * </p>
      */
-    public enum Property {
+    public enum Property implements ConfigProperty<PluginConfig> {
 
         JAVA_VERSION("projectJavaVersion", Property.Parser.javaVersionParser),
         IS_JAVA_LIBRARY("isProjectJavaLibrary", PrimitiveParser.BOOLEAN),
@@ -130,56 +127,30 @@ public class PluginConfig {
         TEST_FAIL_FAST("testFailFast", PrimitiveParser.BOOLEAN);
 
         private final String name;
-        private final Field field;
         private final DataParser parser;
 
         Property(String name, DataParser parser) {
 
             this.name = name;
             this.parser = parser;
-
-            try {
-                this.field = PluginConfig.class.getDeclaredField(name);
-            }
-            catch (NoSuchFieldException e) {
-                throw new IllegalArgumentException(String.format("The specified field " +
-                        "\"%s\" was not found declared in class PluginConfig", name), e);
-            }
         }
         Property(String name) {
             this(name, null);
         }
 
-        /**
-         * Read this property from the given {@code Project} for the specified {@code JutePlugin}
-         * instance using a {@code DataParser} to parse the found property {@code Object}.
-         *
-         * @param plugin {@code PluginConfig} owner loading this property.
-         * @param project {@code Project} instance to search for property data.
-         */
-        @SuppressWarnings("unchecked")
-        void loadFromProjectProperties(JutePlugin plugin, Project project) {
-
-            Object property = project.findProperty(name);
-            if (property instanceof String) {
-                /*
-                 * null parser indicated that the property should be interpreted as a String
-                 */
-                Object result = parser != null ? parser.parse(property) : property.toString();
-                try {
-                    field.set(plugin.getConfig(), result);
-                }
-                catch (IllegalAccessException e) {
-                    throw new IllegalStateException(String.format("Unable to set field %s," +
-                            " access through reflection was denied.", field.getName()), e);
-                }
-            }
-        }
-        /**
-         * @return the name of this property used to access it through DSL.
-         */
+        @Override
         public String getName() {
             return name;
+        }
+
+        @Override
+        public Class<PluginConfig> getPropertyClass() {
+            return PluginConfig.class;
+        }
+
+        @Override
+        public DataParser getDataParser() {
+            return parser;
         }
 
         private static class Parser {
