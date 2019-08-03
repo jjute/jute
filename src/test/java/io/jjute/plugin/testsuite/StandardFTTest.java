@@ -122,7 +122,7 @@ class StandardFTTest extends FunctionalTest {
             return (boolean) forwardingStreams.get(runner);
         }
         catch (SecurityException | IllegalAccessException e) {
-            throw new GradlePluginTestException("Unable to read " +
+            throw new PluginTestException("Unable to read " +
                     "\"forwardingSystemStreams\" field of DefaultGradleRunner.class", e);
         }
     }

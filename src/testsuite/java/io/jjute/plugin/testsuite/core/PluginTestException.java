@@ -1,4 +1,4 @@
-package io.jjute.plugin.testsuite;
+package io.jjute.plugin.testsuite.core;
 
 /**
  * Signals that a fatal exception occurred while running a Gradle plugin test.
@@ -10,17 +10,17 @@ package io.jjute.plugin.testsuite;
  * </ul>
  * This exception should <b>not</b> be thrown to handle unchecked exceptions.
  */
-public class GradlePluginTestException extends RuntimeException {
+public class PluginTestException extends RuntimeException {
 
-    public GradlePluginTestException(String message) {
+    public PluginTestException(String message) {
         super(message);
     }
 
-    public GradlePluginTestException(String message, Throwable cause) {
+    public PluginTestException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public GradlePluginTestException(String message, String arg, Throwable cause) {
+    public PluginTestException(String message, String arg, Throwable cause) {
         super(String.format(message, arg), cause);
     }
 }

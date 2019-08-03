@@ -32,7 +32,7 @@ public class IntegrationTest {
     protected final Project project;
 
     /**
-     * @throws GradlePluginTestException if an I/O exception occurred while creating the project root directory
+     * @throws PluginTestException if an I/O exception occurred while creating the project root directory
      */
     public IntegrationTest() {
 
@@ -41,7 +41,7 @@ public class IntegrationTest {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try { FileUtils.deleteDirectory(projectDir); }
                 catch (java.io.IOException e) {
-                    throw new GradlePluginTestException("Failed to schedule " +
+                    throw new PluginTestException("Failed to schedule " +
                             "project root dir deletion: \"%s\"", projectDir.getPath(), e);
                 }
             }));
@@ -49,7 +49,7 @@ public class IntegrationTest {
             this.project.getPluginManager().apply("java");
         }
         catch (java.io.IOException e) {
-            throw new GradlePluginTestException("Unable to create project root directory", e);
+            throw new PluginTestException("Unable to create project root directory", e);
         }
     }
 

@@ -107,10 +107,10 @@ public class FunctionalTest {
             if (properties != null) {
                 properties.storeToFile(buildDir.toPath().resolve("gradle.properties").toFile());
             }
-            else throw new GradlePluginTestException("Unable to find gradle.properties resource file.");
+            else throw new PluginTestException("Unable to find gradle.properties resource file.");
         }
         catch (IOException e) {
-            throw new GradlePluginTestException("An I/O exception occurred while reading properties.");
+            throw new PluginTestException("An I/O exception occurred while reading properties.");
         }
     }
 
@@ -284,7 +284,7 @@ public class FunctionalTest {
      *         return a valid {@code String} value (not {@code null} or empty).
      *
      * @throws IOException if an I/O error is thrown when accessing a classpath directory.
-     * @throws GradlePluginTestException if plugin descriptor was not found on classpath. This will happen
+     * @throws PluginTestException if plugin descriptor was not found on classpath. This will happen
      *                                   when using {@code java-gradle-plugin}, modifying package or class
      *                                   names and not re-running relevant Gradle tasks located under the
      *                                   {@code plugin development} group or when the plugin implementation
@@ -298,14 +298,14 @@ public class FunctionalTest {
         java.nio.file.Path path = java.nio.file.Paths.get("META-INF/gradle-plugins");
         File classpathDir = PluginUtils.findClasspathEntry(buildRunner.getPluginClasspath(), path);
         if (classpathDir == null) {
-            throw new GradlePluginTestException("Unable to find \"META-INF/gradle-plugins\" on classpath.");
+            throw new PluginTestException("Unable to find \"META-INF/gradle-plugins\" on classpath.");
         }
 
         File[] propertiesFiles = classpathDir.listFiles(f ->
                 FilenameUtils.getExtension(f.getName()).equals("properties"));
 
         if (propertiesFiles == null || propertiesFiles.length == 0) {
-            throw new GradlePluginTestException("Unable to find plugin descriptor on classpath.");
+            throw new PluginTestException("Unable to find plugin descriptor on classpath.");
         }
         else if (propertiesFiles.length > 1) {
             System.out.println("Warning: Multiple properties files detected in META-INF/gradle-plugins.");
@@ -321,7 +321,7 @@ public class FunctionalTest {
      * @return a reference to the successfully copied {@code File}.
      *
      * @throws NullPointerException if the resource under the given path was not found.
-     * @throws GradlePluginTestException if an I/O error occurred while copying file to directory.
+     * @throws PluginTestException if an I/O error occurred while copying file to directory.
      */
     protected File copyResourceToDirectory(String resourcePath, String dirPath) {
 
@@ -333,7 +333,7 @@ public class FunctionalTest {
             return copyResultFile.toPath().resolve(resourceFile.getName()).toFile();
         }
         catch (URISyntaxException | IOException e) {
-            throw new GradlePluginTestException(String.format("Unable to move resource " +
+            throw new PluginTestException(String.format("Unable to move resource " +
                     "\"%s\" to directory \"%s\"", resourcePath, dirPath), e);
         }
     }
