@@ -1,5 +1,6 @@
 package io.jjute.plugin.framework.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -84,7 +85,7 @@ public class DependencyUtils {
      *     can just compare the content of resolved notations as two {@code String} objects.
      */
     public static String getDependencyNotation(@NotNull Dependency dependency) {
-        return dependency.getGroup() + ':' + dependency.getName() + ':' + dependency.getVersion();
+        return getDependencyNotation(dependency.getGroup(), dependency.getName(), dependency.getVersion());
     }
 
     /**
@@ -109,8 +110,14 @@ public class DependencyUtils {
      *
      * @see #getDependencyNotation(Dependency)
      */
-    @SuppressWarnings("UnnecessaryCallToStringValueOf")
     public static String getDependencyNotation(@Nullable String group, String name, @Nullable String version) {
-        return String.valueOf(group) + ':' + name + ':' + String.valueOf(version);
+        return emptyStringIfNull(group) + ':' + name + ':' + emptyStringIfNull(version);
+    }
+
+    /**
+     * @return the value of the given {@code String} or an empty string if {@code null}.
+     */
+    private static String emptyStringIfNull(@Nullable String value) {
+        return value == null ? StringUtils.EMPTY : value;
     }
 }
