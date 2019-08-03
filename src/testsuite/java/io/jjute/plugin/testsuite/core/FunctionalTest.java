@@ -1,4 +1,4 @@
-package io.jjute.plugin.testsuite;
+package io.jjute.plugin.testsuite.core;
 
 import io.jjute.plugin.framework.CommunityPlugin;
 import io.jjute.plugin.framework.GradleProperties;

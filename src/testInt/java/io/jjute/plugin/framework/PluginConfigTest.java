@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.testsuite.FunctionalTest;
+import io.jjute.plugin.testsuite.core.FunctionalTest;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Test;
 

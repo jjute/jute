@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework.util;
 
-import io.jjute.plugin.testsuite.IntegrationTest;
+import io.jjute.plugin.testsuite.core.IntegrationTest;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.junit.jupiter.api.Assertions;

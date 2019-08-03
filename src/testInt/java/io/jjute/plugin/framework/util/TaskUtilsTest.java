@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework.util;
 
-import io.jjute.plugin.testsuite.IntegrationTest;
+import io.jjute.plugin.testsuite.core.IntegrationTest;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Task;
 import org.gradle.api.internal.AbstractTask;

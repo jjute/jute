@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.testsuite.IntegrationTest;
+import io.jjute.plugin.testsuite.core.IntegrationTest;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Assertions;

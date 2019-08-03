@@ -1,7 +1,7 @@
 package io.jjute.plugin.framework.integration;
 
 import io.jjute.plugin.framework.PluginConfig;
-import io.jjute.plugin.testsuite.FunctionalTest;
+import io.jjute.plugin.testsuite.core.FunctionalTest;
 import org.gradle.api.JavaVersion;
 import org.junit.jupiter.api.Test;
 

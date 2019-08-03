@@ -1,4 +1,4 @@
-package io.jjute.plugin.testsuite;
+package io.jjute.plugin.testsuite.core;
 
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;

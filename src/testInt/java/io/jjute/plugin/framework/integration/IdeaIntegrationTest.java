@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.testsuite.FunctionalTest;
+import io.jjute.plugin.testsuite.core.FunctionalTest;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
