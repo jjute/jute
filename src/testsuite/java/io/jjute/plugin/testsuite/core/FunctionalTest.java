@@ -30,7 +30,7 @@ import java.util.InvalidPropertiesFormatException;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#functional-tests">
  *      Testing Gradle Plugins: Implementing functional tests</a>
  */
-public class FunctionalTest {
+public abstract class FunctionalTest extends PluginTest {
 
     protected final GradleProperties properties;
 
@@ -93,6 +93,8 @@ public class FunctionalTest {
                         "build root dir deletion: \"%s\"", buildDir.getPath(), e);
             }
         }));
+    protected FunctionalTest() {
+        super(Type.FUNCTIONAL);
 
         buildRunner = createRunnerForPlugin();
 

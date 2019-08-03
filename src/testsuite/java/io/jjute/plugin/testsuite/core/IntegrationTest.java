@@ -24,7 +24,7 @@ import java.nio.file.Files;
  *      Testing Gradle Plugins: Implementing integration tests</a>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IntegrationTest {
+public abstract class IntegrationTest extends PluginTest {
 
     /**
      * {@code Project} instance used to execute this integration test.
@@ -34,7 +34,8 @@ public class IntegrationTest {
     /**
      * @throws PluginTestException if an I/O exception occurred while creating the project root directory
      */
-    public IntegrationTest() {
+    protected IntegrationTest() {
+        super(Type.INTEGRATION);
 
         try {
             File projectDir = Files.createTempDirectory("jute-plugin").toFile();
