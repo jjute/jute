@@ -1,8 +1,7 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.framework.integration.IdeaIntegration;
-import io.jjute.plugin.framework.integration.JUnitIntegration;
-import io.jjute.plugin.framework.integration.JavaIntegration;
+import io.jjute.plugin.framework.config.TestConfigurator;
+import io.jjute.plugin.framework.integration.*;
 import io.jjute.plugin.framework.parser.DataParsingException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 public class JutePlugin implements Plugin<Project> {
 
-    private Logger logger;
     private PluginConfig config;
     private Set<ProjectPlugin> plugins;
 
@@ -36,11 +34,16 @@ public class JutePlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
 
-        logger = target.getLogger();
+        Logger logger = target.getLogger();
         logger.debug("Applying JutePlugin to project " + target.getDisplayName());
 
-        config = target.getExtensions().create("jute", PluginConfig.class);
-        loadGradleProperties(target);
+        config = JutePlugin.createPluginConfig(target);
+
+        java.util.Set<ProjectPlugin> pluginsList = new java.util.HashSet<>();
+        pluginsList.add(config.isJavaLibrary() ? CorePlugin.JAVA_LIBRARY : CorePlugin.JAVA);
+        if (config.ideaIntegration()) pluginsList.add(CorePlugin.IDEA);
+
+        plugins = java.util.Collections.unmodifiableSet(pluginsList);
 
         ScriptHandler buildscript = target.getBuildscript();
         buildscript.getRepositories().gradlePluginPortal();
@@ -76,35 +79,40 @@ public class JutePlugin implements Plugin<Project> {
     }
 
     /**
-     * Load key/value pairs from {@code gradle.properties} file located inside project root directory
-     * and update proper {@link PluginConfig} fields. Also populate the list of dependency plugins
-     * according to retrieved properties. Note that the plugin list will be immutable after this.
+     * Create a new {@code PluginConfig} DSL extension type and update the available
+     * fields with corresponding Gradle properties defined in {@code gradle.properties} file
+     *
+     * @param project {@code Project} to create the extension for
+     * @return the created DSL extension
      */
-    private void loadGradleProperties(Project project) {
+    public static PluginConfig createPluginConfig(Project project) {
 
-        logger.debug("Loading internal project properties from \"gradle.properties\".");
+        PluginConfig createdConfig = project.getExtensions().create("jute", PluginConfig.class);
+        JutePlugin.loadGradleProperties(project, createdConfig);
+        return createdConfig;
+    }
+
+    /**
+     * Load key/value pairs from {@code gradle.properties} file located inside the given
+     * project's root directory and update corresponding {@code PluginConfig} fields.
+     *
+     * @throws PluginExecutionException if a {@link DataParsingException} occurred while loading
+     *                                  properties from project properties
+     */
+    protected static void loadGradleProperties(Project project, PluginConfig config) {
+
         try {
             for (PluginConfig.Property value : PluginConfig.Property.values()) {
-                value.loadFromProjectProperties(this, project);
+                value.loadFromProjectProperties(config, project);
             }
         } catch (DataParsingException e) {
             throw new PluginExecutionException("A fatal exception occurred while loading" +
                     " Gradle properties for project " + project.getName(), e);
         }
-        logger.debug("Populating plugin dependencies list.");
-        java.util.Set<ProjectPlugin> pluginsList = new java.util.HashSet<>();
-
-        pluginsList.add(config.isJavaLibrary() ? CorePlugin.JAVA_LIBRARY : CorePlugin.JAVA);
-        if (config.ideaIntegration()) pluginsList.add(CorePlugin.IDEA);
-        plugins = java.util.Collections.unmodifiableSet(pluginsList);
     }
 
     public Set<ProjectPlugin> getProjectPlugins() {
         return plugins;
-    }
-
-    public Logger getLogger() {
-        return logger;
     }
 
     public PluginConfig getConfig() {
