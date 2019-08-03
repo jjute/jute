@@ -18,7 +18,7 @@ class JavaIntegrationTest extends FunctionalTest {
         properties.put(PluginConfig.Property.JAVA_VERSION.getName(), compatibility);
         writeToGradleProperties(properties);
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyCompatibility {",
                 "   JavaVersion compatibility = JavaVersion." + compatibility.name(),
                 "   JavaPluginConvention jpConvention = project.convention.getPlugin(JavaPluginConvention.class)",
@@ -31,7 +31,7 @@ class JavaIntegrationTest extends FunctionalTest {
     @Test
     void shouldSetSourceSetDirectoryLayout() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
             "void verifySourceSetDirectory(SourceDirectorySet set, String path) {",
             "   if (set.srcDirs.size() != 1 && !set.srcDirs.iterator().next().path.equals(path)) {",
             "       String message = \"SourceDirectorySet %s was not configured properly: %s\"",
@@ -50,7 +50,7 @@ class JavaIntegrationTest extends FunctionalTest {
     @Test
     void shouldSetSingleSourceSetDirectory() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task setSingleSourceSetDir {",
                 "   io.jjute.plugin.framework.integration.JavaIntegration java = " +
                         "new io.jjute.plugin.framework.integration.JavaIntegration(project)",

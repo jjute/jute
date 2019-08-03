@@ -13,7 +13,7 @@ class IdeaIntegrationTest extends FunctionalTest {
     @Test
     void whenIdeaIntegrationEnabledShouldApplyIdeaPlugin() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task validateIdeaIntegration {",
                 "   if (!project.plugins.hasPlugin('idea'))",
                 "       throw new RuntimeException('Unable to find idea plugin')",
@@ -25,7 +25,7 @@ class IdeaIntegrationTest extends FunctionalTest {
     @Test
     void whenIdeaIntegrationEnabledShouldFindPlugin() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
             "task validateIdeaIntegration {",
             "   IdeaPlugin ideaPlugin = plugins.getPlugin('idea')",
             "   if (ideaPlugin == null || ideaPlugin.getModel().module == null)",
@@ -48,7 +48,7 @@ class IdeaIntegrationTest extends FunctionalTest {
         properties.put(Property.IDEA_TEST_OUTPUT_DIR.getName(), testOutputDirPath);
 
         writeToGradleProperties(properties);
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task validateIdeaOutputPaths {",
                 "   String outputDirPath = idea.module.outputDir.path",
                 "   if (System.getProperty(\"os.name\").startsWith(\"Windows\")) {",

@@ -2,8 +2,9 @@ package io.jjute.plugin.testsuite.core;
 
 import io.jjute.plugin.framework.CommunityPlugin;
 import io.jjute.plugin.framework.GradleProperties;
-import io.jjute.plugin.framework.ProjectPlugin;
 import io.jjute.plugin.framework.util.PluginUtils;
+import io.jjute.plugin.testsuite.file.BuildFile;
+import io.jjute.plugin.testsuite.JuteGradleRunner;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.gradle.api.Project;
@@ -15,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.InvalidPropertiesFormatException;
 
 /**
@@ -40,70 +40,14 @@ public abstract class FunctionalTest extends PluginTest {
     protected final JuteGradleRunner buildRunner;
 
     /**
-     * {@code CommunityPlugin} that contains information needed to resolve {@code JutePlugin}.
+     * @throws PluginTestException if {@code gradle.properties} resource file was not found in root
+     *                                   directory, an I/O error occurred while finding resource or creating
+     *                                   or scheduling the deletion of root directory or build file.
      */
-    protected final CommunityPlugin jutePlugin;
-
-    /**
-     * The directory that Gradle will be executed in
-     * which is also the root project of the build under test.
-     */
-    protected final File buildDir;
-
-    /**
-     * The {@code build.gradle} file being tested.
-     * It will always be located in the root project directory - {@link #buildDir}.
-     */
-    protected final File buildFile;
-
-    /**
-     * Prepare project build test area in a new directory located in the
-     * system designated default temporary-file directory. The test area
-     * will be cleaned after the JVM that invoked the tests terminates.
-     *
-     * @throws GradlePluginTestException if an {@code IOException} occurred while trying to create
-     *                                   or schedule deletion of the root directory or build file.
-     */
-    public FunctionalTest() {
-
-        try {
-            buildDir = Files.createTempDirectory("jute-plugin").toFile();
-        }
-        catch (java.io.IOException e) {
-            throw new GradlePluginTestException("Unable to create build root directory", e);
-        }
-
-        buildFile = buildDir.toPath().resolve("build.gradle").toFile();
-
-        try {
-            if (!buildFile.createNewFile()) {
-                throw new java.nio.file.FileAlreadyExistsException("Project build file already exists.");
-            }
-        } catch (java.io.IOException e) {
-            throw new GradlePluginTestException("Unable to create " +
-                    "test project build file: \"%s\"", buildFile.getPath(), e);
-        }
-        /* Use a shutdown hook here because for some reason Apache
-         * FileUtils.forceDeleteOnExit does not work in this specific situation.
-         */
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try { FileUtils.deleteDirectory(buildDir); }
-            catch (java.io.IOException e) {
-                throw new GradlePluginTestException("Failed to schedule " +
-                        "build root dir deletion: \"%s\"", buildDir.getPath(), e);
-            }
-        }));
     protected FunctionalTest() {
         super(Type.FUNCTIONAL);
 
         buildRunner = createRunnerForPlugin();
-
-        try {
-            jutePlugin = new CommunityPlugin(getPluginIdentifier());
-        }
-        catch (IOException e) {
-            throw new GradlePluginTestException("Unable to resolve plugin identifier.", e);
-        }
         try {
             properties = GradleProperties.getFromResources();
             if (properties != null) {
@@ -117,76 +61,22 @@ public abstract class FunctionalTest extends PluginTest {
     }
 
     /**
-     * Apply the given plugins with a plugin DSL block that configures an instance
-     * of {@link org.gradle.plugin.use.PluginDependenciesSpec PluginDependenciesSpec}
-     * which is an API used by plugin declarations inside the {@code plugins{}} script block.
+     * Initialize {@code BuildFile} by deleting existing content, applying {@code JutePlugin}
+     * and writing {@code toString()} value of each array item to build file line by line.
      *
-     * @param plugins array of project plugins to apply
-     * @throws IOException if an I/O error occurred while reading build file.
-     * @throws GradlePluginTestException if the DSL plugins block could not be created because
-     *                                   it is already defined in the current build file.
-     *
-     * @see <a href="https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block">
-     *      Gradle Docs: Applying plugins with the plugins DSL</a>
+     * @param text array of text lines to write to file. {@code null} entries produce blank lines.
+     * @throws PluginTestException if the method is unable to resolve plugin identifier.
      */
-    protected void applyPlugins(ProjectPlugin... plugins) throws IOException {
+    protected BuildFile initializeBuild(String[] text) {
 
-        if (FileUtils.readFileToByteArray(buildFile).length > 0) {
-            throw new GradlePluginTestException("Cannot write DSL plugin declaration, block is already defined.");
+        CommunityPlugin jute;
+        try {
+            jute = new CommunityPlugin(getPluginIdentifier());
         }
-        String[] pluginDeclarations = new String[plugins.length];
-        for (int i = 0; i < plugins.length; i++) {
-            pluginDeclarations[i] = "\t" + plugins[i].toString();
+        catch (IOException e) {
+            throw new PluginTestException("Unable to resolve plugin identifier.", e);
         }
-        String[] pluginsDSL = new String[plugins.length + 2];
-        pluginsDSL[0] = "plugins {"; pluginsDSL[pluginsDSL.length - 1] = "}\n";
-
-        System.arraycopy(pluginDeclarations, 0, pluginsDSL, 1, pluginDeclarations.length);
-        writeToBuildFile(pluginsDSL, false);
-    }
-
-    /**
-     * Internal method that does the actual writing to file.
-     *
-     * @param text array of text lines to write to file. {@code null} entries produce blank lines.
-     * @param append if {@code true}, the lines will be added to the end of the file rather than overwriting
-     *
-     * @throws IOException if an I/O exception occurred while writing to build file
-     */
-    private void writeToBuildFile(String[] text, boolean append) throws IOException {
-
-        java.util.List<String> toWrite = java.util.Arrays.asList(text);
-        FileUtils.writeLines(buildFile, toWrite, append);
-    }
-
-    /**
-     * Writes the {@code toString()} value of each array item to the build {@code File} line by line.
-     * The lines are added to the end of the file rather then overwriting existing content.
-     *
-     * @param text array of text lines to write to file. {@code null} entries produce blank lines.
-     * @throws IOException if an I/O exception occurred while writing to build file.
-     * @see #initializeBuildFile(String[])
-     */
-    protected void writeToBuildFile(String[] text) throws IOException {
-        writeToBuildFile(text, true);
-    }
-
-    /**
-     * Initialize the test build file by deleting existing content, applying {@link #jutePlugin} and
-     * writing {@code toString()} value of each array item to the build {@code File} line by line.
-     *
-     * @param text array of text lines to write to file. {@code null} entries produce blank lines.
-     *
-     * @throws GradlePluginTestException if build file already contains written content.
-     * @throws IOException if an I/O error occurred while reading build file.
-     *
-     * @see #applyPlugins(ProjectPlugin...)
-     * @see #writeToBuildFile(String[])
-     */
-    protected void initializeBuildFile(String[] text) throws IOException {
-
-        applyPlugins(jutePlugin);
-        writeToBuildFile(text);
+        return BuildFile.create(buildDir).applyPlugins(jute).write(text).sign();
     }
 
     /**
@@ -213,7 +103,7 @@ public abstract class FunctionalTest extends PluginTest {
      * file located in the test project root directory by adding them to the end of the file <i>(appending)</i>.
      * If the file does not exist it will be created. Each array element will be interpreted and written to
      * file <i>as-is</i>, meaning each element is expected to be formatted according to the following syntax:
-     * <blockquote>
+     * <    blockquote>
      * <dl>
      *     <dt><b>Syntax:</b>
      *         <dd>{@code <property-key>=<property-value>}
@@ -261,7 +151,7 @@ public abstract class FunctionalTest extends PluginTest {
     protected JuteGradleRunner createRunnerForPlugin(boolean forwardOutput, boolean withDebug) {
 
         final GradleRunner runner = JuteGradleRunner.create().withPluginClasspath()
-                .withProjectDir(buildFile.getParentFile()).withDebug(withDebug);
+                .withProjectDir(buildDir).withDebug(withDebug);
 
         if (forwardOutput) runner.forwardOutput();
         return (JuteGradleRunner) runner;

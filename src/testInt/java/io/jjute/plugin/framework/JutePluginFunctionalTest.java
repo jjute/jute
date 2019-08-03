@@ -10,7 +10,7 @@ class JutePluginFunctionalTest extends FunctionalTest {
     @Test
     void whenPropertiesAsOptionShouldApplyProjectPlugins() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyPlugin {",
                 "   projectPlugins.split(',').each { plugin ->",
                 "       if (!project.plugins.hasPlugin(plugin))",
@@ -24,7 +24,7 @@ class JutePluginFunctionalTest extends FunctionalTest {
     @Test
     void shouldFailWhenProjectPluginNotFound() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyPlugin {",
                 "   if (!project.plugins.hasPlugin('123abc348f'))",
                 "       throw new RuntimeException()",
@@ -35,7 +35,7 @@ class JutePluginFunctionalTest extends FunctionalTest {
     @Test
     void shouldAddJCenterRepository() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyRepository {",
                 "    if (project.getRepositories().findByName('BintrayJCenter') == null)",
                 "        throw new RuntimeException()",
@@ -46,7 +46,7 @@ class JutePluginFunctionalTest extends FunctionalTest {
     @Test
     void shouldUseCorrectJavaVersionCompatibility() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyCompatibility {",
                 "   String sVersion = findProperty('projectJavaVersion')",
                 "   JavaVersion version = JavaVersion.toVersion(sVersion)",

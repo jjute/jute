@@ -1,8 +1,10 @@
 package io.jjute.plugin.testsuite;
 
-import io.jjute.plugin.framework.CommunityPlugin;
-import io.jjute.plugin.framework.CorePlugin;
+import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.PluginTestException;
+import io.jjute.plugin.testsuite.file.BuildFile;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -13,10 +15,7 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.InvalidPropertiesFormatException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StandardFTTest extends FunctionalTest {
@@ -24,44 +23,24 @@ class StandardFTTest extends FunctionalTest {
     private static final Charset CHARSET = Charset.defaultCharset();
 
     @BeforeEach
-    void shouldSetupStandardFTTest() throws IOException {
+    void shouldSetupStandardFTTest() {
 
         Assertions.assertTrue(buildDir.isDirectory());
-        Assertions.assertTrue(buildFile.exists());
-        /*
-         * Build file should contain no content.
-         * This ensures that the file was freshly created.
-         */
-        String build = FileUtils.readFileToString(buildFile, CHARSET);
-        Assertions.assertTrue(build.isEmpty());
+        File[] buildTestFiles = buildDir.listFiles();
+        Assertions.assertTrue(buildTestFiles == null || Arrays.stream(buildTestFiles)
+                .noneMatch(f -> FilenameUtils.isExtension(f.getName(), "gradle")));
     }
 
     @Test
     void shouldInitializeBuildFile() throws IOException {
 
-        String[] plugins = { "plugins {", "\tid \"" + jutePlugin.getId() + "\"", "}", "" };
+        String[] plugins = { "plugins {", "\tid \"" + getPluginIdentifier() + "\"", "}", "" };
         String[] text = { "first line", "second line", "third line" };
 
-        initializeBuildFile(text);
+        BuildFile buildFile = initializeBuild(text);
 
         List<String> textList = java.util.Arrays.asList(ArrayUtils.addAll(plugins, text));
         Assertions.assertEquals(textList, FileUtils.readLines(buildFile, CHARSET));
-        Assertions.assertThrows(GradlePluginTestException.class, () -> initializeBuildFile(text));
-    }
-
-    @Test
-    void shouldWriteToBuildFile() throws IOException {
-
-        String firstLine = "first line\n";
-        FileUtils.write(buildFile, firstLine, CHARSET);
-        Assertions.assertEquals(firstLine, FileUtils.readFileToString(buildFile, CHARSET));
-
-        String[] text = { "second line", "third line" };
-        String[] expected = ArrayUtils.addAll(new String[] {firstLine.trim()}, text);
-
-        writeToBuildFile(text);
-        List<String> expectedList = java.util.Arrays.asList(expected);
-        Assertions.assertEquals(expectedList, FileUtils.readLines(buildFile, CHARSET));
     }
 
     @Test
@@ -177,22 +156,6 @@ class StandardFTTest extends FunctionalTest {
          */
         expectedResult = java.util.Arrays.asList(ArrayUtils.addAll(propertiesArray, propertiesArray));
         Assertions.assertEquals(expectedResult, FileUtils.readLines(gradleProperties, CHARSET));
-    }
-
-    @Test
-    void whenApplyPluginsShouldDeclareDSLPluginsBlock() throws IOException {
-
-        String[] expectedDSLBlock = {
-                "plugins {", "\tid 'java'", "\tid 'idea'", "\tid \"com-pluginA\"",
-                "\tid \"com-pluginB\" version \"1.0\"",  "}", ""
-        };
-        applyPlugins(CorePlugin.JAVA, CorePlugin.IDEA, new CommunityPlugin("com-pluginA"),
-                new CommunityPlugin("com-pluginB", "1.0"));
-
-        java.util.List<String> expected = java.util.Arrays.asList(expectedDSLBlock);
-        Assertions.assertEquals(expected, FileUtils.readLines(buildFile, CHARSET));
-
-        Assertions.assertThrows(GradlePluginTestException.class, () -> applyPlugins(CorePlugin.JAVA));
     }
 
     @Test

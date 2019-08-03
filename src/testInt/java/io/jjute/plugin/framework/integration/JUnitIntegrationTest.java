@@ -14,7 +14,7 @@ class JUnitIntegrationTest extends FunctionalTest {
     @Test
     void shouldAddProjectDependencies() throws IOException {
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyJUnitIntegration {",
                 "   if (!(test.getTestFramework() instanceof org.gradle.api.internal.tasks.testing." +
                         "junitplatform.JUnitPlatformTestFramework))",
@@ -29,7 +29,7 @@ class JUnitIntegrationTest extends FunctionalTest {
         Assertions.assertNotNull(JUnitIntegration.API);
         Assertions.assertNotNull(JUnitIntegration.ENGINE);
 
-        initializeBuildFile(new String[] {
+        initializeBuild(new String[] {
                 "task verifyJUnitIntegration {",
                 "   java.util.Set<Dependency> dependencies = io.jjute.plugin.framework.util." +
                         "DependencyUtils.getProjectDependencies(project)",

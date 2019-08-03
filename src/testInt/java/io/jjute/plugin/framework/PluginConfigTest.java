@@ -32,7 +32,7 @@ class PluginConfigTest extends FunctionalTest {
         map.put("jute.ideaOutputDir", "\"test/directory/path/one\"");
         map.put("jute.ideaTestOutputDir", "\"test/directory/path/two\"");
 
-        initializeBuildFile(getCompareConfigsTaskBuildLines(map));
+        initializeBuild(getCompareConfigsTaskBuildLines(map));
         createRunnerForPlugin().build();
     }
 
@@ -59,7 +59,7 @@ class PluginConfigTest extends FunctionalTest {
         map.put("jute.ideaOutputDir", "\"test/dir/path/one\"");
         map.put("jute.ideaTestOutputDir", "\"test/dir/path/two\"");
 
-        initializeBuildFile(getCompareConfigsTaskBuildLines(map));
+        initializeBuild(getCompareConfigsTaskBuildLines(map));
     }
 
     @TestOnly
