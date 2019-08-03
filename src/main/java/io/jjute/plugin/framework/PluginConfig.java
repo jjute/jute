@@ -79,8 +79,33 @@ public class PluginConfig {
     /**
      * Should tests perform using {@code JUnit} platform. If integration is disabled
      * and JUnit is the only project test suite available then tests will not run.
+     *
+     * @see io.jjute.plugin.framework.integration.JUnitIntegration JUnitIntegration
      */
     public boolean enableJUnitIntegration = true;
+
+    /**
+     * Determines whether stack traces of exceptions that occur during test execution will be logged.
+     * Note that {@link #testExceptionFormat} depends on this being set to {@code true}.
+     *
+     * @see org.gradle.api.tasks.testing.logging.TestLogging#setShowStackTraces(boolean)
+     *      TestLogging.setShowStackTraces(boolean)
+     */
+    public boolean testShowStackTraces = true;
+
+    /**
+     * Format used by exceptions thrown in test environments.
+     *
+     * @see org.gradle.api.tasks.testing.logging.TestExceptionFormat TestExceptionFormat
+     */
+    public String testExceptionFormat = "FULL";
+
+    /**
+     * Enabling the fail fast behavior will cause the {@code Test} task to fail on the first failed test.
+
+     * @see org.gradle.api.tasks.testing.Test#setFailFast(boolean) Test.setFailFast(boolean)
+     */
+    public boolean testFailFast = false;
 
     /**
      * <p>
@@ -100,6 +125,9 @@ public class PluginConfig {
         IDEA_TEST_OUTPUT_DIR("ideaTestOutputDir"),
         IDEA_INHERIT_DIRS("ideaInheritOutputDirs", PrimitiveParser.BOOLEAN),
         JUNIT_INTEGRATION("enableJUnitIntegration", PrimitiveParser.BOOLEAN),
+        TEST_SHOW_STACK_TRACE("testShowStackTraces", PrimitiveParser.BOOLEAN),
+        TEST_EXCEPTION_FORMAT("testExceptionFormat"),
+        TEST_FAIL_FAST("testFailFast", PrimitiveParser.BOOLEAN);
 
         private final String name;
         private final Field field;
