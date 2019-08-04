@@ -1,9 +1,10 @@
 package io.jjute.plugin.framework.integration;
 
+import io.jjute.plugin.framework.define.JuteDependency;
+import io.jjute.plugin.framework.define.JuteExternalDependency;
 import io.jjute.plugin.framework.util.TaskUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
-import org.gradle.api.internal.artifacts.dependencies.DefaultClientModule;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.testing.Test;
 import org.jetbrains.annotations.Contract;
@@ -15,7 +16,7 @@ public class JUnitIntegration extends IntegrationModel {
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api">
      *      Artifact on Maven Repository</a>
      */
-    public static final DefaultClientModule API = new DefaultClientModule(
+    public static final JuteDependency API = new JuteExternalDependency(
             "org.junit.jupiter", "junit-jupiter-api", "5.5.0",
             JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME
     );
@@ -24,7 +25,7 @@ public class JUnitIntegration extends IntegrationModel {
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine">
      *      Artifact on Maven Repository</a>
      */
-    public static final DefaultClientModule ENGINE = new DefaultClientModule(
+    public static final JuteDependency ENGINE = new JuteExternalDependency(
             "org.junit.jupiter", "junit-jupiter-engine", "5.5.0",
             JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME
     );
@@ -44,8 +45,8 @@ public class JUnitIntegration extends IntegrationModel {
 
         DependencyHandler dependencies = project.getDependencies();
 
-        dependencies.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, API);
-        dependencies.add(JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME, ENGINE);
+        dependencies.add(API.getConfiguration(), API);
+        dependencies.add(ENGINE.getConfiguration(), ENGINE);
 
         return this;
     }

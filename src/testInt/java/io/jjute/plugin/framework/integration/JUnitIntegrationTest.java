@@ -33,7 +33,7 @@ class JUnitIntegrationTest extends FunctionalTest {
                 "task verifyJUnitIntegration {",
                 "   java.util.Set<Dependency> dependencies = io.jjute.plugin.framework.util." +
                         "DependencyUtils.getProjectDependencies(project)",
-                "   org.gradle.api.internal.artifacts.dependencies.DefaultClientModule[] junitDependencies = [",
+                "   io.jjute.plugin.framework.define.JuteDependency[] junitDependencies = [",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.API,",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.ENGINE",
                 "   ]",
@@ -41,7 +41,7 @@ class JUnitIntegrationTest extends FunctionalTest {
                 "   dependencies.each { d -> ",
                 "       String notation = io.jjute.plugin.framework.util.DependencyUtils.getDependencyNotation(d)",
                 "       for (int i = 0; i < foundDependency.length; i++) {",
-                "           if (junitDependencies[i].getId().equals(notation))",
+                "           if (junitDependencies[i].getIdentifier().equals(notation))",
                 "               foundDependency[i] = true",
                 "       }",
                 "   }",
