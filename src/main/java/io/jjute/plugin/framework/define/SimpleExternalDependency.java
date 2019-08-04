@@ -9,29 +9,46 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
+/**
+ * Represents a basic external {@code Dependency} model with only skeleton methods
+ * providing just enough information to create and resolve simple dependencies.
+ */
 @NonNullApi
-public class JuteExternalDependency implements JuteDependency {
-
-    public static final JuteExternalDependency DUMMY_DEPENDENCY =
-            new JuteExternalDependency("group", "name", "1.0");
+public class SimpleExternalDependency implements SimpleDependency {
 
     private final String group;
     private final String name;
     private final String version;
 
+    /**
+     * {@code String} notation that identifies this dependency.
+     *
+     * @see DependencyUtils#getDependencyNotation(Dependency)
+     */
     private final String identifier;
+
+    /**
+     * {@code String} representation of {@code Configuration}
+     * used to include this dependency in classpath.
+     *
+     * @see org.gradle.api.artifacts.Configuration
+     */
     private final String configuration;
 
     private @Nullable String reason;
 
-    public JuteExternalDependency(String group, String name, String version, String configuration) {
+    public SimpleExternalDependency(String group, String name, String version, String configuration) {
 
         this.group = group; this.name = name; this.version = version;
         this.identifier = DependencyUtils.getDependencyNotation(group, name, version);
         this.configuration = configuration;
     }
 
-    public JuteExternalDependency(String group, String name, String version) {
+    /**
+     * Construct a new {@code SimpleExternalDependency} with {@link
+     * JavaPlugin#IMPLEMENTATION_CONFIGURATION_NAME default} configuration.
+     */
+    public SimpleExternalDependency(String group, String name, String version) {
         this(group, name, version, JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME);
     }
 
@@ -67,7 +84,7 @@ public class JuteExternalDependency implements JuteDependency {
 
     @Override
     public Dependency copy() {
-        return new JuteExternalDependency(group, name, version, configuration);
+        return new SimpleExternalDependency(group, name, version, configuration);
     }
 
     @Override

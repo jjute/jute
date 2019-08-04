@@ -1,7 +1,7 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.framework.define.JuteDependency;
-import io.jjute.plugin.framework.define.JuteExternalDependency;
+import io.jjute.plugin.framework.define.SimpleDependency;
+import io.jjute.plugin.framework.define.SimpleExternalDependency;
 import io.jjute.plugin.framework.util.TaskUtils;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
@@ -16,7 +16,7 @@ public class JUnitIntegration extends IntegrationModel {
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api">
      *      Artifact on Maven Repository</a>
      */
-    public static final JuteDependency API = new JuteExternalDependency(
+    public static final SimpleDependency API = new SimpleExternalDependency(
             "org.junit.jupiter", "junit-jupiter-api", "5.5.0",
             JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME
     );
@@ -25,7 +25,7 @@ public class JUnitIntegration extends IntegrationModel {
      * @see <a href="https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine">
      *      Artifact on Maven Repository</a>
      */
-    public static final JuteDependency ENGINE = new JuteExternalDependency(
+    public static final SimpleDependency ENGINE = new SimpleExternalDependency(
             "org.junit.jupiter", "junit-jupiter-engine", "5.5.0",
             JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME
     );

@@ -3,8 +3,8 @@ package io.jjute.plugin.testsuite.file;
 import io.jjute.plugin.framework.CommunityPlugin;
 import io.jjute.plugin.framework.CorePlugin;
 import io.jjute.plugin.framework.ProjectPlugin;
-import io.jjute.plugin.framework.define.JuteDependency;
-import io.jjute.plugin.framework.define.JuteExternalDependency;
+import io.jjute.plugin.framework.define.SimpleDependency;
+import io.jjute.plugin.framework.define.SimpleExternalDependency;
 import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.testsuite.core.UnitTest;
 import org.apache.commons.io.FileUtils;
@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Set;
 
 class BuildFileUTest extends UnitTest {
+
+    private static final SimpleExternalDependency DUMMY_DEPENDENCY =
+            new SimpleExternalDependency("group", "name", "1.0");
 
     private static final Charset CHARSET = Charset.defaultCharset();
 
@@ -116,13 +119,13 @@ class BuildFileUTest extends UnitTest {
         final int length = dependenciesArray.length;
         String[] expectedDSLBlock = new String[length];
 
-        JuteDependency[] dependencies = new JuteDependency[length];
-        Set<JuteDependency> dependencySet = new java.util.HashSet<>();
+        SimpleDependency[] dependencies = new SimpleDependency[length];
+        Set<SimpleDependency> dependencySet = new java.util.HashSet<>();
 
         for (int i = 0; i < dependenciesArray.length; i++)
         {
             String[] notation = dependenciesArray[i].split(":");
-            JuteDependency dependency = new JuteExternalDependency(notation[0], notation[1], notation[2]);
+            SimpleDependency dependency = new SimpleExternalDependency(notation[0], notation[1], notation[2]);
 
             dependencySet.add(dependency); dependencies[i] = dependency;
             expectedDSLBlock[i] = dependency.toDSLDeclaration();
@@ -167,20 +170,20 @@ class BuildFileUTest extends UnitTest {
     void whenModifyWriterSetsShouldThrowUnsupportedOperationException() {
 
         BuildFile result = buildWriter.applyPlugins(CorePlugin.JAVA)
-                .declareExternalDependencies(JuteExternalDependency.DUMMY_DEPENDENCY).sign();
+                .declareExternalDependencies(DUMMY_DEPENDENCY).sign();
 
         Assertions.assertThrows(UnsupportedOperationException.class,
                 () -> result.getDeclaredPlugins().add(new CommunityPlugin("dummy")));
 
         Assertions.assertThrows(UnsupportedOperationException.class,
-                () -> result.getDeclaredDependencies().add(JuteExternalDependency.DUMMY_DEPENDENCY));
+                () -> result.getDeclaredDependencies().add(DUMMY_DEPENDENCY));
     }
 
     @Test
     void shouldDeclareJUnitIntegrationDependencies() {
 
         BuildFile result = buildWriter.declareJUnitDependencies().sign();
-        Set<JuteDependency> dependencies = result.getDeclaredDependencies();
+        Set<SimpleDependency> dependencies = result.getDeclaredDependencies();
 
         Assertions.assertTrue(dependencies.contains(JUnitIntegration.API));
         Assertions.assertTrue(dependencies.contains(JUnitIntegration.ENGINE));

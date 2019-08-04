@@ -33,7 +33,7 @@ class JUnitIntegrationTest extends FunctionalTest {
                 "task verifyJUnitIntegration {",
                 "   java.util.Set<Dependency> dependencies = io.jjute.plugin.framework.util." +
                         "DependencyUtils.getProjectDependencies(project)",
-                "   io.jjute.plugin.framework.define.JuteDependency[] junitDependencies = [",
+                "   io.jjute.plugin.framework.define.SimpleDependency[] junitDependencies = [",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.API,",
                 "       io.jjute.plugin.framework.integration.JUnitIntegration.ENGINE",
                 "   ]",

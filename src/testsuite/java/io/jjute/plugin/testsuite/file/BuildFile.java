@@ -1,7 +1,7 @@
 package io.jjute.plugin.testsuite.file;
 
 import io.jjute.plugin.framework.ProjectPlugin;
-import io.jjute.plugin.framework.define.JuteDependency;
+import io.jjute.plugin.framework.define.SimpleDependency;
 import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.testsuite.core.PluginTestException;
 import org.apache.commons.io.FileUtils;
@@ -42,7 +42,7 @@ import java.util.Set;
 public class BuildFile extends File {
 
     private final Set<ProjectPlugin> plugins;
-    private final Set<JuteDependency> dependencies;
+    private final Set<SimpleDependency> dependencies;
     private Set<ArtifactRepository> repositories;
 
     private BuildFile(Path buildDir, String filename, Writer writer) {
@@ -83,7 +83,7 @@ public class BuildFile extends File {
         private final String filename;
 
         private Set<ProjectPlugin> plugins;
-        private Set<JuteDependency> dependencies;
+        private Set<SimpleDependency> dependencies;
         private Set<ArtifactRepository> repositories;
 
         private final TextEntry.Map entries = new TextEntry.Map();
@@ -176,14 +176,14 @@ public class BuildFile extends File {
          * @see <a href="https://docs.gradle.org/current/userguide/declaring_dependencies.html">
          *      Gradle Docs: Declaring a dependency to a module</a>
          */
-        public Writer declareExternalDependencies(JuteDependency... dependencies) {
+        public Writer declareExternalDependencies(SimpleDependency... dependencies) {
 
             this.dependencies = java.util.Collections.unmodifiableSet(java.util.
                     Arrays.stream(dependencies).collect(java.util.stream.Collectors.toSet()));
 
             String[] declarations = new String[dependencies.length];
             for (int i = 0; i < dependencies.length; i++) {
-                JuteDependency dependency = dependencies[i];
+                SimpleDependency dependency = dependencies[i];
                 declarations[i] = dependency.getConfiguration() + " \"" + dependency.getIdentifier() + '\"';
             }
             return writeDSLBlock("dependencies", declarations);
@@ -194,7 +194,7 @@ public class BuildFile extends File {
          * instance of {@link org.gradle.api.artifacts.dsl.DependencyHandler DependencyHandler}.
          *
          * @return instance of this {@code BuildFile.Writer}
-         * @see #declareExternalDependencies(JuteDependency...)
+         * @see #declareExternalDependencies(SimpleDependency...)
          */
         public Writer declareJUnitDependencies() {
             return declareExternalDependencies(JUnitIntegration.API, JUnitIntegration.ENGINE);
@@ -321,7 +321,7 @@ public class BuildFile extends File {
     /**
      * @return an immutable {@code Set} of declared dependencies for this {@code BuildFile}.
      */
-    public Set<JuteDependency> getDeclaredDependencies() {
+    public Set<SimpleDependency> getDeclaredDependencies() {
         return dependencies;
     }
     /**

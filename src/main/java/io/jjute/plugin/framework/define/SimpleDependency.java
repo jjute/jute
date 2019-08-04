@@ -3,7 +3,11 @@ package io.jjute.plugin.framework.define;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ModuleDependency;
 
-public interface JuteDependency extends Dependency {
+/**
+ * Represents a basic {@code Dependency} model with only skeleton methods
+ * providing just enough information to create and resolve simple dependencies.
+ */
+public interface SimpleDependency extends Dependency {
 
     /**
      * @return dependency identifier used to resolve this dependency in remote repositories.
