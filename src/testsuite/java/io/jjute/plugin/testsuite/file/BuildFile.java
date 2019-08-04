@@ -2,9 +2,14 @@ package io.jjute.plugin.testsuite.file;
 
 import io.jjute.plugin.framework.ProjectPlugin;
 import io.jjute.plugin.framework.define.JuteDependency;
+import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.testsuite.core.PluginTestException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.gradle.api.artifacts.UnknownRepositoryException;
+import org.gradle.api.artifacts.repositories.ArtifactRepository;
+import org.gradle.api.artifacts.repositories.IvyArtifactRepository;
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -38,12 +43,14 @@ public class BuildFile extends File {
 
     private final Set<ProjectPlugin> plugins;
     private final Set<JuteDependency> dependencies;
+    private Set<ArtifactRepository> repositories;
 
     private BuildFile(Path buildDir, String filename, Writer writer) {
 
         super(buildDir.toString(), filename);
         this.plugins = writer.plugins;
         this.dependencies = writer.dependencies;
+        this.repositories = writer.repositories;
     }
 
     /**
@@ -77,6 +84,7 @@ public class BuildFile extends File {
 
         private Set<ProjectPlugin> plugins;
         private Set<JuteDependency> dependencies;
+        private Set<ArtifactRepository> repositories;
 
         private final TextEntry.Map entries = new TextEntry.Map();
 
@@ -115,6 +123,44 @@ public class BuildFile extends File {
         }
 
         /**
+         * Add {@link ArtifactRepository} declarations that represent given repositories to a
+         * Gradle DSL block that configures an instance of {@link org.gradle.api.artifacts.dsl
+         * .RepositoryHandler RepositoryHandler}. Each declaration will be written as a nested
+         * DSL script block that represents an artifact resolver responsible for managing a set
+         * of {@code ArtifactRepository} instances. Note that repository declarations will be
+         * arranged in the same order as they are found in the given array.
+         *
+         * @param repositories array of {@code ArtifactRepositories} to add.
+         * @return instance of this {@code BuildFile.Writer}.
+         */
+        public Writer addRepositories(ArtifactRepository... repositories) {
+
+            this.repositories = java.util.Collections.unmodifiableSet(java.util.
+                    Arrays.stream(repositories).collect(java.util.stream.Collectors.toSet()));
+
+            java.util.List<javafx.util.Pair<String, java.net.URI>> map = new java.util.ArrayList<>();
+            for (ArtifactRepository repo : repositories)
+            {
+                if (repo instanceof MavenArtifactRepository) {
+                    map.add(new javafx.util.Pair<>("maven", ((MavenArtifactRepository) repo).getUrl()));
+                }
+                else if (repo instanceof IvyArtifactRepository) {
+                    map.add(new javafx.util.Pair<>("ivy", ((IvyArtifactRepository) repo).getUrl()));
+                }
+                else throw new UnknownRepositoryException(String.format("Cannot add unknown " +
+                            "repository %s for build file: \"%s\"", repo.getName(), buildDir));
+            }
+            java.util.List<String> lines = new java.util.ArrayList<>();
+            for (javafx.util.Pair<String, java.net.URI> pair : map)
+            {
+                String line = "url \"" + pair.getValue().toString() + '\"';
+                String[] dslBlock = constructDSLBlock(pair.getKey(), new String[]{line});
+                lines.addAll(java.util.Arrays.asList(dslBlock));
+            }
+            return writeDSLBlock("repositories", lines.toArray(new String[0]));
+        }
+
+        /**
          * Declare module dependencies with a Gradle DSL block that configures an instance
          * of {@link org.gradle.api.artifacts.dsl.DependencyHandler DependencyHandler}.
          *
@@ -141,6 +187,17 @@ public class BuildFile extends File {
                 declarations[i] = dependency.getConfiguration() + " \"" + dependency.getIdentifier() + '\"';
             }
             return writeDSLBlock("dependencies", declarations);
+        }
+
+        /**
+         * Declare {@link JUnitIntegration} dependencies with a Gradle DSL block that configures an
+         * instance of {@link org.gradle.api.artifacts.dsl.DependencyHandler DependencyHandler}.
+         *
+         * @return instance of this {@code BuildFile.Writer}
+         * @see #declareExternalDependencies(JuteDependency...)
+         */
+        public Writer declareJUnitDependencies() {
+            return declareExternalDependencies(JUnitIntegration.API, JUnitIntegration.ENGINE);
         }
 
         /**
@@ -266,5 +323,11 @@ public class BuildFile extends File {
      */
     public Set<JuteDependency> getDeclaredDependencies() {
         return dependencies;
+    }
+    /**
+     * @return an immutable {@code Set} of declared repositories for this {@code BuildFile}.
+     */
+    public Set<ArtifactRepository> getDeclaredRepositories() {
+        return repositories;
     }
 }

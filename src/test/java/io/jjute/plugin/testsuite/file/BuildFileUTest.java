@@ -5,6 +5,7 @@ import io.jjute.plugin.framework.CorePlugin;
 import io.jjute.plugin.framework.ProjectPlugin;
 import io.jjute.plugin.framework.define.JuteDependency;
 import io.jjute.plugin.framework.define.JuteExternalDependency;
+import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.testsuite.core.UnitTest;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.TestOnly;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-class BuildFileTest extends UnitTest {
+class BuildFileUTest extends UnitTest {
 
     private static final Charset CHARSET = Charset.defaultCharset();
 
@@ -173,5 +174,15 @@ class BuildFileTest extends UnitTest {
 
         Assertions.assertThrows(UnsupportedOperationException.class,
                 () -> result.getDeclaredDependencies().add(JuteExternalDependency.DUMMY_DEPENDENCY));
+    }
+
+    @Test
+    void shouldDeclareJUnitIntegrationDependencies() {
+
+        BuildFile result = buildWriter.declareJUnitDependencies().sign();
+        Set<JuteDependency> dependencies = result.getDeclaredDependencies();
+
+        Assertions.assertTrue(dependencies.contains(JUnitIntegration.API));
+        Assertions.assertTrue(dependencies.contains(JUnitIntegration.ENGINE));
     }
 }
