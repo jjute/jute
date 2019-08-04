@@ -163,7 +163,7 @@ class BuildFileUTest extends UnitTest {
 
     @TestOnly
     private <T> void assertEqualWriterSets(Set<T> expected, Set<T> actual) {
-        Assertions.assertFalse(expected.retainAll(actual));
+        Assertions.assertFalse(new java.util.HashSet<>(expected).retainAll(actual));
     }
 
     @Test
