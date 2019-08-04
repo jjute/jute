@@ -1,6 +1,7 @@
 package io.jjute.plugin.testsuite.file;
 
 import io.jjute.plugin.framework.ProjectPlugin;
+import io.jjute.plugin.framework.define.CommonRepository;
 import io.jjute.plugin.framework.define.SimpleDependency;
 import io.jjute.plugin.framework.integration.JUnitIntegration;
 import io.jjute.plugin.testsuite.core.PluginTestException;
@@ -123,14 +124,13 @@ public class BuildFile extends File {
         }
 
         /**
-         * Add {@link ArtifactRepository} declarations that represent given repositories to a
-         * Gradle DSL block that configures an instance of {@link org.gradle.api.artifacts.dsl
-         * .RepositoryHandler RepositoryHandler}. Each declaration will be written as a nested
-         * DSL script block that represents an artifact resolver responsible for managing a set
-         * of {@code ArtifactRepository} instances. Note that repository declarations will be
-         * arranged in the same order as they are found in the given array.
+         * Add {@code ArtifactRepository} declarations that represent given repositories to a Gradle DSL block
+         * that configures an instance of {@link org.gradle.api.artifacts.dsl.RepositoryHandler RepositoryHandler}.
+         * Each declaration will be written as a nested DSL script block that represents an artifact resolver
+         * responsible for managing a set of {@code ArtifactRepository} instances. Note that repository
+         * declarations will be arranged in the same order as they are found in the given array.
          *
-         * @param repositories array of {@code ArtifactRepositories} to add.
+         * @param repositories array of artifact repositories to add.
          * @return instance of this {@code BuildFile.Writer}.
          */
         public Writer addRepositories(ArtifactRepository... repositories) {
@@ -151,11 +151,32 @@ public class BuildFile extends File {
                             "repository %s for build file: \"%s\"", repo.getName(), buildDir));
             }
             java.util.List<String> lines = new java.util.ArrayList<>();
-            for (javafx.util.Pair<String, java.net.URI> pair : map)
-            {
-                String line = "url \"" + pair.getValue().toString() + '\"';
-                String[] dslBlock = constructDSLBlock(pair.getKey(), new String[]{line});
-                lines.addAll(java.util.Arrays.asList(dslBlock));
+            for (javafx.util.Pair<String, java.net.URI> pair : map) {
+                lines.addAll(java.util.Arrays.asList(constructDSLBlock(
+                        pair.getKey(), new String[]{"url \"" + pair.getValue().toString() + '\"'})));
+            }
+            return writeDSLBlock("repositories", lines.toArray(new String[0]));
+        }
+
+        /**
+         * Add common repository declarations that represent given repositories to a Gradle DSL block that
+         * configures an instance of {@link org.gradle.api.artifacts.dsl.RepositoryHandler RepositoryHandler}.
+         * Each declaration will be written as a nested DSL script block that represents an artifact resolver
+         * responsible for managing a set of {@code ArtifactRepository} instances. Note that repository
+         * declarations will be arranged in the same order as they are found in the given array.
+         *
+         * @param repositories array of common repositories to add.
+         * @return instance of this {@code BuildFile.Writer}.
+         */
+        public Writer addRepositories(CommonRepository... repositories) {
+
+            this.repositories = java.util.Collections.unmodifiableSet(java.util.
+                    Arrays.stream(repositories).collect(java.util.stream.Collectors.toSet()));
+
+            java.util.List<String> lines = new java.util.ArrayList<>();
+            for (CommonRepository repo : repositories) {
+                lines.addAll(java.util.Arrays.asList(constructDSLBlock(
+                        repo.getName(), new String[]{"url \"" + repo.getUrl() + '\"'})));
             }
             return writeDSLBlock("repositories", lines.toArray(new String[0]));
         }
