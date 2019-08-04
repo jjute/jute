@@ -109,7 +109,7 @@ public class BuildFile extends File {
 
             String[] declarations = new String[plugins.length];
             for (int i = 0; i < plugins.length; i++) {
-                declarations[i] = '\t' + plugins[i].toString();
+                declarations[i] = plugins[i].toString();
             }
             return writeDSLBlock("plugins", declarations);
         }
@@ -138,7 +138,7 @@ public class BuildFile extends File {
             String[] declarations = new String[dependencies.length];
             for (int i = 0; i < dependencies.length; i++) {
                 JuteDependency dependency = dependencies[i];
-                declarations[i] = '\t' + dependency.getConfiguration() + " \"" + dependency.getIdentifier() + '\"';
+                declarations[i] = dependency.getConfiguration() + " \"" + dependency.getIdentifier() + '\"';
             }
             return writeDSLBlock("dependencies", declarations);
         }
@@ -180,10 +180,8 @@ public class BuildFile extends File {
          */
         public Writer writeDSLBlock(String name, @Nullable String argument, String[] lines) {
 
-            String[] dslBlock = new String[lines.length + 2];
-            System.arraycopy(lines, 0, dslBlock, 1, lines.length);
-
-            dslBlock[0] = name + (argument != null ? ' ' + argument : "") + " {";
+            String blockName = name + (argument != null ? ' ' + argument : "");
+            String[] dslBlock = constructDSLBlock(blockName, lines);
             dslBlock[dslBlock.length - 1] = "}\n";
 
             entries.put(name, dslBlock);
@@ -207,6 +205,26 @@ public class BuildFile extends File {
          */
         public Writer writeDSLBlock(String name, String[] lines) {
             return writeDSLBlock(name, null, lines);
+        }
+
+        /**
+         * Format the given {@code String} array as a DSL script block where the block
+         * name will match {@code name} parameter. Each line will be indented with
+         * {@code \t} to improve readability when debugging or storing build logs.
+         *
+         * @param name name of the DSL script block.
+         * @param lines contents of the DSL script block.
+         * @return instance of this {@code BuildFile.Writer}
+         */
+        private static String[] constructDSLBlock(String name, String[] lines) {
+
+            for (int i = 0; i < lines.length; i++) {
+                lines[i] = '\t' + lines[i];
+            }
+            String[] dslBlock = new String[lines.length + 2];
+            System.arraycopy(lines, 0, dslBlock, 1, lines.length);
+            dslBlock[0] = name + " {"; dslBlock[dslBlock.length - 1] = "}";
+            return dslBlock;
         }
 
         /**

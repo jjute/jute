@@ -60,7 +60,7 @@ class BuildFileTest extends UnitTest {
     @Test
     void shouldConstructAndWriteDSLBlock() throws IOException {
 
-        String[] content = { "\tfirst statement", "\tsecond statement", };
+        String[] content = { "first statement", "second statement", };
         String[] expectedDSLBlock = constructDSLDeclarationBlock("sampleBlock", content);
 
         BuildFile result = buildWriter.writeDSLBlock("sampleBlock", content).sign();
@@ -71,8 +71,8 @@ class BuildFileTest extends UnitTest {
         // Delete the build file before creating a new writer
         Assertions.assertTrue(result.delete());
 
-        String line = "\t// do something here...";
-        expectedDSLBlock = new String[]{ "task awesomeTask {", line, "}", "" };
+        String line = "// do something here...";
+        expectedDSLBlock = new String[]{ "task awesomeTask {", '\t' + line, "}", "" };
 
         BuildFile.Writer newBuildWriter = BuildFile.create(buildDir);
         newBuildWriter.writeDSLBlock("task", "awesomeTask", new String[]{line});
@@ -85,8 +85,8 @@ class BuildFileTest extends UnitTest {
     void shouldApplyPluginsInDSLBlock() throws IOException {
 
         String[] expectedDSLBlock = {
-                "\tid 'java'", "\tid 'idea'", "\tid \"com-pluginA\"",
-                "\tid \"com-pluginB\" version \"1.0\""
+                "id 'java'", "id 'idea'", "id \"com-pluginA\"",
+                "id \"com-pluginB\" version \"1.0\""
         };
         ProjectPlugin[] pluginsArray = {
                 CorePlugin.JAVA, CorePlugin.IDEA,
@@ -122,7 +122,7 @@ class BuildFileTest extends UnitTest {
             JuteDependency dependency = new JuteExternalDependency(notation[0], notation[1], notation[2]);
 
             dependencySet.add(dependency); dependencies[i] = dependency;
-            expectedDSLBlock[i] = '\t' + dependency.toDSLDeclaration();
+            expectedDSLBlock[i] = dependency.toDSLDeclaration();
         }
         BuildFile result = buildWriter.declareExternalDependencies(dependencies).sign();
 
@@ -140,8 +140,16 @@ class BuildFileTest extends UnitTest {
     @TestOnly
     private String[] constructDSLDeclarationBlock(String name, String[] content) {
 
+        String[] indented = java.util.Arrays.copyOf(content, content.length);
+        /*
+         * Indent each array element with '\t' to match how DSL
+         * block declarations are constructed in BuildFile
+         */
+        for (int i = 0; i < content.length; i++) {
+            indented[i] = '\t' + content[i];
+        }
         String[] result = new String[content.length + 3];
-        System.arraycopy(content, 0, result, 1, content.length);
+        System.arraycopy(indented, 0, result, 1, content.length);
 
         result[0] = name + " {"; result[result.length - 2] = "}";
         result[result.length - 1] = ""; return result;
