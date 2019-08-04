@@ -50,8 +50,8 @@ public class JUnitIntegration extends IntegrationModel {
 
         DependencyHandler dependencies = project.getDependencies();
 
-        dependencies.add(API.getConfiguration(), API);
-        dependencies.add(ENGINE.getConfiguration(), ENGINE);
+        dependencies.add(API.getConfiguration(), API.getIdentifier());
+        dependencies.add(ENGINE.getConfiguration(), ENGINE.getIdentifier());
 
         return this;
     }
