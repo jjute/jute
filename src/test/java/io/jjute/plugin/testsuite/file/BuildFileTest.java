@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 class BuildFileTest extends UnitTest {
 
@@ -53,7 +55,7 @@ class BuildFileTest extends UnitTest {
         String[] text = { "first line", "second line", "third line" };
         BuildFile buildFile = buildWriter.write(text).sign();
 
-        List<String> expected = java.util.Arrays.asList(text);
+        List<String> expected = Arrays.asList(text);
         Assertions.assertEquals(expected, FileUtils.readLines(buildFile, CHARSET));
     }
 
@@ -65,7 +67,7 @@ class BuildFileTest extends UnitTest {
 
         BuildFile result = buildWriter.writeDSLBlock("sampleBlock", content).sign();
 
-        List<String> expected = java.util.Arrays.asList(expectedDSLBlock);
+        List<String> expected = Arrays.asList(expectedDSLBlock);
         Assertions.assertEquals(expected, FileUtils.readLines(result, CHARSET));
 
         // Delete the build file before creating a new writer
@@ -77,7 +79,7 @@ class BuildFileTest extends UnitTest {
         BuildFile.Writer newBuildWriter = BuildFile.create(buildDir);
         newBuildWriter.writeDSLBlock("task", "awesomeTask", new String[]{line});
 
-        expected = java.util.Arrays.asList(expectedDSLBlock);
+        expected = Arrays.asList(expectedDSLBlock);
         Assertions.assertEquals(expected, FileUtils.readLines(newBuildWriter.sign(), CHARSET));
     }
 
@@ -93,7 +95,7 @@ class BuildFileTest extends UnitTest {
                 new CommunityPlugin("com-pluginA"),
                 new CommunityPlugin("com-pluginB", "1.0")
         };
-        java.util.Set<ProjectPlugin> pluginsSet = new java.util.HashSet<>();
+        Set<ProjectPlugin> pluginsSet = new java.util.HashSet<>();
         java.util.Collections.addAll(pluginsSet, pluginsArray);
 
         BuildFile result = buildWriter.applyPlugins(pluginsArray).sign();
@@ -114,7 +116,7 @@ class BuildFileTest extends UnitTest {
         String[] expectedDSLBlock = new String[length];
 
         JuteDependency[] dependencies = new JuteDependency[length];
-        java.util.Set<JuteDependency> dependencySet = new java.util.HashSet<>();
+        Set<JuteDependency> dependencySet = new java.util.HashSet<>();
 
         for (int i = 0; i < dependenciesArray.length; i++)
         {
@@ -134,13 +136,13 @@ class BuildFileTest extends UnitTest {
     private void validateBuildFileWriterDSLBlock(BuildFile result, String name, String[] expected) throws IOException {
 
         String[] dsl = constructDSLDeclarationBlock(name, expected);
-        Assertions.assertEquals(java.util.Arrays.asList(dsl), FileUtils.readLines(result, CHARSET));
+        Assertions.assertEquals(Arrays.asList(dsl), FileUtils.readLines(result, CHARSET));
     }
 
     @TestOnly
     private String[] constructDSLDeclarationBlock(String name, String[] content) {
 
-        String[] indented = java.util.Arrays.copyOf(content, content.length);
+        String[] indented = Arrays.copyOf(content, content.length);
         /*
          * Indent each array element with '\t' to match how DSL
          * block declarations are constructed in BuildFile
@@ -156,7 +158,7 @@ class BuildFileTest extends UnitTest {
     }
 
     @TestOnly
-    private <T> void assertEqualWriterSets(java.util.Set<T> expected, java.util.Set<T> actual) {
+    private <T> void assertEqualWriterSets(Set<T> expected, Set<T> actual) {
         Assertions.assertFalse(expected.retainAll(actual));
     }
 
