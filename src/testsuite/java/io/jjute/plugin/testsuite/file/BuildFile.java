@@ -211,14 +211,17 @@ public class BuildFile extends File {
         }
 
         /**
-         * Declare {@link JUnitIntegration} dependencies with a Gradle DSL block that configures an
-         * instance of {@link org.gradle.api.artifacts.dsl.DependencyHandler DependencyHandler}.
+         * Setup JUnit integration with Gradle to enable running tests using a JUnit platform by
+         * declaring {@code API} and {@code ENGINE} dependencies as well as specifying which JUnit
+         * Platform (a.k.a. JUnit 5) should be used to execute the tests.
          *
          * @return instance of this {@code BuildFile.Writer}
-         * @see #declareExternalDependencies(SimpleDependency...)
+         * @see JUnitIntegration
          */
-        public Writer declareJUnitDependencies() {
-            return declareExternalDependencies(JUnitIntegration.API, JUnitIntegration.ENGINE);
+        public Writer withJUnitIntegration() {
+
+            return declareExternalDependencies(JUnitIntegration.API, JUnitIntegration.ENGINE)
+                    .writeDSLBlock("test", new String[]{"useJUnitPlatform()"});
         }
 
         /**

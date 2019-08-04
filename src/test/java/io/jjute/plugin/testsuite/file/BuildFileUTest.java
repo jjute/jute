@@ -180,12 +180,19 @@ class BuildFileUTest extends UnitTest {
     }
 
     @Test
-    void shouldDeclareJUnitIntegrationDependencies() {
+    void shouldDeclareJUniDependenciesAndEnableTestPlatform() throws IOException {
 
-        BuildFile result = buildWriter.declareJUnitDependencies().sign();
-        Set<SimpleDependency> dependencies = result.getDeclaredDependencies();
+        String[] expectedDSLBlock = {
+                "dependencies {",
+                '\t' + JUnitIntegration.API.toDSLDeclaration(),
+                '\t' + JUnitIntegration.ENGINE.toDSLDeclaration(),
+                "}", "", "test {", "\tuseJUnitPlatform()", "}", ""
+        };
+        BuildFile result = buildWriter.withJUnitIntegration().sign();
+        Set<SimpleDependency> dependencies = Arrays.stream(JUnitIntegration.
+                DEPENDENCIES).collect(java.util.stream.Collectors.toSet());
 
-        Assertions.assertTrue(dependencies.contains(JUnitIntegration.API));
-        Assertions.assertTrue(dependencies.contains(JUnitIntegration.ENGINE));
+        assertEqualWriterSets(dependencies, result.getDeclaredDependencies());
+        Assertions.assertEquals(Arrays.asList(expectedDSLBlock), FileUtils.readLines(result, CHARSET));
     }
 }

@@ -30,6 +30,11 @@ public class JUnitIntegration extends IntegrationModel {
             JavaPlugin.TEST_RUNTIME_CLASSPATH_CONFIGURATION_NAME
     );
 
+    /**
+     * Dependencies required by JUnit to run Java tests.
+     */
+    public static final SimpleDependency[] DEPENDENCIES = { API, ENGINE };
+
     private final Test test;
 
     public JUnitIntegration(Project project) {
