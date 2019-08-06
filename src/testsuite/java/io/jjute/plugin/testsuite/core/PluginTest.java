@@ -20,7 +20,10 @@ public abstract class PluginTest {
          */
         INTEGRATION("int"),
 
-
+        /**
+         * Verifies the smallest unit of code which in Java translates to methods.
+         * @see UnitTest
+         */
         UNIT("unit");
 
         private final String prefix;

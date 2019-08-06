@@ -97,7 +97,7 @@ public abstract class FunctionalTest extends PluginTest {
      * file located in the test project root directory by adding them to the end of the file <i>(appending)</i>.
      * If the file does not exist it will be created. Each array element will be interpreted and written to
      * file <i>as-is</i>, meaning each element is expected to be formatted according to the following syntax:
-     * <    blockquote>
+     * <blockquote>
      * <dl>
      *     <dt><b>Syntax:</b>
      *         <dd>{@code <property-key>=<property-value>}

@@ -13,7 +13,7 @@ public interface ProjectPlugin extends Plugin<Project> {
     /**
      * @return a {@code String} representation of this plugin's entry definition inside a
      *         {@code plugins} DSL script block. This is useful when manually constructing
-     *         the DSL script block by directly writing to build file.
+     *         the DSL script block by directly writing to build file in a testing scenario.
      */
     String toString();
 }

@@ -5,14 +5,12 @@ import io.jjute.plugin.testsuite.core.FunctionalTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 class JUnitIntegrationTest extends FunctionalTest {
 
     private static final String JUNIT_INTEGRATION = PluginConfig.Property.JUNIT_INTEGRATION.getName();
 
     @Test
-    void shouldAddProjectDependencies() throws IOException {
+    void shouldAddProjectDependencies() {
 
         initializeBuild(new String[] {
                 "task verifyJUnitIntegration {",
@@ -24,7 +22,7 @@ class JUnitIntegrationTest extends FunctionalTest {
     }
 
     @Test
-    void shouldConfigureProjectTestFramework() throws IOException {
+    void shouldConfigureProjectTestFramework() {
 
         Assertions.assertNotNull(JUnitIntegration.API);
         Assertions.assertNotNull(JUnitIntegration.ENGINE);
