@@ -68,15 +68,7 @@ public abstract class FunctionalTest extends PluginTest {
      * @throws PluginTestException if the method is unable to resolve plugin identifier.
      */
     protected BuildFile initializeBuild(String[] text) {
-
-        CommunityPlugin jute;
-        try {
-            jute = new CommunityPlugin(getPluginIdentifier());
-        }
-        catch (IOException e) {
-            throw new PluginTestException("Unable to resolve plugin identifier.", e);
-        }
-        return BuildFile.create(buildDir).applyPlugins(jute).write(text).sign();
+        return BuildFile.create(buildDir).applyPlugins(getDevelopingPlugin()).write(text).sign();
     }
 
     /**
@@ -167,7 +159,27 @@ public abstract class FunctionalTest extends PluginTest {
     }
 
     /**
-     * Retrieve the plugin identifier as defined by the name of the properties file located in a
+     * Resolve and return a {@code CommunityPlugin} reference that represents a plugin managed by Gradle Plugin
+     * Development Plugin with an identifier that matches the plugin identifier as defined by the name of the
+     * properties file located in {@code META-INF/gradle-plugins} directory found on the plugin classpath.
+     *
+     * @throws PluginTestException if the method is unable to resolve plugin identifier.
+     * @see <a href="https://docs.gradle.org/current/userguide/java_gradle_plugin.html#java_gradle_plugin">
+     *      Gradle Docs: Gradle Plugin Development Plugin</a>
+     * @see #getPluginIdentifier()
+     */
+    protected CommunityPlugin getDevelopingPlugin() {
+
+        try {
+            return new CommunityPlugin(getPluginIdentifier());
+        }
+        catch (IOException e) {
+            throw new PluginTestException("Unable to resolve plugin identifier.", e);
+        }
+    }
+
+    /**
+     * Retrieve the plugin identifier as defined by the name of the properties file located in
      * {@code META-INF/gradle-plugins} directory found on the plugin classpath. Gradle uses this
      * file to determine which class implements the Plugin interface. The name of this properties
      * file excluding the {@code .properties} extension becomes the identifier of the plugin.

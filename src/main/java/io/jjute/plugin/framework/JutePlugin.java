@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.framework.config.TestConfigurator;
+import io.jjute.plugin.framework.config.ProjectConfigurator;
 import io.jjute.plugin.framework.integration.*;
 import io.jjute.plugin.framework.parser.DataParsingException;
 import org.gradle.api.Plugin;
@@ -71,6 +71,7 @@ public class JutePlugin implements Plugin<Project> {
              */
             project.setBuildDir(project.getProjectDir().toPath().resolve("build").toFile());
 
+            ProjectConfigurator.create(project, config).withTestTasks("test").configure();
 
             if (config.JUnitIntegration()) {
                 new JUnitIntegration(project).addProjectDependencies().enableNativeSupport();
