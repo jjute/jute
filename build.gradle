@@ -161,7 +161,8 @@ task updatePluginMetadata {
  * Modify this task to recursively delete all IntelliJ IDEA test output files.
  * This should be called before running defined IDEA test configurations.
  */
-cleanTest {
+tasks.register('cleanIdeaTest') {
+
     File ideaTestOutputDir = file('build/target/')
     onlyIf { ideaTestOutputDir.exists() }
     doLast {
@@ -171,4 +172,5 @@ cleanTest {
 }
 tasks.register('configIdeaIntTests') { 
     dependsOn = ['cleanTest', 'assemble', 'updatePluginMetadata'] 
+cleanTest.dependsOn cleanIdeaTest
 }
