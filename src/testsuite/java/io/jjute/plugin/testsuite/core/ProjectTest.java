@@ -3,6 +3,7 @@ package io.jjute.plugin.testsuite.core;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import java.nio.file.Files;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#integration-tests">
  *      Testing Gradle Plugins: Implementing integration tests</a>
  */
+@Tag("project")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class ProjectTest extends PluginTest {
 

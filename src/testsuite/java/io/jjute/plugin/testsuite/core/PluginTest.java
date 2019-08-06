@@ -1,10 +1,12 @@
 package io.jjute.plugin.testsuite.core;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Tag;
 
 import java.io.File;
 import java.nio.file.Files;
 
+@Tag("plugin")
 public abstract class PluginTest {
 
     public enum Type {

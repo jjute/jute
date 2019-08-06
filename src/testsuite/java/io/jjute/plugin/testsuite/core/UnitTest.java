@@ -1,5 +1,6 @@
 package io.jjute.plugin.testsuite.core;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 
 /**
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.TestInstance;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#testing-pyramid">
  *      Gradle Docs: The testing pyramid</a>
  */
+@Tag("unit")
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class UnitTest extends PluginTest {
 
