@@ -1,11 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Unit Tests" type="JUnit" factoryName="JUnit">
-    <module name="jute.test" />
-    <option name="PACKAGE_NAME" value="io.jjute.plugin" />
+  <configuration default="false" name="Build Tests" type="JUnit" factoryName="JUnit">
+    <module name="jute.testInt" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="package" />
+    <option name="TEST_OBJECT" value="tags" />
     <option name="PARAMETERS" value="" />
+    <category value="io.jjute.plugin.testsuite.core.BuildTest" />
+    <tag value="build" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
