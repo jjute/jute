@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.gradle.api.Project;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.BuildResult;
+import org.junit.jupiter.api.TestInstance;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.File;
@@ -30,6 +31,7 @@ import java.util.InvalidPropertiesFormatException;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#functional-tests">
  *      Testing Gradle Plugins: Implementing functional tests</a>
  */
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public abstract class FunctionalTest extends PluginTest {
 
     protected final GradleProperties properties;

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestInstance;
  * @see <a href="https://guides.gradle.org/testing-gradle-plugins/#testing-pyramid">
  *      Gradle Docs: The testing pyramid</a>
  */
-//@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class UnitTest extends PluginTest {
 
     protected UnitTest() {
