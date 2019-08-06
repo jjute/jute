@@ -1,13 +1,13 @@
 package io.jjute.plugin.framework.util;
 
-import io.jjute.plugin.testsuite.core.IntegrationTest;
+import io.jjute.plugin.testsuite.core.ProjectTest;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class DependencyUtilsTest extends IntegrationTest {
+class DependencyUtilsTest extends ProjectTest {
 
     private static final String apacheLang = "org.apache.commons:commons-lang3:3.9";
     private static final String apacheMath = "org.apache.commons:commons-math3:3.6.1";

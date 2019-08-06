@@ -1,11 +1,11 @@
 package io.jjute.plugin.framework.integration;
 
 import io.jjute.plugin.framework.PluginConfig;
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class JUnitIntegrationTest extends FunctionalTest {
+class JUnitIntegrationTest extends BuildTest {
 
     private static final String JUNIT_INTEGRATION = PluginConfig.Property.JUNIT_INTEGRATION.getName();
 

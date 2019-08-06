@@ -10,13 +10,13 @@ public abstract class PluginTest {
     public enum Type {
         /**
          * Used to test the system from the end user’s perspective.
-         * @see FunctionalTest
+         * @see BuildTest
          */
         FUNCTIONAL("func"),
 
         /**
          * Verifies that multiple classes or components work together as a whole.
-         * @see IntegrationTest
+         * @see ProjectTest
          */
         INTEGRATION("int"),
 

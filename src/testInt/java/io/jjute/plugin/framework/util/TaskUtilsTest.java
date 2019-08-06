@@ -1,6 +1,6 @@
 package io.jjute.plugin.framework.util;
 
-import io.jjute.plugin.testsuite.core.IntegrationTest;
+import io.jjute.plugin.testsuite.core.ProjectTest;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Task;
 import org.gradle.api.internal.AbstractTask;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TaskUtilsTest extends IntegrationTest {
+class TaskUtilsTest extends ProjectTest {
 
     @TestOnly
     public static class DummyTask extends DefaultTask {

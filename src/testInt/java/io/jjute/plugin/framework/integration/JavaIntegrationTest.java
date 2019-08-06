@@ -1,13 +1,13 @@
 package io.jjute.plugin.framework.integration;
 
 import io.jjute.plugin.framework.PluginConfig;
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import org.gradle.api.JavaVersion;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class JavaIntegrationTest extends FunctionalTest {
+class JavaIntegrationTest extends BuildTest {
 
     @Test
     void shouldSetSourceAndTargetCompatibility() throws IOException {

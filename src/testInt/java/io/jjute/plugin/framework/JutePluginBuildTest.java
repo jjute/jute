@@ -1,11 +1,11 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class JutePluginFunctionalTest extends FunctionalTest {
+class JutePluginBuildTest extends BuildTest {
 
     @Test
     void whenPropertiesAsOptionShouldApplyProjectPlugins() throws IOException {

@@ -3,7 +3,7 @@ package io.jjute.plugin.framework.config;
 import io.jjute.plugin.framework.*;
 import io.jjute.plugin.framework.define.CommonRepository;
 import io.jjute.plugin.framework.util.TaskUtils;
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import io.jjute.plugin.testsuite.file.BuildFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,7 +23,7 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 
-class ProjectConfiguratorTest extends FunctionalTest {
+class ProjectConfiguratorTest extends BuildTest {
 
     private static final String DUMMY_UNIT_TEST_FILE = "DummyUnitTest.java";
     private static final String DUMMY_UNIT_TEST_PATH = "src/test/java/io/jjute/test";

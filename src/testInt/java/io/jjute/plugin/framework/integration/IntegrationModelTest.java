@@ -1,13 +1,13 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.testsuite.core.IntegrationTest;
+import io.jjute.plugin.testsuite.core.ProjectTest;
 import org.gradle.api.Project;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class IntegrationModelTest extends IntegrationTest {
+class IntegrationModelTest extends ProjectTest {
 
     private static final String exceptionCause = "Unknown cause";
     private DummyIntegrationModel model;

@@ -1,12 +1,12 @@
 package io.jjute.plugin.framework.integration;
 
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static io.jjute.plugin.framework.PluginConfig.Property;
 
-class IdeaIntegrationTest extends FunctionalTest {
+class IdeaIntegrationTest extends BuildTest {
 
     private final String IDEA_INTEGRATION = Property.IDEA_INTEGRATION.getName();
 

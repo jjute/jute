@@ -1,14 +1,14 @@
 package io.jjute.plugin.framework;
 
 import io.jjute.plugin.framework.parser.DataParser;
-import io.jjute.plugin.testsuite.core.IntegrationTest;
+import io.jjute.plugin.testsuite.core.ProjectTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-class ConfigPropertyTest extends IntegrationTest {
+class ConfigPropertyTest extends ProjectTest {
 
     static class DummyPluginConfig extends PluginConfig {
 

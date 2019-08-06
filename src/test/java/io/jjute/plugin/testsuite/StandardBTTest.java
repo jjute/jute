@@ -1,6 +1,6 @@
 package io.jjute.plugin.testsuite;
 
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import io.jjute.plugin.testsuite.core.PluginTestException;
 import io.jjute.plugin.testsuite.file.BuildFile;
 import org.apache.commons.io.FileUtils;
@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class StandardFTTest extends FunctionalTest {
+class StandardBTTest extends BuildTest {
 
     private static final Charset CHARSET = Charset.defaultCharset();
 

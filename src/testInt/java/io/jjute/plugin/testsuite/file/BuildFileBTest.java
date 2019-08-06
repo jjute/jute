@@ -1,7 +1,7 @@
 package io.jjute.plugin.testsuite.file;
 
 import io.jjute.plugin.framework.define.CommonRepository;
-import io.jjute.plugin.testsuite.core.IntegrationTest;
+import io.jjute.plugin.testsuite.core.ProjectTest;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.artifacts.repositories.ArtifactRepository;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-class BuildFileBTest extends IntegrationTest {
+class BuildFileBTest extends ProjectTest {
 
     private java.io.File build = buildDir.toPath().resolve("build.gradle").toFile();
 

@@ -1,13 +1,13 @@
 package io.jjute.plugin.framework;
 
-import io.jjute.plugin.testsuite.core.FunctionalTest;
+import io.jjute.plugin.testsuite.core.BuildTest;
 import org.jetbrains.annotations.TestOnly;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Map;
 
-class PluginConfigTest extends FunctionalTest {
+class PluginConfigTest extends BuildTest {
 
     private static final Map<String, Object> PROPERTIES_OBJECTS = getGradlePropertiesAsObjects();
     private static final Map<String, String> PROPERTIES_LITERALS = getLiteralGradleProperties();

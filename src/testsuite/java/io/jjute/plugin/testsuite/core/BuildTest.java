@@ -32,7 +32,7 @@ import java.util.InvalidPropertiesFormatException;
  *      Testing Gradle Plugins: Implementing functional tests</a>
  */
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public abstract class FunctionalTest extends PluginTest {
+public abstract class BuildTest extends PluginTest {
 
     protected final GradleProperties properties;
 
@@ -46,7 +46,7 @@ public abstract class FunctionalTest extends PluginTest {
      *                                   directory, an I/O error occurred while finding resource or creating
      *                                   or scheduling the deletion of root directory or build file.
      */
-    protected FunctionalTest() {
+    protected BuildTest() {
         super(Type.FUNCTIONAL);
 
         buildRunner = createRunnerForPlugin();

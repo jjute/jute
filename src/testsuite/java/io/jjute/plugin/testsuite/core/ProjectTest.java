@@ -24,7 +24,7 @@ import java.nio.file.Files;
  *      Testing Gradle Plugins: Implementing integration tests</a>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class IntegrationTest extends PluginTest {
+public abstract class ProjectTest extends PluginTest {
 
     /**
      * {@code Project} instance used to execute this integration test.
@@ -34,7 +34,7 @@ public abstract class IntegrationTest extends PluginTest {
     /**
      * @throws PluginTestException if an I/O exception occurred while creating the project root directory
      */
-    protected IntegrationTest() {
+    protected ProjectTest() {
         super(Type.INTEGRATION);
 
         try {
